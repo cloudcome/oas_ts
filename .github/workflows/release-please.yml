@@ -23,25 +23,12 @@ jobs:
           release-type: node
           bump-minor-pre-major: true
 
-  test-coverage:
-    runs-on: ubuntu-latest
+  publish-npm:
     needs: release
     if: needs.release.outputs.release_created
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/setup-nvm
-      - run: npm ci
-      - run: npm run test:coverage
-      - uses: codacy/codacy-coverage-reporter-action@v1
-        with:
-          api-token: ${{ secrets.CODACY_API_TOKEN }}
-          coverage-reports: coverage/lcov.info
-
-  publish-npm:
     runs-on: ubuntu-latest
     permissions:
         id-token: write
-    needs: test-coverage
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-nvm
@@ -54,10 +41,11 @@ jobs:
       - uses: FrontEndDev-org/npm-mirror-sync-action@v1
 
   publish-github:
+    needs: release
+    if: needs.release.outputs.release_created
     runs-on: ubuntu-latest
     permissions:
       packages: write
-    needs: test-coverage
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-nvm
