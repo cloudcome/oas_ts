@@ -252,6 +252,84 @@ test('object', async () => {
     ]);
 });
 
+test('object required inside', async () => {
+    const parser = new ComponentsParser({
+        info: {
+            title: 'test',
+            version: '1.0.0',
+        },
+        openapi: '3.0.0',
+        paths: {},
+        components: {
+            schemas: {
+                O: {
+                    type: 'object',
+                    nullable: false,
+                    properties: {
+                        B: {
+                            type: 'boolean',
+                        },
+                        S: {
+                            type: 'string',
+                        },
+                        N: {
+                            type: 'number',
+                        },
+                        I: {
+                            type: 'integer',
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            required: true,
+                        },
+                        R: {
+                            $ref: '#/components/schemas/R',
+                        },
+                    },
+                    required: ['B', 'S', 'N'],
+                    additionalProperties: true,
+                },
+                R: {
+                    type: 'string',
+                },
+            },
+        },
+    });
+
+    const t = parser.parseComponents();
+    expect(t).toEqual<TypeList>([
+        {
+            kind: 'origin',
+            name: 'O',
+            type: 'object',
+            required: true,
+            children: [
+                // 已重新排序
+                { name: 'B', type: 'boolean', required: true, kind: 'origin' },
+                { name: 'I', type: 'number', required: true, kind: 'origin' },
+                { name: 'N', type: 'number', required: true, kind: 'origin' },
+                {
+                    kind: 'alias',
+                    refAble: false,
+                    required: false,
+                    name: 'R',
+                    target: 'R',
+                    origin: 'R',
+                    props: [],
+                    ref: '#/components/schemas/R',
+                },
+                { name: 'S', type: 'string', required: true, kind: 'origin' },
+                { name: '[key: string]', type: 'any', required: true, kind: 'origin' },
+            ],
+        },
+        {
+            kind: 'origin',
+            name: 'R',
+            type: 'string',
+            required: false,
+        },
+    ]);
+});
+
 test('array', async () => {
     const parser = new ComponentsParser({
         info: {
