@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.2](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.17.1...v0.17.2) (2024-04-16)
+
+
+### Bug Fixes
+
+* 修正未考虑属性自身必填的情况 ([569c817](https://github.com/FrontEndDev-org/openapi-axios/commit/569c817ca400b92a7cf19e18e7a5af3d89c8c250))
+
 ## [0.17.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.17.0...v0.17.1) (2024-01-23)
 
 
