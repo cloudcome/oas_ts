@@ -66,7 +66,8 @@ export class ComponentsParser extends BaseParser {
             ...this.inheritProps(schema),
             name,
             type,
-            required,
+            // {type: 'string', required: true}
+            required: (schema.required as boolean | undefined) || required,
             kind: 'origin',
         };
     }
