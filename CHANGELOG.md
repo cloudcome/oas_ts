@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.3](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.17.2...v0.17.3) (2024-04-16)
+
+
+### Bug Fixes
+
+* 修复 release-please 工作流 ([80c873c](https://github.com/FrontEndDev-org/openapi-axios/commit/80c873ca835a9db618134ec518f89e8e530a7403))
+
 ## [0.17.2](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.17.1...v0.17.2) (2024-04-16)
 
 
