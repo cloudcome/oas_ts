@@ -23,6 +23,7 @@ node_modules
 .idea
 .vscode
 !.vscode/extensions.json
+.history
 
 # dist and cache
 /dist
