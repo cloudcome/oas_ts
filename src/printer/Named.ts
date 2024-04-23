@@ -39,15 +39,16 @@ export class Named {
         return nextUniqueName(operationId, this.varNameCountMap);
     }
 
-    nextTypeName(name: string, isComponent: boolean | string) {
-        const ref = isComponent === true ? `#/components/schemas/${name}` : isString(isComponent) ? isComponent : '';
+    nextTypeName(name: string) {
         const refTypeName = fixVarName(name, true);
-        const uniqueTypeName = nextUniqueName(refTypeName, this.varNameCountMap);
+        return nextUniqueName(refTypeName, this.varNameCountMap);
+    }
 
-        if (ref) {
-            this.varNameRefMap.set(uniqueTypeName, ref);
-            this.refVarNameMap.set(ref, uniqueTypeName);
-        }
+    nextRefName(name: string, ref: string) {
+        const uniqueTypeName = this.nextTypeName(name);
+
+        this.varNameRefMap.set(uniqueTypeName, ref);
+        this.refVarNameMap.set(ref, uniqueTypeName);
 
         return uniqueTypeName;
     }

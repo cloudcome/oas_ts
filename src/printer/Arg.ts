@@ -22,10 +22,10 @@ export class Arg {
     parameters: OpenApi3_Parameter[] = [];
 
     constructor(
-        private named: Named,
-        private kind: ArgKind,
-        private schemata: Schemata,
-        private isRoot = false,
+        readonly named: Named,
+        readonly kind: ArgKind,
+        readonly schemata: Schemata,
+        readonly isRoot = false,
     ) {}
 
     add(parameter?: OpenApi3_Parameter) {

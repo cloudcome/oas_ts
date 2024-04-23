@@ -43,7 +43,12 @@ test('v3.1 schema', () => {
         },
     });
 
-    expect(printer.print()).toMatchInlineSnapshot(`
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
       "/**
        * @title 1
        * @version 2

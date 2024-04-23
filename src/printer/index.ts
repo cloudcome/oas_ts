@@ -1,3 +1,4 @@
+import { record } from 'zod';
 import { pkgName } from '../const';
 import type { OpenApi3 } from '../types/openapi';
 import { never } from '../utils/func';
@@ -15,6 +16,7 @@ import {
     isRefResponse,
     type OpenApi3_Media,
     type OpenApi3_Operation,
+    type OpenApi3_Parameter,
     type OpenApi3_Request,
     type OpenApi3_Response,
     type OpenApi3_Schema,
@@ -26,8 +28,8 @@ import type { PrinterOptions, RequestStatusCodeMatch } from './types';
 
 const allowMethods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 
-type RequestMediaMatch = (mediaType: string, media: OpenApi3_Media) => boolean;
-type ResponseMediaMatch = (mediaType: string, media: OpenApi3_Media, response: OpenApi3.ResponseObject) => boolean;
+type RequestMediaMatch = (contentType: string, content: OpenApi3_Media) => boolean;
+type ResponseMediaMatch = (contentType: string, content: OpenApi3_Media, response: OpenApi3.ResponseObject) => boolean;
 
 type ResponseMatch = (statusCode: string, response: OpenApi3_Response) => boolean;
 
@@ -47,25 +49,46 @@ export class Printer {
         this.named.internalVarName(options?.axiosImportName || AXIOS_IMPORT_NAME);
     }
 
+    refRequestBodies: Record<string, OpenApi3_Request> = {};
+    refParameters: Record<string, OpenApi3_Parameter> = {};
+    refResponses: Record<string, OpenApi3_Response> = {};
     registerComponents() {
-        Object.entries(this.document.components?.schemas || {}).forEach(([name, schema]) => {
-            // 指定引用 ID
-            const id = schema.$id;
-            this.named.nextTypeName(name, id || true);
+        const { schemas = {}, requestBodies = {}, parameters = {}, responses = {} } = this.document.components || {};
+
+        Object.entries(schemas).forEach(([name, schema]) => {
+            const id = '$id' in schema ? schema.$id : '';
+            this.named.nextRefName(name, id || `#/components/schemas/${name}`);
+        });
+
+        Object.entries(requestBodies).forEach(([name, requestBody]) => {
+            const id = ('$id' in requestBody && requestBody.$id) || `#/components/requestBodies/${name}`;
+            this.refRequestBodies[id] = requestBody;
+        });
+
+        Object.entries(parameters).forEach(([name, parameter]) => {
+            const id = ('$id' in parameter && parameter.$id) || `#/components/parameters/${name}`;
+            this.refParameters[id] = parameter;
+        });
+
+        Object.entries(responses).forEach(([name, response]) => {
+            const id = ('$id' in response && response.$id) || `#/components/responses/${name}`;
+            this.refResponses[id] = response;
         });
     }
 
-    print() {
+    print(options?: { hideInfo?: boolean; hideImports?: boolean; hideComponents?: boolean; hidePaths?: boolean }) {
         return [
             //
-            this.printInfo(),
-            this.printImports(),
-            this.printComponents(),
-            this.printPaths(),
-        ].join('\n');
+            !options?.hideInfo && this._printInfo(),
+            !options?.hideImports && this._printImports(),
+            !options?.hideComponents && this._printComponents(),
+            !options?.hidePaths && this._printPaths(),
+        ]
+            .filter(Boolean)
+            .join('\n\n');
     }
 
-    printImports() {
+    private _printImports() {
         const {
             axiosImportName = AXIOS_IMPORT_NAME,
             axiosNamedImport: axiosNamedImport,
@@ -78,24 +101,22 @@ export class Printer {
         const defaultBaseURL = firstServer?.url || '/';
         const BASE_URL = isString(baseURL) ? baseURL : baseURL?.(this.document) || defaultBaseURL;
 
-        return (
-            [
-                //
-                axiosNamedImport
-                    ? // 具名导入
-                      `import {${axiosImportName}} from "${axiosImportFile}";`
-                    : // 默认导入
-                      `import ${axiosImportName} from "${axiosImportFile}";`,
-                `import type {${axiosRequestConfigTypeName}, ${axiosResponseTypeName}} from "${axiosImportFile}";`,
-                `import {resolveURL} from "${pkgName}/client";`,
-                `import type {OneOf} from "${pkgName}/client";`,
-                '',
-                `const BASE_URL=${JSON.stringify(BASE_URL)};`,
-            ].join('\n') + '\n'
-        );
+        return [
+            //
+            axiosNamedImport
+                ? // 具名导入
+                  `import {${axiosImportName}} from "${axiosImportFile}";`
+                : // 默认导入
+                  `import ${axiosImportName} from "${axiosImportFile}";`,
+            `import type {${axiosRequestConfigTypeName}, ${axiosResponseTypeName}} from "${axiosImportFile}";`,
+            `import {resolveURL} from "${pkgName}/client";`,
+            `import type {OneOf} from "${pkgName}/client";`,
+            '',
+            `const BASE_URL=${JSON.stringify(BASE_URL)};`,
+        ].join('\n');
     }
 
-    printInfo() {
+    private _printInfo() {
         const { contact, description, license, summary, termsOfService, title, version } = this.document.info;
         const { externalDocs } = this.document;
         const { name, email, url } = contact || {};
@@ -109,18 +130,16 @@ export class Printer {
             summary,
             see: extDoc,
         });
-        return jsDoc.print() + '\n';
+        return jsDoc.print();
     }
 
-    printComponents() {
-        return (
-            Object.entries(this.document.components?.schemas || {})
-                .map(([name, schema]) => {
-                    const id = schema.$id || `#/components/schemas/${name}`;
-                    return this._printComponent(name, id, schema);
-                })
-                .join('\n\n') + '\n'
-        );
+    private _printComponents() {
+        return Object.entries(this.document.components?.schemas || {})
+            .map(([name, schema]) => {
+                const id = schema.$id || `#/components/schemas/${name}`;
+                return this._printComponent(name, id, schema);
+            })
+            .join('\n\n');
     }
 
     private _printComponent(name: string, id: string, schema: OpenApi3_Schema) {
@@ -132,7 +151,7 @@ export class Printer {
         return [jsDoc.print(), `export type ${typeName} = ${type};`].filter(Boolean).join('\n');
     }
 
-    printPaths() {
+    private _printPaths() {
         return Object.entries(this.document.paths || {})
             .map(([url, pathItem]) => {
                 if (isRefPathItem(pathItem)) return;
@@ -157,9 +176,9 @@ export class Printer {
 
     private _printOperation(method: string, url: string, operation: OpenApi3.OperationObject) {
         const argNamed = new Named();
-        const headers = new Arg(argNamed, 'headers', this.schemata);
-        const cookies = new Arg(argNamed, 'cookies', this.schemata);
-        const params = new Arg(argNamed, 'params', this.schemata);
+        const header = new Arg(argNamed, 'headers', this.schemata);
+        const cookie = new Arg(argNamed, 'cookies', this.schemata);
+        const query = new Arg(argNamed, 'params', this.schemata);
         const path = new Arg(argNamed, 'path', this.schemata);
         const data = new Arg(argNamed, 'data', this.schemata, true);
         const config = new Arg(argNamed, 'config', this.schemata, true);
@@ -167,33 +186,23 @@ export class Printer {
         const { parameters, requestBody, responses, operationId } = operation;
         const { responseStatusCode, responseContentType, requestContentType } = this.options || {};
 
-        parameters?.forEach((parameter) => {
-            if (isRefParameter(parameter)) return;
-
-            switch (parameter.in) {
-                case 'query':
-                    params.add(parameter);
-                    break;
-                case 'header':
-                    headers.add(parameter);
-                    break;
-                case 'path':
-                    path.add(parameter);
-                    break;
-                case 'cookie':
-                    cookies.add(parameter);
-                    break;
-                default:
-                    never(parameter.in);
-            }
-        });
+        if (parameters) {
+            parameters.forEach((parameter) => {
+                this._parseParameter(parameter, {
+                    header,
+                    cookie,
+                    path,
+                    query,
+                });
+            });
+        }
 
         if (requestBody) {
-            this._parseRequestBody(data, requestBody, (mediaType, content) => {
-                if (isString(requestContentType)) return requestContentType === mediaType;
+            this._parseRequestBody(data, requestBody, (contentType, content) => {
+                if (isString(requestContentType)) return requestContentType === contentType;
                 if (!requestContentType) return true;
 
-                return requestContentType(mediaType, {
+                return requestContentType(contentType, {
                     content,
                     method,
                     operation,
@@ -218,11 +227,11 @@ export class Printer {
                         responses,
                     });
                 },
-                (mediaType, content, response) => {
-                    if (isString(responseContentType)) return responseContentType === mediaType;
+                (contentType, content, response) => {
+                    if (isString(responseContentType)) return responseContentType === contentType;
                     if (!responseContentType) return true;
 
-                    return responseContentType(mediaType, {
+                    return responseContentType(contentType, {
                         content,
                         method,
                         operation,
@@ -235,7 +244,7 @@ export class Printer {
         }
 
         const funcName = this.named.nextOperationId(method, url, operationId);
-        const requestArgs = new Args([headers.parse(), params.parse(), path.parse(), data.parse(), config.parse()]);
+        const requestArgs = new Args([header.parse(), query.parse(), path.parse(), data.parse(), config.parse()]);
         const responseArgs = new Args([resp.parse()]);
         const respType = responseArgs.toType(0);
         const jsDoc = new JsDoc(this.document.tags);
@@ -254,34 +263,68 @@ export class Printer {
         }`;
     }
 
-    private _parseContent(
+    private _parseContents(
         arg: Arg,
-        content: { [mediaType: string]: OpenApi3.MediaTypeObject | OpenApi3.ReferenceObject },
+        contents: { [contentType: string]: OpenApi3.MediaTypeObject | OpenApi3.ReferenceObject },
         comments: {
             description?: string;
             required?: boolean;
         },
         match: RequestMediaMatch,
     ) {
-        const media = Object.entries(content).find(([mediaType, media]) => {
-            return match(mediaType, media);
+        const content = Object.entries(contents).find(([contentType, content]) => {
+            return match(contentType, content);
         })?.[1];
 
-        if (!media) return;
+        if (!content) return;
 
-        if (isRefMedia(media)) {
-            arg.add({
-                ...comments,
-                ...media,
-            });
+        this._parseContent(arg, content, comments);
+    }
+
+    private _parseContent(
+        arg: Arg,
+        content: OpenApi3_Media,
+        comments: {
+            description?: string;
+            required?: boolean;
+        },
+    ) {
+        if (isRefMedia(content)) {
+            const { $ref } = content;
+            const label = arg.kind === 'return' ? '响应' : '请求';
+
+            throw new Error(`不支持引用${label}内容：${$ref}`);
         } else {
             arg.add({
                 in: 'query',
                 name: '',
                 ...comments,
-                schema: media.schema,
+                schema: content.schema,
                 required: true,
             });
+        }
+    }
+
+    private _parseParameter(parameter: OpenApi3_Parameter, args: Record<OpenApi3.ParameterObject['in'], Arg>) {
+        if (isRefParameter(parameter)) {
+            const { $ref } = parameter;
+            const refParameter = this.refParameters[$ref];
+
+            if (!refParameter) throw new Error(`未发现引用参数（${$ref}）`);
+
+            this._parseParameter(refParameter, args);
+            return;
+        }
+
+        switch (parameter.in) {
+            case 'query':
+            case 'header':
+            case 'path':
+            case 'cookie':
+                args[parameter.in].add(parameter);
+                break;
+            default:
+                never(parameter.in);
         }
     }
 
@@ -289,26 +332,42 @@ export class Printer {
         if (!requestBody) return;
 
         if (isRefRequest(requestBody)) {
-            return arg.add(requestBody);
+            const { $ref } = requestBody;
+            const refRequestBody = this.refRequestBodies[$ref];
+
+            if (!refRequestBody) throw new Error(`未发现引用请求（${$ref}）`);
+
+            this._parseRequestBody(arg, refRequestBody, match);
+            return;
         }
 
-        this._parseContent(arg, requestBody.content, requestBody, match);
+        this._parseContents(arg, requestBody.content, requestBody, match);
     }
 
-    private _parseResponses(arg: Arg, responses: OpenApi3.ResponsesObject, responseMatch: ResponseMatch, mediaMatch: ResponseMediaMatch) {
-        const { responseStatusCode } = this.options || {};
+    private _parseResponses(arg: Arg, responses: OpenApi3.ResponsesObject, responseMatch: ResponseMatch, contentMatch: ResponseMediaMatch) {
         const response = Object.entries(responses).find(([statusCode, response]) => {
             return responseMatch(statusCode, response);
         })?.[1];
 
         if (!response) return;
 
+        this._parseResponse(arg, response, contentMatch);
+    }
+
+    private _parseResponse(arg: Arg, response: OpenApi3_Response, contentMatch: ResponseMediaMatch) {
         if (isRefResponse(response)) {
-            return arg.add(response);
+            const { $ref } = response;
+            const refResponse = this.refResponses[$ref];
+
+            if (!refResponse) throw new Error(`未发现引用响应（${$ref}）`);
+
+            this._parseResponse(arg, refResponse, contentMatch);
+            return;
         }
 
-        if (response.content) {
-            this._parseContent(arg, response.content, response, (mediaType, media) => mediaMatch(mediaType, media, response));
-        }
+        const { content } = response;
+        if (!content) return;
+
+        this._parseContents(arg, content, response, (contentType, content) => contentMatch(contentType, content, response));
     }
 }

@@ -17,8 +17,12 @@ test('printComponents number', () => {
             },
         },
     });
-    const text = printer.printComponents();
-    expect(text).toMatchInlineSnapshot(`
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
       "/**
        * @format int64
        * @example 10
@@ -46,8 +50,12 @@ test('printComponents number enum', () => {
             },
         },
     });
-    const text = printer.printComponents();
-    expect(text).toMatchInlineSnapshot(`
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
       "/**
        * @format int64
        * @example 10
@@ -75,8 +83,12 @@ test('printComponents [number, null] enum', () => {
             },
         },
     });
-    const text = printer.printComponents();
-    expect(text).toMatchInlineSnapshot(`
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
       "/**
        * @format int64
        * @example 10
@@ -105,8 +117,12 @@ test('printComponents type[]', () => {
             },
         },
     });
-    const text = printer.printComponents();
-    expect(text).toMatchInlineSnapshot(`
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
       "/**
        * @description test1
        * @deprecated
@@ -145,9 +161,12 @@ test('printComponents AllOf primitive', () => {
             },
         },
     });
-    printer.named.nextTypeName('User', true);
-    const text = printer.printComponents();
-    expect(text).toMatchInlineSnapshot(`
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
       "export type Order = (
       /**
        * @description test1
@@ -194,9 +213,12 @@ test('printComponents primitive explicit array', () => {
             },
         },
     });
-    printer.named.nextTypeName('User', true);
-    const text = printer.printComponents();
-    expect(text).toMatchInlineSnapshot(`
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
       "export type Order = [
       /**
        * @description test1
@@ -237,9 +259,12 @@ test('printComponents primitive generic array', () => {
             },
         },
     });
-    printer.named.nextTypeName('User', true);
-    const text = printer.printComponents();
-    expect(text).toMatchInlineSnapshot(`
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
       "export type Order = ((
       /**
        * @description test1
@@ -286,9 +311,12 @@ test('printComponents primitive object', () => {
             },
         },
     });
-    printer.named.nextTypeName('User', true);
-    const text = printer.printComponents();
-    expect(text).toMatchInlineSnapshot(`
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
       "export type Order = {
       /**
        * @description test1
@@ -337,10 +365,12 @@ test('printComponents primitive object', () => {
             },
         },
     });
-    printer.named.nextTypeName('Category', true);
-    printer.named.nextTypeName('Tag', true);
-    const text = printer.printComponents();
-    expect(text).toMatchInlineSnapshot(`
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
       "export type Pet = {
       /**
        * @format int64

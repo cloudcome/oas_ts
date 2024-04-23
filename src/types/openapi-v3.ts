@@ -240,6 +240,7 @@ export interface ExternalDocumentationObject extends Extensable {
  * A unique parameter is defined by a combination of a name and location.
  */
 export interface ParameterObject extends Extensable {
+    $id?: string;
     /**
      * REQUIRED. The name of the parameter. Parameter names are case sensitive.
      *
@@ -279,6 +280,7 @@ export interface ParameterObject extends Extensable {
  * Describes a single request body.
  */
 export interface RequestBodyObject extends Extensable {
+    $id?: string;
     /** A brief description of the request body. This could contain examples of use. CommonMark syntax MAY be used for rich text representation. */
     description?: string;
     /** REQUIRED. The content of the request body. The key is a media type or media type range and the value describes it. For requests that match multiple keys, only the most specific key is applicable. e.g. text/plain overrides text */
@@ -334,8 +336,9 @@ export type ResponsesObject = {
  * Describes a single response from an API Operation, including design-time, static links to operations based on the response.
  */
 export interface ResponseObject extends Extensable {
+    $id?: string;
     /** REQUIRED. A description of the response. CommonMark syntax MAY be used for rich text representation. */
-    description: string;
+    description?: string;
     /** Maps a header name to its definition. [RFC7230] states header names are case insensitive. If a response header is defined with the name "Content-Type", it SHALL be ignored. */
     headers?: { [name: string]: HeaderObject | ReferenceObject };
     /** A map containing descriptions of potential response payloads. The key is a media type or media type range and the value describes it. For responses that match multiple keys, only the most specific key is applicable. e.g. text/plain overrides text */
@@ -411,6 +414,7 @@ export interface TagObject extends Extensable {
  * A simple object to allow referencing other components in the OpenAPI document, internally and externally. The $ref string value contains a URI [RFC3986], which identifies the location of the value being referenced. See the rules for resolving Relative References.
  */
 export interface ReferenceObject extends Extensable {
+    $id?: string;
     /** REQUIRED. The reference identifier. This MUST be in the form of a URI. */
     $ref: string;
     /** A short summary which by default SHOULD override that of the referenced component. If the referenced object-type does not allow a summary field, then this field has no effect. */

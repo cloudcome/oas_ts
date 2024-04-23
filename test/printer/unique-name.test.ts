@@ -40,7 +40,12 @@ test('unique name', () => {
         },
     });
 
-    expect(printer.print()).toMatchInlineSnapshot(`
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
       "/**
        * @title test
        * @version 1.0.0
