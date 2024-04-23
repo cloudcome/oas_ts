@@ -50,19 +50,6 @@ test('v3.1 schema', () => {
         }),
     ).toMatchInlineSnapshot(`
       "/**
-       * @title 1
-       * @version 2
-       * @description 3
-       */
-
-      import axios from "axios";
-      import type {AxiosRequestConfig, AxiosPromise} from "axios";
-      import {resolveURL} from "pkg-name-for-test/client";
-      import type {OneOf} from "pkg-name-for-test/client";
-
-      const BASE_URL="/";
-
-      /**
        * @description Category
        */
       export type Category = {
@@ -83,8 +70,6 @@ test('v3.1 schema', () => {
        */
       id?:number;
       category?:Category;
-      };
-
-      "
+      };"
     `);
 });

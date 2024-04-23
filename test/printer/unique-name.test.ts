@@ -46,19 +46,7 @@ test('unique name', () => {
             hideImports: true,
         }),
     ).toMatchInlineSnapshot(`
-      "/**
-       * @title test
-       * @version 1.0.0
-       */
-
-      import axios from "axios";
-      import type {AxiosRequestConfig, AxiosPromise} from "axios";
-      import {resolveURL} from "pkg-name-for-test/client";
-      import type {OneOf} from "pkg-name-for-test/client";
-
-      const BASE_URL="/";
-
-      export type TestAa = {
+      "export type TestAa = {
       name?:string;
       };
 

@@ -11,8 +11,7 @@
         "lint": "npm run lint:js && npm run lint:type",
         "lint:fix": "npm run lint:js:fix && npm run lint:type",
         "test": "vitest run",
-        "test:coverage": "vitest run --coverage",
-        "copy-types": "cp -rf node_modules/openapi3-ts/dist/model src/model"
+        "test:coverage": "vitest run --coverage"
     },
     "engines": {
         "node": ">=14.21"

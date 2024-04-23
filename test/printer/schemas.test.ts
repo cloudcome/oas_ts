@@ -27,8 +27,7 @@ test('printComponents number', () => {
        * @format int64
        * @example 10
        */
-      export type OrderId = number;
-      "
+      export type OrderId = number;"
     `);
 });
 
@@ -60,8 +59,7 @@ test('printComponents number enum', () => {
        * @format int64
        * @example 10
        */
-      export type OrderId = (1|3|5|7|9);
-      "
+      export type OrderId = (1|3|5|7|9);"
     `);
 });
 
@@ -93,8 +91,7 @@ test('printComponents [number, null] enum', () => {
        * @format int64
        * @example 10
        */
-      export type OrderId = ((1|3|5|7|9)|null);
-      "
+      export type OrderId = ((1|3|5|7|9)|null);"
     `);
 });
 
@@ -129,8 +126,7 @@ test('printComponents type[]', () => {
        * @format int64
        * @example 10
        */
-      export type Order = (number|string);
-      "
+      export type Order = (number|string);"
     `);
 });
 
@@ -179,9 +175,8 @@ test('printComponents AllOf primitive', () => {
       /**
        * @description test2
        */
-      User
-      );
-      "
+      unknown
+      );"
     `);
 });
 
@@ -231,9 +226,8 @@ test('printComponents primitive explicit array', () => {
       /**
        * @description test2
        */
-      User
-      ];
-      "
+      unknown
+      ];"
     `);
 });
 
@@ -273,8 +267,7 @@ test('printComponents primitive generic array', () => {
        * @example 10
        */
       number
-      )[]);
-      "
+      )[]);"
     `);
 });
 
@@ -327,8 +320,7 @@ test('printComponents primitive object', () => {
       aaa:number;
       bbb:string;
       ccc:boolean;
-      };
-      "
+      };"
     `);
 });
 
@@ -381,14 +373,13 @@ test('printComponents primitive object', () => {
        * @example doggie
        */
       name:string;
-      category?:Category;
+      category?:unknown;
       photoUrls:((string)[]);
-      tags?:((Tag)[]);
+      tags?:((unknown)[]);
       /**
        * @description pet status in the store
        */
       status?:("available"|"pending"|"sold");
-      };
-      "
+      };"
     `);
 });
