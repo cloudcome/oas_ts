@@ -10,7 +10,7 @@ test('Generator', async () => {
         openAPIs: [
             {
                 name: 'petStore3',
-                document: path.join(__dirname, '../files/petStore3.openapi.json'),
+                document: path.join(__dirname, '../example-json/3.0/pet-store.json'),
             },
         ],
     });
@@ -34,7 +34,7 @@ test('Generator', async () => {
 
     expect(fn1).toBeCalledTimes(1);
     expect(fn2).toBeCalledTimes(1);
-    expect(fn3).toBeCalledTimes(1 /*reading*/ + 1 /*parsing*/ + 1 /*printing*/ + 1 /*writing*/ + 1 /*generated*/);
+    expect(fn3).toBeCalledTimes(1 /*reading*/ + 1 /*printing*/ + 1 /*writing*/ + 1 /*generated*/);
     expect(fn4).toBeCalledTimes(0);
 
     clean();

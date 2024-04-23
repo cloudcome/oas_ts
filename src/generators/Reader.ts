@@ -1,15 +1,16 @@
-import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 import process from 'process';
-import type { AcceptDocument } from '../parsers/types';
-import type { OpenAPIV3Document } from '../types/openapi';
+import type { OpenApi3 } from '../types/openapi';
+import { request } from '../utils/request';
 import { isString } from '../utils/type-is';
+
+type AcceptDocument = OpenApi3.Document | string;
 
 export class Reader {
     cwd = process.cwd();
 
-    async read(document: AcceptDocument): Promise<OpenAPIV3Document> {
+    async read(document: AcceptDocument): Promise<OpenApi3.Document> {
         if (isString(document)) {
             if (/^https?:/i.test(document)) {
                 return await this.readRemote(document);
@@ -27,18 +28,14 @@ export class Reader {
 
     protected readLocal(file: string) {
         const data = fs.readFileSync(path.resolve(this.cwd, file), 'utf8');
-        return JSON.parse(data) as OpenAPIV3Document;
+        return JSON.parse(data) as OpenApi3.Document;
     }
 
     protected async readRemote(url: string) {
-        const { data } = await axios.request<OpenAPIV3Document>({
-            url,
-            method: 'get',
-        });
-        return data;
+        return await request<OpenApi3.Document>(url);
     }
 
-    protected readObject(document: OpenAPIV3Document) {
+    protected readObject(document: OpenApi3.Document) {
         return document;
     }
 }

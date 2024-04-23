@@ -1,21 +1,22 @@
 {
-  "compilerOptions": {
-    "strict": true,
-    "noEmit": true,
-    "allowJs": true,
-    "sourceMap": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "verbatimModuleSyntax": true,
-    "useDefineForClassFields": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "target": "ES2020",
-    "module": "ES2020",
-    "moduleResolution": "Node",
-    "lib": ["Es2020"],
-    "types": ["vitest/globals"]
-  },
-  "include": ["src", "test", "*.ts"]
+    "compilerOptions": {
+        "strict": true,
+        "noEmit": true,
+        "allowJs": true,
+        "sourceMap": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "verbatimModuleSyntax": true,
+        "useDefineForClassFields": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "target": "ES2020",
+        "module": "ES2020",
+        "moduleResolution": "Node",
+        "lib": ["Es2020"],
+        "types": ["vitest/globals"]
+    },
+    "include": ["src", "test", "*.ts"],
+    "exclude": ["test/example-dest"]
 }

@@ -36,12 +36,5 @@ yarn.lock
 # testing
 /coverage
 
-# next.js
-.next
-/out
-/build
-
-# nuxt.js
-.nuxt
-.nitro
-.output
+# project
+/test/example-dest

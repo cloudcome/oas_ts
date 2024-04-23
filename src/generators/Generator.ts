@@ -3,18 +3,18 @@ import path from 'path';
 import process from 'process';
 import { Emitter } from 'strict-event-emitter';
 import { normalizeError } from 'try-flatten';
-import { DocumentParser } from '../parsers/DocumentParser';
-import { DocumentPrinter } from '../printers/DocumentPrinter';
+import { Printer } from '../printer';
+import { formatTsCode } from '../utils/string';
 import { Reader } from './Reader';
 import type {
     GeneratingOptions,
+    GeneratingPayload,
     GeneratingStage,
     GeneratorEmits,
     GeneratorOptions,
-    GeneratingPayload,
+    GeneratorPayload,
     OpenAPIOptions,
     StrictGeneratorOptions,
-    GeneratorPayload,
 } from './types';
 
 export class Generator extends Emitter<GeneratorEmits> {
@@ -51,20 +51,18 @@ export class Generator extends Emitter<GeneratorEmits> {
     }
 
     protected async generateOpenAPI(index: number, count: number, openAPIOptions: OpenAPIOptions, generatorOptions: StrictGeneratorOptions) {
-        const { cwd, dest, parser: globalParser, printer: globalPrinter } = generatorOptions;
-        const { name, document, parser: scopeParser, printer: scopePrinter } = openAPIOptions;
+        const { cwd, dest, ...globalPrinter } = generatorOptions;
+        const { name, document, ...scopePrinter } = openAPIOptions;
         const fileName = `${name}.ts`;
         const filePath = path.join(cwd, dest, fileName);
 
         // 1. 参数合并
-        const parserOptions = Object.assign({}, globalParser, scopeParser);
         const printerOptions = Object.assign({}, globalPrinter, scopePrinter);
         const options: GeneratingOptions = {
             ...openAPIOptions,
             cwd,
             dest,
-            parser: parserOptions,
-            printer: printerOptions,
+            ...printerOptions,
         };
         const makePayload = (step: GeneratingStage): GeneratingPayload => ({
             index,
@@ -80,20 +78,15 @@ export class Generator extends Emitter<GeneratorEmits> {
         reader.cwd = cwd;
         const openAPIV3Document = await reader.read(document);
 
-        // 3. 解析
-        this.emit('process', makePayload('parsing'));
-        const parser = new DocumentParser(openAPIV3Document, parserOptions);
-        const types = parser.parse();
-
-        // 4. 输出
+        // 3. 输出
         this.emit('process', makePayload('printing'));
-        const printer = new DocumentPrinter(types, printerOptions);
+        const printer = new Printer(openAPIV3Document, printerOptions);
         const text = printer.print();
 
-        // 5. 写入
+        // 4. 写入
         this.emit('process', makePayload('writing'));
         fs.mkdirSync(path.dirname(filePath), { recursive: true });
-        fs.writeFileSync(filePath, text, 'utf8');
+        fs.writeFileSync(filePath, await formatTsCode(text), 'utf8');
 
         this.emit('process', makePayload('generated'));
     }

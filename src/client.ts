@@ -1,20 +1,20 @@
 export * from './const';
 
-// @ref https://github.com/drwpow/openapi-typescript/blob/bc52343c44f9dab4006e04c27411e405fb67a739/src/index.ts#L215
-export type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };
-export type XOR<T, U> = T | U extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;
-export type OneOf<T extends unknown[]> = T extends [infer Only] ? Only : T extends [infer A, infer B, ...infer Rest] ? OneOf<[XOR<A, B>, ...Rest]> : never;
+// @ref https://qiita.com/ssssota/items/7e05f05b57e71dfe1cf9#%E3%81%8A%E3%81%BE%E3%81%91
+export type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
+export type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
+export type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
 
-export const DELETE = 'DELETE';
-export const GET = 'GET';
-export const HEAD = 'HEAD';
-export const OPTIONS = 'OPTIONS';
-export const PATCH = 'PATCH';
-export const POST = 'POST';
-export const PUT = 'PUT';
-export const TRACE = 'TRACE';
-
-export function resolveURL(baseURL: string, url: string) {
+export function resolveURL(baseURL: string, url: string, vars: Record<string, string | number> = {}) {
     // @ref https://github.com/FrontEndDev-org/openapi-axios/security/code-scanning/1
-    return baseURL.replace(/(?<!\/)\/+$/, '') + '/' + url.replace(/^\/+/, '');
+    return (
+        baseURL.replace(/(?<!\/)\/+$/, '') +
+        '/' +
+        url
+            .replace(/\{(.*?)}/g, ($0, $1) => {
+                const val = vars[$1];
+                return typeof val === 'number' || typeof val === 'string' ? String(val) : '';
+            })
+            .replace(/^\/+/, '')
+    );
 }

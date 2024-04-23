@@ -1,10 +1,10 @@
-import type { AcceptDocument, ParserOptions } from '../parsers/types';
-import type { PrinterOptions } from '../printers/types';
-import type { OpenAPIV3Document } from '../types/openapi';
+import type { Options } from 'prettier';
+import type { PrinterOptions } from '../printer/types';
+import type { OpenApi3 } from '../types/openapi';
 
 type RequiredWith<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
-export interface OpenAPIOptions {
+export type OpenAPIOptions = PrinterOptions & {
     /**
      * openapi 的名称，将会生成 ${name}.ts 文件
      */
@@ -13,20 +13,10 @@ export interface OpenAPIOptions {
     /**
      * openapi 的 document，可以是一个链接地址，也可以是本地路径，也可以是一个对象
      */
-    document: AcceptDocument;
+    document: OpenApi3.Document | string;
+};
 
-    /**
-     * 解析配置，优先级高于全局配置
-     */
-    parser?: ParserOptions;
-
-    /**
-     * 输出配置，优先级高于全局配置
-     */
-    printer?: PrinterOptions;
-}
-
-export interface GeneratorOptions {
+export type GeneratorOptions = PrinterOptions & {
     /**
      * 工作目录，默认为 process.cwd()
      */
@@ -38,23 +28,18 @@ export interface GeneratorOptions {
     dest?: string;
 
     /**
-     * 解析配置
+     * 格式化配置，默认会读取当前工作目录下的配置文件
      */
-    parser?: ParserOptions;
-
-    /**
-     * 输出配置
-     */
-    printer?: PrinterOptions;
+    prettierOptions?: Options;
 
     /**
      * openapi 配置列表
      */
     openAPIs: OpenAPIOptions[];
-}
+};
 export type StrictGeneratorOptions = RequiredWith<GeneratorOptions, 'cwd' | 'dest'>;
 
-export type GeneratingStage = 'reading' | 'parsing' | 'printing' | 'writing' | 'generated';
+export type GeneratingStage = 'reading' | 'printing' | 'writing' | 'generated';
 export type GeneratingOptions = OpenAPIOptions & Pick<StrictGeneratorOptions, 'cwd' | 'dest'>;
 
 export interface GeneratorPayload {

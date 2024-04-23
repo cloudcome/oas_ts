@@ -1,5 +1,9 @@
 export * from './const';
-export { defineConfig, run } from './generators/command';
-export { DocumentPrinter } from './printers/DocumentPrinter';
-export { DocumentParser } from './parsers/DocumentParser';
+export { Printer } from './printer';
 export { Generator } from './generators/Generator';
+export * from './generators/command';
+
+// types
+export type * from './types/openapi';
+export type * from './printer/types';
+export type * from './generators/types';

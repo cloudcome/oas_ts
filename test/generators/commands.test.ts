@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { configFileNameOrder, resolveConfig, resolveConfigFile, run } from '../../src/generators/command';
-import type { OpenAPIV3Document } from '../../src/types/openapi';
 import { createTempDirname } from '../helpers';
+import type { OpenApi3 } from '../../src/types/openapi';
 
 test('resolveConfigFile', async () => {
     const [cwd, clean] = createTempDirname();
@@ -71,7 +71,7 @@ test('run', async () => {
             },
             openapi: '3.0.0',
             paths: {},
-        } as OpenAPIV3Document),
+        } as OpenApi3.Document),
     );
     fs.writeFileSync(
         file,
