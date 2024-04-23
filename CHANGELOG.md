@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.18.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.17.3...v0.18.0) (2024-04-23)
+
+
+### Features
+
+* 支持请求、响应、参数的引用 ([cbe6cc1](https://github.com/FrontEndDev-org/openapi-axios/commit/cbe6cc1939aa56ae43daefe6e2a49e05fb8d0bf8))
+
 ## [0.17.3](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.17.2...v0.17.3) (2024-04-16)
 
 
