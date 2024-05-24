@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.18.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.18.0...v0.18.1) (2024-05-24)
+
+
+### Bug Fixes
+
+* 修正未处理 nullable 的问题 ([3987e10](https://github.com/FrontEndDev-org/openapi-axios/commit/3987e10e8e88875b9b4b96243698405651f85b95))
+
 ## [0.18.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.17.3...v0.18.0) (2024-04-23)
 
 
