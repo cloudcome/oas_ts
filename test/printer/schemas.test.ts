@@ -139,6 +139,16 @@ test('printComponents AllOf primitive', () => {
         },
         components: {
             schemas: {
+                User: {
+                    type: 'object',
+                    nullable: true,
+                    properties: {
+                        username: {
+                            type: 'string',
+                        },
+                    },
+                    required: ['username'],
+                },
                 Order: {
                     allOf: [
                         {

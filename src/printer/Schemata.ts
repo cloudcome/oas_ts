@@ -15,6 +15,10 @@ function withGroup(texts: string[], separator: string, start = '(', end = ')') {
     return start + texts.join(separator) + end;
 }
 
+function withNullable(type: string, nullable?: boolean) {
+    return nullable ? `(${type}) | null` : type;
+}
+
 export class Schemata {
     constructor(private named: Named) {}
 
@@ -27,15 +31,18 @@ export class Schemata {
             };
         }
 
-        const { type, allOf, oneOf, anyOf, default: defaultValue, deprecated, description, format, readOnly, title } = schema;
+        const { type, allOf, oneOf, anyOf, nullable } = schema;
         const comments = JsDoc.fromSchema(schema);
 
         if (allOf) {
             return {
                 comments,
-                type: withGroup(
-                    allOf.map((s) => this.toString(s)),
-                    '&',
+                type: withNullable(
+                    withGroup(
+                        allOf.map((s) => this.toString(s)),
+                        '&',
+                    ),
+                    nullable,
                 ),
                 required: false,
             };
@@ -44,9 +51,12 @@ export class Schemata {
         if (oneOf) {
             return {
                 comments,
-                type: withGroup(
-                    oneOf.map((s) => this.toString(s)),
-                    '|',
+                type: withNullable(
+                    withGroup(
+                        oneOf.map((s) => this.toString(s)),
+                        '|',
+                    ),
+                    nullable,
                 ),
                 required: false,
             };
@@ -55,11 +65,14 @@ export class Schemata {
         if (anyOf) {
             return {
                 comments,
-                type: withGroup(
-                    anyOf.map((s) => this.toString(s)),
-                    ',',
-                    'AnyOf<',
-                    '>',
+                type: withNullable(
+                    withGroup(
+                        anyOf.map((s) => this.toString(s)),
+                        ',',
+                        'AnyOf<',
+                        '>',
+                    ),
+                    nullable,
                 ),
                 required: false,
             };
@@ -68,21 +81,24 @@ export class Schemata {
         if (isArray(type)) {
             return {
                 comments,
-                type: withGroup(
-                    type.map((type) =>
-                        this.toString(
-                            type === 'null'
-                                ? { type }
-                                : ({
-                                      // 将枚举值传给子类型
-                                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                      // @ts-ignore
-                                      enum: schema.enum,
-                                      type,
-                                  } as OpenApi3.SchemaObject),
+                type: withNullable(
+                    withGroup(
+                        type.map((type) =>
+                            this.toString(
+                                type === 'null'
+                                    ? { type }
+                                    : ({
+                                          // 将枚举值传给子类型
+                                          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                          // @ts-ignore
+                                          enum: schema.enum,
+                                          type,
+                                      } as OpenApi3.SchemaObject),
+                            ),
                         ),
+                        '|',
                     ),
-                    '|',
+                    nullable,
                 ),
                 required: false,
             };
@@ -93,13 +109,15 @@ export class Schemata {
                 const { enum: enumValues = [] } = schema;
                 return {
                     comments,
-                    type:
+                    type: withNullable(
                         enumValues.length > 0
                             ? withGroup(
                                   enumValues.map((e) => (isString(e) ? JSON.stringify(e) : this.named.getRefType(e.$ref) || 'unknown')),
                                   '|',
                               )
                             : type,
+                        nullable,
+                    ),
                     required: schema.required || false,
                 };
             }
@@ -108,13 +126,15 @@ export class Schemata {
                 const { enum: enumValues = [] } = schema;
                 return {
                     comments,
-                    type:
+                    type: withNullable(
                         enumValues.length > 0
                             ? withGroup(
                                   enumValues.map((e) => (isBoolean(e) ? String(e) : this.named.getRefType(e.$ref) || 'unknown')),
                                   '|',
                               )
                             : type,
+                        nullable,
+                    ),
                     required: schema.required || false,
                 };
             }
@@ -124,13 +144,15 @@ export class Schemata {
                 const { enum: enumValues = [] } = schema;
                 return {
                     comments,
-                    type:
+                    type: withNullable(
                         enumValues.length > 0
                             ? withGroup(
                                   enumValues.map((e) => (isNumber(e) ? String(e) : this.named.getRefType(e.$ref) || 'unknown')),
                                   '|',
                               )
                             : 'number',
+                        nullable,
+                    ),
                     required: schema.required || false,
                 };
             }
@@ -178,7 +200,7 @@ export class Schemata {
         const subTypes = subSchemas.map((s) => this.toString(s));
         return {
             comments,
-            type: explicit ? `[${subTypes.join(',')}]` : `((${subTypes.join('|')})[])`,
+            type: withNullable(explicit ? `[${subTypes.join(',')}]` : `((${subTypes.join('|')})[])`, schema.nullable),
             required: false,
         };
     }
@@ -199,28 +221,35 @@ export class Schemata {
 
         return {
             comments,
-            type: withGroup(
-                entries.map(([name, subSchema]) => {
-                    const { required: subRequired, comments, type } = this.print(subSchema);
-                    const required = schema.required?.includes(name) || subRequired || false;
-                    const jsDoc = new JsDoc();
-                    jsDoc.addComments(comments);
-                    return [jsDoc.print(), `${name}${requiredTypeStringify(required)}${type};`].filter(Boolean).join('\n');
-                }),
-                '\n',
-                '{\n',
-                '\n}',
+            type: withNullable(
+                withGroup(
+                    entries.map(([name, subSchema]) => {
+                        const { required: subRequired, comments, type } = this.print(subSchema);
+                        const required = schema.required?.includes(name) || subRequired || false;
+                        const jsDoc = new JsDoc();
+                        jsDoc.addComments(comments);
+                        return [jsDoc.print(), `${name}${requiredTypeStringify(required)}${type};`].filter(Boolean).join('\n');
+                    }),
+                    '\n',
+                    '{\n',
+                    '\n}',
+                ),
+                schema.nullable,
             ),
             required: false,
         };
     }
 
-    private _printUnknown(schema: OpenApi3_Schema, type: 'object' | 'array' | 'primitive' = 'primitive') {
+    private _printUnknown(schema: OpenApi3.SchemaBaseObject & OpenApi3_Schema, type: 'object' | 'array' | 'primitive' = 'primitive') {
         const comments = JsDoc.fromSchema(schema);
 
         return {
             comments,
-            type: type === 'object' ? 'Record<keyof unknown, unknown>' : type === 'array' ? '(unknown[])' : 'unknown',
+            type: withNullable(
+                //
+                type === 'object' ? 'Record<keyof unknown, unknown>' : type === 'array' ? '(unknown[])' : 'unknown',
+                schema.nullable,
+            ),
             required: false,
         };
     }
