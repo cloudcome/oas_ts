@@ -4,7 +4,7 @@
     "description": "OpenAPI → Axios",
     "scripts": {
         "prepare": "husky install",
-        "build": "vite build",
+        "build": "NODE_ENV=production vite build",
         "lint:js": "eslint --ext=.cjs,.mjs,.ts,.tsx src test",
         "lint:js:fix": "eslint --ext=.cjs,.mjs,.ts,.tsx src test --fix",
         "lint:type": " tsc --project tsconfig.json",
