@@ -43,7 +43,7 @@ export interface GeneratorPayload {
 export interface GeneratingPayload {
     index: number;
     count: number;
-    name: string;
+    module: string;
     stage: GeneratingStage;
     options: GeneratingOptions;
     filePath: string;

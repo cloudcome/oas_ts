@@ -12,7 +12,7 @@ test('Logger', async () => {
     logger.pipeProcessEvent({
         index: 5,
         count: 99,
-        name: 'test',
+        module: 'test',
         stage: 'generated',
         filePath: '/a/b/c/d/e/f',
         options: {

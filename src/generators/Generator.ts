@@ -53,10 +53,10 @@ export class Generator extends Emitter<GeneratorEmits> {
         this.emit('end', payload);
     }
 
-    protected async generateOpenAPI(index: number, count: number, name: string, openAPIOptions: OpenAPIOptions, generatorOptions: StrictGeneratorOptions) {
+    protected async generateOpenAPI(index: number, count: number, module: string, openAPIOptions: OpenAPIOptions, generatorOptions: StrictGeneratorOptions) {
         const { cwd, dest, ...globalPrinter } = generatorOptions;
         const { document, ...scopePrinter } = openAPIOptions;
-        const fileName = `${name}.ts`;
+        const fileName = `${module}.ts`;
         const filePath = path.join(cwd, dest, fileName);
 
         // 1. 参数合并
@@ -70,7 +70,7 @@ export class Generator extends Emitter<GeneratorEmits> {
         const makePayload = (step: GeneratingStage): GeneratingPayload => ({
             index,
             count,
-            name,
+            module,
             stage: step,
             options,
             filePath,
@@ -85,7 +85,7 @@ export class Generator extends Emitter<GeneratorEmits> {
         // 3. 输出
         this.emit('process', makePayload('printing'));
         const printer = new Printer(openAPIV3Document, printerOptions);
-        const code = printer.print();
+        const code = printer.print({ module });
 
         // 4. 写入
         this.emit('process', makePayload('writing'));
