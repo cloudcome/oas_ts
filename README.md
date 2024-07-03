@@ -54,6 +54,7 @@ npx openapi-axios
 
 ```ts
 /**
+ * @module petStore3
  * @title Swagger Petstore - OpenAPI 3.1
  * @version 1.0.6
  * @contact <apiteam@swagger.io>
