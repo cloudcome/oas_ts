@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.19.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.18.1...v0.19.0) (2024-07-03)
+
+
+### Features
+
+* 打印时增加 module 信息输出 ([235e4d6](https://github.com/FrontEndDev-org/openapi-axios/commit/235e4d6b4d60d6fec0f91b07589a44d2eabe0618))
+* 配置项由 openAPIs 数组调整为 modules 对象 ([47c638c](https://github.com/FrontEndDev-org/openapi-axios/commit/47c638cb3ac13eb69da90057fc57090960de3830))
+
 ## [0.18.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.18.0...v0.18.1) (2024-05-24)
 
 
