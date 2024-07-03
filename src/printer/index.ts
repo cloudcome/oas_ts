@@ -1,4 +1,3 @@
-import { record } from 'zod';
 import { pkgName } from '../const';
 import type { OpenApi3 } from '../types/openapi';
 import { never } from '../utils/func';
@@ -24,7 +23,7 @@ import {
 import { JsDoc } from './JsDoc';
 import { Named } from './Named';
 import { Schemata } from './Schemata';
-import type { PrinterOptions, RequestStatusCodeMatch } from './types';
+import type { PrinterOptions, PrinterConfigs, RequestStatusCodeMatch } from './types';
 
 const allowMethods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 
@@ -36,6 +35,7 @@ type ResponseMatch = (statusCode: string, response: OpenApi3_Response) => boolea
 export class Printer {
     named = new Named();
     schemata = new Schemata(this.named);
+    private configs: PrinterConfigs = {};
 
     constructor(
         private readonly document: OpenApi3.Document,
@@ -76,13 +76,16 @@ export class Printer {
         });
     }
 
-    print(options?: { hideInfo?: boolean; hideImports?: boolean; hideComponents?: boolean; hidePaths?: boolean }) {
+    print(configs?: PrinterConfigs) {
+        Object.assign(this.configs, configs);
+        const { hideInfo, hideComponents, hideImports, hidePaths } = this.configs;
+
         return [
             //
-            !options?.hideInfo && this._printInfo(),
-            !options?.hideImports && this._printImports(),
-            !options?.hideComponents && this._printComponents(),
-            !options?.hidePaths && this._printPaths(),
+            !hideInfo && this._printInfo(),
+            !hideImports && this._printImports(),
+            !hideComponents && this._printComponents(),
+            !hidePaths && this._printPaths(),
         ]
             .filter(Boolean)
             .join('\n\n');
@@ -121,6 +124,8 @@ export class Printer {
         const { externalDocs } = this.document;
         const { name, email, url } = contact || {};
         const jsDoc = new JsDoc();
+        const { module } = this.configs;
+        if (module) jsDoc.addComments({ module });
         const extDoc = JsDoc.printExternalDoc(externalDocs);
         jsDoc.addComments({
             title,
@@ -249,6 +254,8 @@ export class Printer {
         const respType = responseArgs.toType(0);
         const jsDoc = new JsDoc(this.document.tags);
         const comments = JsDoc.fromOperation(operation);
+        const { module } = this.configs;
+        if (module) jsDoc.addComments({ module });
         jsDoc.addComments(comments);
         jsDoc.addComments(requestArgs.toComments());
         jsDoc.addComments(responseArgs.toComments());

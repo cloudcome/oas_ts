@@ -107,3 +107,15 @@ export type PrinterOptions = {
      */
     operationIdNormalize?: OperationIdNormalize;
 };
+
+export type PrinterConfigs = {
+    /**
+     * 表明当前 API 所在的模块
+     */
+    module?: string;
+
+    hideInfo?: boolean;
+    hideImports?: boolean;
+    hideComponents?: boolean;
+    hidePaths?: boolean;
+};
