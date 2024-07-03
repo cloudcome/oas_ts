@@ -66,8 +66,7 @@
         "chalk": "^4.1.2",
         "prettier": "^3.2.5",
         "strict-event-emitter": "^0.5.1",
-        "try-flatten": "^1.3.2",
-        "zod": "^3.22.4"
+        "try-flatten": "^1.3.2"
     },
     "devDependencies": {
         "@commitlint/cli": "^18.5.0",
