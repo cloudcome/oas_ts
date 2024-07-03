@@ -6,11 +6,6 @@ type RequiredWith<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 export type OpenAPIOptions = PrinterOptions & {
     /**
-     * openapi 的名称，将会生成 ${name}.ts 文件
-     */
-    name: string;
-
-    /**
      * openapi 的 document，可以是一个链接地址，也可以是本地路径，也可以是一个对象
      */
     document: OpenApi3.Document | string;
@@ -33,9 +28,9 @@ export type GeneratorOptions = PrinterOptions & {
     prettierOptions?: Options;
 
     /**
-     * openapi 配置列表
+     * openapi 模块配置
      */
-    openAPIs: OpenAPIOptions[];
+    modules: Record<string, OpenAPIOptions | string>;
 };
 export type StrictGeneratorOptions = RequiredWith<GeneratorOptions, 'cwd' | 'dest'>;
 
@@ -48,6 +43,7 @@ export interface GeneratorPayload {
 export interface GeneratingPayload {
     index: number;
     count: number;
+    name: string;
     stage: GeneratingStage;
     options: GeneratingOptions;
     filePath: string;

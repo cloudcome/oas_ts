@@ -14,7 +14,7 @@ export class Logger {
         console.log(
             chalk.cyanBright('▷'),
             chalk.yellowBright(`${step}/${payload.count}`),
-            payload.options.name,
+            payload.name,
             payload.stage,
             payload.stage === 'generated' ? path.relative(payload.options.cwd, payload.filePath) : '',
         );
