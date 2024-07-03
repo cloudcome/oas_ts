@@ -25,32 +25,16 @@ test('resolveConfig', async () => {
     expect(() => resolveConfig(cwd)).toThrow('配置文件未找到');
 
     const file = path.join(cwd, configFileNameOrder[0]);
-    fs.writeFileSync(file, '', 'utf8');
-    expect(() => resolveConfig(cwd)).toThrow('#/openAPIs - Required');
 
     fs.writeFileSync(
         file,
         `module.exports = {
-    openAPIs: []
-  };`,
-        'utf8',
-    );
-    expect(() => resolveConfig(cwd)).toThrow('#/openAPIs - Array must contain at least 1 element(s)');
 
-    fs.writeFileSync(
-        file,
-        `module.exports = {
-    openAPIs: [{name: "test"}]
-  };`,
-        'utf8',
-    );
-    expect(() => resolveConfig(cwd)).toThrow('#/openAPIs/0/document - Invalid input');
+modules: {
+    "test": {"document": "test.openapi.json"}
+}
 
-    fs.writeFileSync(
-        file,
-        `module.exports = {
-    openAPIs: [{name: "test", "document": "test.openapi.json"}]
-  };`,
+};`,
         'utf8',
     );
     expect(() => resolveConfig(cwd)).not.toThrow();
@@ -76,8 +60,12 @@ test('run', async () => {
     fs.writeFileSync(
         file,
         `module.exports = {
-    openAPIs: [{name: "test", "document": "test.openapi.json"}]
-  };`,
+
+modules: {
+    "test": "test.openapi.json"
+}
+
+};`,
         'utf8',
     );
 

@@ -33,6 +33,46 @@ test('1路径 + 1请求', () => {
     `);
 });
 
+test('1路径 + 1请求 * module', () => {
+    const printer = new Printer({
+        info: {
+            title: 'api',
+            version: 'v1',
+        },
+        openapi: '3.0.0',
+        paths: {
+            '/api/abc': {
+                get: {},
+            },
+        },
+    });
+
+    expect(
+        printer.print({
+            module: 'TTT',
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
+      "/**
+       * @module TTT
+       * @title api
+       * @version v1
+       */
+
+      /**
+       * @module TTT
+       * @param [config] request config
+       */
+              export async function getApiAbc(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+                  return axios({
+                      method: "get",
+                      url:resolveURL(BASE_URL,"/api/abc"),
+      ...config
+                  });
+              }"
+    `);
+});
+
 test('1路径 + 2请求', () => {
     const printer = new Printer({
         info: {

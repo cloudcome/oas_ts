@@ -7,12 +7,11 @@ test('Generator', async () => {
     const [tempDir, clean] = createTempDirname();
     const generator = new Generator({
         cwd: tempDir,
-        openAPIs: [
-            {
-                name: 'petStore3',
+        modules: {
+            petStore3: {
                 document: path.join(__dirname, '../example-json/3.0/pet-store.json'),
             },
-        ],
+        },
     });
 
     const fn1 = vi.fn();

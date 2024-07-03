@@ -173,7 +173,11 @@ test('printComponents AllOf primitive', () => {
             hideImports: true,
         }),
     ).toMatchInlineSnapshot(`
-      "export type Order = (
+      "export type User = ({
+      username:string;
+      }) | null;
+
+      export type Order = (
       /**
        * @description test1
        * @deprecated
@@ -185,7 +189,7 @@ test('printComponents AllOf primitive', () => {
       /**
        * @description test2
        */
-      unknown
+      User
       );"
     `);
 });
