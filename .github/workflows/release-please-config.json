@@ -1,0 +1,5 @@
+{
+    "$schema": "https://raw.githubusercontent.com/googleapis/release-please/ace2bd5dc778f83c33ad5dee6807db5d0afdba36/schemas/config.json",
+    "bump-minor-pre-major": true,
+    "packages": {}
+}
