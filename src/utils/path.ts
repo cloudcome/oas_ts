@@ -1,9 +1,9 @@
 import path from 'node:path';
 
-export function toRelative(to: string, from?: string) {
-    if (!from) return to;
-    if (!path.isAbsolute(to)) return to;
+export function toRelative(toFile: string, fromFile?: string) {
+    if (!fromFile) return toFile;
+    if (!path.isAbsolute(toFile)) return toFile;
 
-    const relative = path.relative(from, to);
+    const relative = path.relative(path.dirname(fromFile), toFile);
     return relative.startsWith('.') ? relative : `./${relative}`;
 }
