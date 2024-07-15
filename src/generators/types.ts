@@ -46,7 +46,7 @@ export interface GeneratingPayload {
     module: string;
     stage: GeneratingStage;
     options: GeneratingOptions;
-    filePath: string;
+    file: string;
 }
 
 export type GeneratorEmits = {

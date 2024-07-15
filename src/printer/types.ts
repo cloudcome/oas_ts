@@ -114,6 +114,11 @@ export type PrinterConfigs = {
      */
     module?: string;
 
+    /**
+     * file path
+     */
+    file?: string;
+
     hideInfo?: boolean;
     hideImports?: boolean;
     hideComponents?: boolean;

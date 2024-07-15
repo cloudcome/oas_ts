@@ -57,7 +57,7 @@ export class Generator extends Emitter<GeneratorEmits> {
         const { cwd, dest, ...globalPrinter } = generatorOptions;
         const { document, ...scopePrinter } = openAPIOptions;
         const fileName = `${module}.ts`;
-        const filePath = path.join(cwd, dest, fileName);
+        const file = path.join(cwd, dest, fileName);
 
         // 1. 参数合并
         const printerOptions = Object.assign({}, globalPrinter, scopePrinter);
@@ -73,7 +73,7 @@ export class Generator extends Emitter<GeneratorEmits> {
             module,
             stage: step,
             options,
-            filePath,
+            file,
         });
 
         // 2. 读取
@@ -85,12 +85,12 @@ export class Generator extends Emitter<GeneratorEmits> {
         // 3. 输出
         this.emit('process', makePayload('printing'));
         const printer = new Printer(openAPIV3Document, printerOptions);
-        const code = printer.print({ module });
+        const code = printer.print({ module, file: file });
 
         // 4. 写入
         this.emit('process', makePayload('writing'));
-        fs.mkdirSync(path.dirname(filePath), { recursive: true });
-        fs.writeFileSync(filePath, await formatTsCode(code), 'utf8');
+        fs.mkdirSync(path.dirname(file), { recursive: true });
+        fs.writeFileSync(file, await formatTsCode(code), 'utf8');
 
         this.emit('process', makePayload('generated'));
     }

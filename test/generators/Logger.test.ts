@@ -14,7 +14,7 @@ test('Logger', async () => {
         count: 99,
         module: 'test',
         stage: 'generated',
-        filePath: '/a/b/c/d/e/f',
+        file: '/a/b/c/d/e/f',
         options: {
             cwd: '/a/b/c',
             dest: '',

@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { pkgName } from '../const';
 import type { OpenApi3 } from '../types/openapi';
 import { never } from '../utils/func';
@@ -24,6 +25,7 @@ import { JsDoc } from './JsDoc';
 import { Named } from './Named';
 import { Schemata } from './Schemata';
 import type { PrinterOptions, PrinterConfigs, RequestStatusCodeMatch } from './types';
+import { toRelative } from '../utils/path';
 
 const allowMethods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 
@@ -95,7 +97,7 @@ export class Printer {
     private _printImports() {
         const {
             axiosImportName = AXIOS_IMPORT_NAME,
-            axiosNamedImport: axiosNamedImport,
+            axiosNamedImport,
             axiosImportFile = AXIOS_IMPORT_FILE,
             axiosRequestConfigTypeName = AXIOS_QUEST_CONFIG_TYPE_NAME,
             axiosResponseTypeName = AXIOS_PROMISE_TYPE_NAME,
@@ -104,15 +106,17 @@ export class Printer {
         const firstServer = this.document.servers?.[0];
         const defaultBaseURL = firstServer?.url || '/';
         const BASE_URL = isString(baseURL) ? baseURL : baseURL?.(this.document) || defaultBaseURL;
+        const { file } = this.configs;
+        const importPath = toRelative(axiosImportFile, file);
 
         return [
             //
             axiosNamedImport
                 ? // 具名导入
-                  `import {${axiosImportName}} from "${axiosImportFile}";`
+                  `import {${axiosImportName}} from "${importPath}";`
                 : // 默认导入
-                  `import ${axiosImportName} from "${axiosImportFile}";`,
-            `import type {${axiosRequestConfigTypeName}, ${axiosResponseTypeName}} from "${axiosImportFile}";`,
+                  `import ${axiosImportName} from "${importPath}";`,
+            `import type {${axiosRequestConfigTypeName}, ${axiosResponseTypeName}} from "${importPath}";`,
             `import {resolveURL} from "${pkgName}/client";`,
             `import type {OneOf} from "${pkgName}/client";`,
             '',

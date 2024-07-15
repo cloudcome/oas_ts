@@ -16,7 +16,7 @@ export class Logger {
             chalk.yellowBright(`${step}/${payload.count}`),
             payload.module,
             payload.stage,
-            payload.stage === 'generated' ? path.relative(payload.options.cwd, payload.filePath) : '',
+            payload.stage === 'generated' ? path.relative(payload.options.cwd, payload.file) : '',
         );
     }
 
