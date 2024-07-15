@@ -63,8 +63,8 @@ export class JsDoc {
     static fromSchema(schema: OpenApi3.SchemaObject) {
         const { deprecated, description, default: defaultValue, format, example, title, externalDocs } = schema;
         return {
-            description,
             summary: title,
+            description,
             deprecated,
             default: defaultValue,
             format,

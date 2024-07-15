@@ -12,7 +12,8 @@ test('v3.1 schema', () => {
             schemas: {
                 Category: {
                     $id: 'my-id',
-                    description: 'Category',
+                    title: 'Category Title',
+                    description: 'Category Description',
                     properties: {
                         id: {
                             type: 'integer',
@@ -50,7 +51,8 @@ test('v3.1 schema', () => {
         }),
     ).toMatchInlineSnapshot(`
       "/**
-       * @description Category
+       * @summary Category Title
+       * @description Category Description
        */
       export type Category = {
       /**
