@@ -43,6 +43,7 @@ export class Printer {
     ) {
         const { openapi } = document;
 
+        if (!openapi) throw new Error(`未找到 openapi 版本号`);
         if (!openapi.startsWith('3.')) throw new Error(`当前仅支持 openapi 3.x，当前版本为 ${openapi}`);
 
         this.registerComponents();
