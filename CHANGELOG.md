@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.20.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.19.1...v0.20.0) (2024-07-19)
+
+
+### Features
+
+* **printer:** 添加新导入类型以支持更丰富的模式 ([6c9f9cd](https://github.com/FrontEndDev-org/openapi-axios/commit/6c9f9cdb6965a08617b9d331991b23a156b7d090))
+* 支持 additionalProperties ([a749471](https://github.com/FrontEndDev-org/openapi-axios/commit/a7494719787f30e1f7b63f3f5f6b93106461e406))
+* 支持泛型对象 ([2a587da](https://github.com/FrontEndDev-org/openapi-axios/commit/2a587daa398a9bc60c320ccc295f34190006480f))
+
+
+### Bug Fixes
+
+* **printer:** 处理非基本类型格式的JS文档注释 ([4dff5e9](https://github.com/FrontEndDev-org/openapi-axios/commit/4dff5e91cc8cb1c6b8eac9856461119990f96a3e))
+
 ## [0.19.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.19.0...v0.19.1) (2024-07-15)
 
 
