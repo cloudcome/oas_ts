@@ -320,7 +320,7 @@ params:{additionalMetadata},
  * @param [config] request config
  * @returns successful operation
  */
-        export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<Record<keyof unknown, unknown>> {
+        export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<AnyObject> {
             return axios({
                 method: "get",
                 url:resolveURL(BASE_URL,"/store/inventory"),

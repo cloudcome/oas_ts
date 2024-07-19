@@ -520,7 +520,7 @@ export interface ObjectSubtype {
     type?: 'object' | ['object', 'null'];
     properties?: { [name: string]: SchemaObject | ReferenceObject };
     additionalProperties?: boolean | Record<string, never> | SchemaObject | ReferenceObject;
-    required?: string[];
+    required?: boolean | string[];
     allOf?: (SchemaObject | ReferenceObject)[];
     anyOf?: (SchemaObject | ReferenceObject)[];
     enum?: (SchemaObject | ReferenceObject)[];

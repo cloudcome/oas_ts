@@ -81,6 +81,8 @@ export const INTERNAL_NAMES = [
     'OneOf',
     'AllOf',
     'AnyOf',
+    'AnyObject',
+    'AnyArray',
     'resolveURL',
     'BASE_URL',
     // config

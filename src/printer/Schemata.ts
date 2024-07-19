@@ -210,7 +210,7 @@ export class Schemata {
         const props = 'properties' in schema ? schema.properties : null;
 
         if (!props) {
-            return this._printUnknown(schema, 'object');
+            return this._printUnknown(schema, 'object', isBoolean(schema.required) ? schema.required : false);
         }
 
         const entries = Object.entries(props);
@@ -225,7 +225,7 @@ export class Schemata {
                 withGroup(
                     entries.map(([name, subSchema]) => {
                         const { required: subRequired, comments, type } = this.print(subSchema);
-                        const required = schema.required?.includes(name) || subRequired || false;
+                        const required = isBoolean(schema.required) ? schema.required : schema.required?.includes(name) || subRequired || false;
                         const jsDoc = new JsDoc();
                         jsDoc.addComments(comments);
                         return [jsDoc.print(), `${name}${requiredTypeStringify(required)}${type};`].filter(Boolean).join('\n');
@@ -240,17 +240,17 @@ export class Schemata {
         };
     }
 
-    private _printUnknown(schema: OpenApi3.SchemaBaseObject & OpenApi3_Schema, type: 'object' | 'array' | 'primitive' = 'primitive') {
+    private _printUnknown(schema: OpenApi3.SchemaBaseObject & OpenApi3_Schema, type: 'object' | 'array' | 'primitive' = 'primitive', required?: boolean) {
         const comments = JsDoc.fromSchema(schema);
 
         return {
             comments,
             type: withNullable(
                 //
-                type === 'object' ? 'Record<keyof unknown, unknown>' : type === 'array' ? '(unknown[])' : 'unknown',
+                type === 'object' ? 'AnyObject' : type === 'array' ? 'AnyArray' : 'unknown',
                 schema.nullable,
             ),
-            required: false,
+            required: isBoolean(required) ? required : type === 'primitive',
         };
     }
 

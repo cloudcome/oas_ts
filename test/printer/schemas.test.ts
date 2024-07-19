@@ -1,6 +1,6 @@
 import { Printer } from '../../src/printer';
 
-test('printComponents number', () => {
+test('number', () => {
     const printer = new Printer({
         openapi: '3.0.0',
         info: {
@@ -31,7 +31,7 @@ test('printComponents number', () => {
     `);
 });
 
-test('printComponents number enum', () => {
+test('number enum', () => {
     const printer = new Printer({
         openapi: '3.0.0',
         info: {
@@ -63,7 +63,7 @@ test('printComponents number enum', () => {
     `);
 });
 
-test('printComponents [number, null] enum', () => {
+test('[number, null] enum', () => {
     const printer = new Printer({
         openapi: '3.0.0',
         info: {
@@ -95,7 +95,7 @@ test('printComponents [number, null] enum', () => {
     `);
 });
 
-test('printComponents type[]', () => {
+test('type[]', () => {
     const printer = new Printer({
         openapi: '3.0.0',
         info: {
@@ -130,7 +130,7 @@ test('printComponents type[]', () => {
     `);
 });
 
-test('printComponents AllOf primitive', () => {
+test('AllOf primitive', () => {
     const printer = new Printer({
         openapi: '3.0.0',
         info: {
@@ -194,7 +194,7 @@ test('printComponents AllOf primitive', () => {
     `);
 });
 
-test('printComponents primitive explicit array', () => {
+test('explicit array', () => {
     const printer = new Printer({
         openapi: '3.0.0',
         info: {
@@ -245,7 +245,7 @@ test('printComponents primitive explicit array', () => {
     `);
 });
 
-test('printComponents primitive generic array', () => {
+test('generic array', () => {
     const printer = new Printer({
         openapi: '3.0.0',
         info: {
@@ -285,7 +285,7 @@ test('printComponents primitive generic array', () => {
     `);
 });
 
-test('printComponents primitive object', () => {
+test('explicit object', () => {
     const printer = new Printer({
         openapi: '3.0.0',
         info: {
@@ -310,7 +310,6 @@ test('printComponents primitive object', () => {
                         },
                         ccc: {
                             type: 'boolean',
-                            required: true,
                         },
                     },
                     required: ['aaa'],
@@ -333,12 +332,12 @@ test('printComponents primitive object', () => {
        */
       aaa:number;
       bbb:string;
-      ccc:boolean;
+      ccc?:boolean;
       };"
     `);
 });
 
-test('printComponents primitive object', () => {
+test('generic object', () => {
     const printer = new Printer({
         openapi: '3.0.0',
         info: {
@@ -348,25 +347,20 @@ test('printComponents primitive object', () => {
         components: {
             schemas: {
                 Pet: {
-                    required: ['name', 'photoUrls'],
                     type: 'object',
+                    required: ['bb'],
                     properties: {
-                        id: { type: 'integer', format: 'int64', example: 10 },
-                        name: { type: 'string', example: 'doggie' },
-                        category: { $ref: '#/components/schemas/Category' },
-                        photoUrls: {
-                            type: 'array',
-                            xml: { wrapped: true },
-                            items: { type: 'string', xml: { name: 'photoUrl' } },
+                        aa: {
+                            required: true,
+                            type: 'object',
                         },
-                        tags: { type: 'array', xml: { wrapped: true }, items: { $ref: '#/components/schemas/Tag' } },
-                        status: {
-                            type: 'string',
-                            description: 'pet status in the store',
-                            enum: ['available', 'pending', 'sold'],
+                        bb: {
+                            type: 'object',
+                        },
+                        cc: {
+                            type: 'object',
                         },
                     },
-                    xml: { name: 'pet' },
                 },
             },
         },
@@ -378,22 +372,9 @@ test('printComponents primitive object', () => {
         }),
     ).toMatchInlineSnapshot(`
       "export type Pet = {
-      /**
-       * @format int64
-       * @example 10
-       */
-      id?:number;
-      /**
-       * @example doggie
-       */
-      name:string;
-      category?:unknown;
-      photoUrls:((string)[]);
-      tags?:((unknown)[]);
-      /**
-       * @description pet status in the store
-       */
-      status?:("available"|"pending"|"sold");
+      aa:AnyObject;
+      bb:AnyObject;
+      cc?:AnyObject;
       };"
     `);
 });
