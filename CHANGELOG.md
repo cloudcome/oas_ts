@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.19.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.19.0...v0.19.1) (2024-07-15)
+
+
+### Bug Fixes
+
+* 优化对 openapi 标识符的判断 ([6ad5541](https://github.com/FrontEndDev-org/openapi-axios/commit/6ad5541a89859a6e98c434e4d5dd491e751d4a64))
+* 优化生成注释顺序 ([694ac7f](https://github.com/FrontEndDev-org/openapi-axios/commit/694ac7fd3a5b139b7b1fd5d7f60c8c8c5b62a49f))
+* 修正 axiosImportFile 导入路径 ([558ef68](https://github.com/FrontEndDev-org/openapi-axios/commit/558ef68ac9af577685ea67887e162f13ca5fb95c))
+* 修正路径相对计算 ([72d4934](https://github.com/FrontEndDev-org/openapi-axios/commit/72d4934714f0585df544dce078c4e436b943c591))
+
 ## [0.19.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.18.1...v0.19.0) (2024-07-03)
 
 
