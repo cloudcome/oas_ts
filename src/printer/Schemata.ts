@@ -95,6 +95,7 @@ export class Schemata {
                                           enum: schema.enum,
                                           type,
                                       } as OpenApi3.SchemaObject),
+                                true,
                             ),
                         ),
                         '|',
@@ -263,9 +264,9 @@ export class Schemata {
         };
     }
 
-    toString(schema: OpenApi3_Schema) {
+    toString(schema: OpenApi3_Schema, ignoreComments = false) {
         const result = this.print(schema);
-        return Schemata.toString(result);
+        return Schemata.toString(result, ignoreComments);
     }
 
     static toString(result: SchemaResult, ignoreComments = false) {

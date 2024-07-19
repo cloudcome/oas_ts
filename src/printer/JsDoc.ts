@@ -10,6 +10,8 @@ function formatLine(key: string, val: unknown) {
     if (isString(val) || isNumber(val)) return `@${key} ${val}`;
 }
 
+const supportTypes = ['string', 'number', 'boolean', 'object', 'array', 'null'];
+
 export class JsDoc {
     lines: string[] = [];
 
@@ -61,13 +63,15 @@ export class JsDoc {
     }
 
     static fromSchema(schema: OpenApi3.SchemaObject) {
-        const { deprecated, description, default: defaultValue, format, example, title, externalDocs } = schema;
+        const { deprecated, description, default: defaultValue, format, example, title, externalDocs, type } = schema;
+        const types = isArray(type) ? type : isString(type) ? [type] : undefined;
+
         return {
             summary: title,
             description,
             deprecated,
             default: defaultValue,
-            format,
+            format: format || types?.filter((type) => !supportTypes.includes(type)).join(' | ') || false,
             example,
             externalDocs,
         };

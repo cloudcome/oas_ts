@@ -267,6 +267,9 @@ test('1路径 + 1请求 + 2path', () => {
        */
               export async function getApiAbcDef(path:{
       "var":string;
+      /**
+       * @format integer
+       */
       "xyz"?:number;
       },config?:AxiosRequestConfig): AxiosPromise<unknown> {
                   return axios({
