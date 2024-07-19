@@ -2,24 +2,24 @@ import path from 'path';
 import type { Options } from 'prettier';
 import process from 'process';
 
-export function fixVarName(origin: string, bigger = false) {
+export function fixVarName(origin: string, bigger = false, fallback = 'var') {
     const name =
         origin
             .replace(/\W/g, '_')
             .replace(/(^_+|_+$)/g, '')
             .replace(/_(.)/g, ($0, $1: string) => $1.toUpperCase())
-            .replace(/^\d+/, '') || '_var';
+            .replace(/^\d+/, '') || fallback;
 
     return (bigger ? name[0].toUpperCase() : name[0].toLowerCase()) + name.slice(1);
 }
 
 export function nextUniqueName(refName: string, nameCountMap: Map<string, number>) {
     // abc123 -> abc
-    const baseName = refName.replace(/\d+$/, '');
+    const baseName = refName.replace(/_[1-9]\d*$/, '');
     const count = nameCountMap.get(baseName) || 0;
     const nextCount = count + 1;
     nameCountMap.set(baseName, nextCount);
-    return nextCount === 1 ? baseName : baseName + nextCount;
+    return nextCount === 1 ? baseName : baseName + `_${nextCount}`;
 }
 
 export function refToType(ref: string): string {

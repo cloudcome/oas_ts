@@ -174,7 +174,7 @@ test('AllOf primitive', () => {
         }),
     ).toMatchInlineSnapshot(`
       "export type User = ({
-      username:string;
+      "username":string;
       }) | null;
 
       export type Order = (
@@ -330,9 +330,9 @@ test('explicit object', () => {
        * @format int64
        * @example 10
        */
-      aaa:number;
-      bbb:string;
-      ccc?:boolean;
+      "aaa":number;
+      "bbb":string;
+      "ccc"?:boolean;
       };"
     `);
 });
@@ -348,16 +348,16 @@ test('generic object', () => {
             schemas: {
                 Pet: {
                     type: 'object',
-                    required: ['bb'],
+                    required: ['b-b'],
                     properties: {
                         aa: {
                             required: true,
                             type: 'object',
                         },
-                        bb: {
+                        'b-b': {
                             type: 'object',
                         },
-                        cc: {
+                        string: {
                             type: 'object',
                         },
                     },
@@ -372,9 +372,160 @@ test('generic object', () => {
         }),
     ).toMatchInlineSnapshot(`
       "export type Pet = {
-      aa:AnyObject;
-      bb:AnyObject;
-      cc?:AnyObject;
+      "aa":AnyObject;
+      "b-b":AnyObject;
+      "string"?:AnyObject;
       };"
+    `);
+});
+
+test('additionalProperties true', () => {
+    const printer = new Printer({
+        openapi: '3.0.0',
+        info: {
+            title: 'test',
+            version: '1.0.0',
+        },
+        components: {
+            schemas: {
+                Pet: {
+                    type: 'object',
+                    additionalProperties: true,
+                },
+            },
+        },
+    });
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
+      "export type Pet = {
+      [key: string]:any;
+      };"
+    `);
+});
+
+test('additionalProperties false', () => {
+    const printer = new Printer({
+        openapi: '3.0.0',
+        info: {
+            title: 'test',
+            version: '1.0.0',
+        },
+        components: {
+            schemas: {
+                Pet: {
+                    type: 'object',
+                    additionalProperties: false,
+                },
+            },
+        },
+    });
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
+      "export type Pet = {
+      [key: string]:never;
+      };"
+    `);
+});
+
+test('additionalProperties schema type', () => {
+    const printer = new Printer({
+        openapi: '3.0.0',
+        info: {
+            title: 'test',
+            version: '1.0.0',
+        },
+        components: {
+            schemas: {
+                PetA: {
+                    type: 'object',
+                    additionalProperties: {
+                        type: 'string',
+                        enum: ['a', 'b'],
+                    },
+                },
+                PetB: {
+                    type: 'object',
+                    additionalProperties: {
+                        type: 'string',
+                        required: true,
+                        enum: ['a', 'b'],
+                    },
+                },
+            },
+        },
+    });
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
+      "export type PetA = {
+      [key: string]:("a"|"b");
+      };
+
+      export type PetB = {
+      [key: string]:("a"|"b");
+      };"
+    `);
+});
+
+test('additionalProperties schema ref', () => {
+    const printer = new Printer({
+        openapi: '3.0.0',
+        info: {
+            title: 'test',
+            version: '1.0.0',
+        },
+        components: {
+            schemas: {
+                PetA: {
+                    type: 'object',
+                    additionalProperties: {
+                        $ref: '#/components/schemas/Pet1',
+                    },
+                },
+                PetB: {
+                    additionalProperties: {
+                        $ref: '#/components/schemas/Pet2',
+                    },
+                },
+                Pet1: {
+                    type: 'string',
+                    enum: ['a', 'b'],
+                },
+                Pet2: {
+                    type: 'string',
+                    required: true,
+                    enum: ['a', 'b'],
+                },
+            },
+        },
+    });
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
+      "export type PetA = {
+      [key: string]:Pet1;
+      };
+
+      export type PetB = {
+      [key: string]:Pet2;
+      };
+
+      export type Pet1 = ("a"|"b");
+
+      export type Pet2 = ("a"|"b");"
     `);
 });

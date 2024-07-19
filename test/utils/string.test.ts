@@ -1,8 +1,8 @@
 import { fixVarName, formatTsCode, nextUniqueName, refToType } from '../../src/utils/string';
 
 test('fixVarName', () => {
-    expect(fixVarName('!')).toEqual('_var');
-    expect(fixVarName('??')).toEqual('_var');
+    expect(fixVarName('!')).toEqual('var');
+    expect(fixVarName('??')).toEqual('var');
     expect(fixVarName('hello-world')).toEqual('helloWorld');
     expect(fixVarName('hello-world123')).toEqual('helloWorld123');
     expect(fixVarName('123hello-world123')).toEqual('helloWorld123');
@@ -20,9 +20,9 @@ test('refToType', () => {
 test('nextUniqueName', () => {
     const map = new Map<string, number>();
     expect(nextUniqueName('abc', map)).toBe('abc');
-    expect(nextUniqueName('abc', map)).toBe('abc2');
-    expect(nextUniqueName('abc', map)).toBe('abc3');
-    expect(nextUniqueName('abc2', map)).toBe('abc4');
+    expect(nextUniqueName('abc', map)).toBe('abc_2');
+    expect(nextUniqueName('abc', map)).toBe('abc_3');
+    expect(nextUniqueName('abc2', map)).toBe('abc2');
 });
 
 test('formatTsCode', async () => {

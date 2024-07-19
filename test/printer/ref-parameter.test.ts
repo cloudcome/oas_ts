@@ -51,7 +51,7 @@ test('ref-parameter', () => {
               export async function postTest(userId?:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
                   return axios({
                       method: "post",
-                      url:resolveURL(BASE_URL,"/test/{userId}",{userId}),
+                      url:resolveURL(BASE_URL,"/test/{userId}",{userId:userId}),
       ...config
                   });
               }"

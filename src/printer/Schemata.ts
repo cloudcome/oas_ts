@@ -1,6 +1,6 @@
 import type { OpenApi3 } from '../types/openapi';
 import { never } from '../utils/func';
-import { isArray, isBoolean, isNumber, isString } from '../utils/type-is';
+import { isArray, isBoolean, isNumber, isString, isUndefined } from '../utils/type-is';
 import { isRefSchema, type OpenApi3_Schema, requiredTypeStringify } from './helpers';
 import { JsDoc } from './JsDoc';
 import type { Named } from './Named';
@@ -27,7 +27,8 @@ export class Schemata {
             return {
                 comments: JsDoc.fromRef(schema),
                 type: this.named.getRefType(schema.$ref) || 'unknown',
-                required: false,
+                // 引用类型，常规为必填
+                required: true,
             };
         }
 
@@ -174,6 +175,8 @@ export class Schemata {
                 // 智能判断类型
                 if ('properties' in schema) {
                     return this._printObject(schema);
+                } else if ('additionalProperties' in schema) {
+                    return this._printObject(schema);
                 } else if ('items' in schema) {
                     return this._printArray(schema);
                 } else {
@@ -189,7 +192,7 @@ export class Schemata {
 
     private _printArray(schema: OpenApi3.SchemaBaseObject & OpenApi3.ArraySubtype) {
         const comments = JsDoc.fromSchema(schema);
-        const items = 'items' in schema ? schema.items : null;
+        const items = 'items' in schema ? schema.items : undefined;
 
         if (!items) {
             return this._printUnknown(schema, 'array');
@@ -205,38 +208,44 @@ export class Schemata {
         };
     }
 
+    private _printAddPropBoolean(bool: boolean) {
+        return {
+            comments: {},
+            type: bool ? 'any' : 'never',
+            required: true,
+        };
+    }
+
+    private _printObjectProp(name: string, propSchema: boolean | OpenApi3.SchemaObject | OpenApi3.ReferenceObject, propRequired1: boolean) {
+        const { required: propRequired2, comments, type } = isBoolean(propSchema) ? this._printAddPropBoolean(propSchema) : this.print(propSchema);
+        const jsDoc = new JsDoc();
+        jsDoc.addComments(comments);
+        return [jsDoc.print(), `${name}${requiredTypeStringify(propRequired1 || propRequired2 || false)}${type};`].filter(Boolean).join('\n');
+    }
+
     private _printObject(schema: OpenApi3.SchemaBaseObject & OpenApi3.ObjectSubtype) {
         const comments = JsDoc.fromSchema(schema);
-        const props = 'properties' in schema ? schema.properties : null;
+        const explicitProps = 'properties' in schema ? schema.properties : undefined;
+        // additionalProperties: true
+        // additionalProperties: false
+        // additionalProperties: {...}
+        const genericProps = 'additionalProperties' in schema ? schema.additionalProperties : undefined;
+        const explicitEntries = Object.entries(explicitProps || {});
 
-        if (!props) {
+        const explicitTypes = explicitEntries.map(([name, propSchema]) => {
+            return this._printObjectProp(JSON.stringify(name), propSchema, isArray(schema.required) ? schema.required?.includes(name) : false);
+        });
+        const genericTypes = isUndefined(genericProps) ? [] : [this._printObjectProp('[key: string]', genericProps, true)];
+        const objectTypes = [...explicitTypes, ...genericTypes];
+
+        if (objectTypes.length === 0) {
             return this._printUnknown(schema, 'object', isBoolean(schema.required) ? schema.required : false);
-        }
-
-        const entries = Object.entries(props);
-
-        if (entries.length === 0) {
-            return this._printUnknown(schema, 'object');
         }
 
         return {
             comments,
-            type: withNullable(
-                withGroup(
-                    entries.map(([name, subSchema]) => {
-                        const { required: subRequired, comments, type } = this.print(subSchema);
-                        const required = isBoolean(schema.required) ? schema.required : schema.required?.includes(name) || subRequired || false;
-                        const jsDoc = new JsDoc();
-                        jsDoc.addComments(comments);
-                        return [jsDoc.print(), `${name}${requiredTypeStringify(required)}${type};`].filter(Boolean).join('\n');
-                    }),
-                    '\n',
-                    '{\n',
-                    '\n}',
-                ),
-                schema.nullable,
-            ),
-            required: false,
+            type: withNullable(withGroup(objectTypes, '\n', '{\n', '\n}'), schema.nullable),
+            required: isBoolean(schema.required) ? schema.required : false,
         };
     }
 

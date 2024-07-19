@@ -130,7 +130,7 @@ test('1路径 + 1请求 + 1query', () => {
                 get: {
                     parameters: [
                         {
-                            name: 'a',
+                            name: 'config',
                             in: 'query',
                             schema: {
                                 type: 'string',
@@ -154,15 +154,15 @@ test('1路径 + 1请求 + 1query', () => {
         }),
     ).toMatchInlineSnapshot(`
       "/**
-       * @param [a] request param
-       * @param [config] request config
+       * @param [config] request param
+       * @param [config_2] request config
        */
-              export async function getApiAbc(a?:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+              export async function getApiAbc(config?:string,config_2?:AxiosRequestConfig): AxiosPromise<unknown> {
                   return axios({
                       method: "get",
-                      params:{a},
+                      config:{config:config},
       url:resolveURL(BASE_URL,"/api/abc"),
-      ...config
+      ...config_2
                   });
               }"
     `);
@@ -176,11 +176,12 @@ test('1路径 + 1请求 + 1path', () => {
         },
         openapi: '3.0.0',
         paths: {
-            '/api/abc': {
+            '/api/abc/{var}': {
                 get: {
                     parameters: [
                         {
                             name: 'var',
+                            required: true,
                             in: 'path',
                             schema: {
                                 type: 'string',
@@ -204,13 +205,73 @@ test('1路径 + 1请求 + 1path', () => {
         }),
     ).toMatchInlineSnapshot(`
       "/**
-       * @param [var2] request param
+       * @param var_2 request param
        * @param [config] request config
        */
-              export async function getApiAbc(var2?:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+              export async function getApiAbc(var_2:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
                   return axios({
                       method: "get",
-                      url:resolveURL(BASE_URL,"/api/abc",{var2}),
+                      url:resolveURL(BASE_URL,"/api/abc/{var}",{var:var_2}),
+      ...config
+                  });
+              }"
+    `);
+});
+
+test('1路径 + 1请求 + 2path', () => {
+    const printer = new Printer({
+        info: {
+            title: 'api',
+            version: 'v1',
+        },
+        openapi: '3.0.0',
+        paths: {
+            '/api/abc/{var}/def/{xyz}': {
+                get: {
+                    parameters: [
+                        {
+                            name: 'var',
+                            required: true,
+                            in: 'path',
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                        {
+                            name: 'xyz',
+                            in: 'path',
+                            schema: {
+                                type: 'integer',
+                            },
+                        },
+                    ],
+                    responses: {
+                        200: {
+                            description: 'success',
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
+      "/**
+       * @param path request params
+       * @param [config] request config
+       */
+              export async function getApiAbcDef(path:{
+      "var":string;
+      "xyz"?:number;
+      },config?:AxiosRequestConfig): AxiosPromise<unknown> {
+                  return axios({
+                      method: "get",
+                      url:resolveURL(BASE_URL,"/api/abc/{var}/def/{xyz}",path),
       ...config
                   });
               }"
@@ -266,11 +327,11 @@ test('1路径 + 1请求 + 2query', () => {
        * @param [config] request config
        */
               export async function getApiAbc(params?:{
-      a?:string;
+      "a"?:string;
       /**
        * @description xxx
        */
-      b:string;
+      "b":string;
       },config?:AxiosRequestConfig): AxiosPromise<unknown> {
                   return axios({
                       method: "get",
@@ -290,7 +351,7 @@ test('1路径 + 1请求 + 2query + 1path', () => {
         },
         openapi: '3.0.0',
         paths: {
-            '/api/abc': {
+            '/api/abc/{params}': {
                 get: {
                     parameters: [
                         {
@@ -311,7 +372,7 @@ test('1路径 + 1请求 + 2query + 1path', () => {
                             },
                         },
                         {
-                            name: 'c',
+                            name: 'params',
                             in: 'path',
                             schema: {
                                 type: 'string',
@@ -338,20 +399,20 @@ test('1路径 + 1请求 + 2query + 1path', () => {
     ).toMatchInlineSnapshot(`
       "/**
        * @param params request params
-       * @param c xxx
+       * @param params_2 xxx
        * @param [config] request config
        */
               export async function getApiAbc(params:{
-      a:string;
+      "a":string;
       /**
        * @description xxx
        */
-      b:string;
-      },c:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+      "b":string;
+      },params_2:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
                   return axios({
                       method: "get",
                       params:params,
-      url:resolveURL(BASE_URL,"/api/abc",{c}),
+      url:resolveURL(BASE_URL,"/api/abc/{params}",{params:params_2}),
       ...config
                   });
               }"
@@ -429,16 +490,16 @@ test('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
        * @param [config] request config
        */
               export async function getApiAbc(params:{
-      a:string;
+      "a":string;
       /**
        * @description xxx
        */
-      b:string;
+      "b":string;
       },c:string,data:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
                   return axios({
                       method: "get",
                       params:params,
-      url:resolveURL(BASE_URL,"/api/abc",{c}),
+      url:resolveURL(BASE_URL,"/api/abc",{c:c}),
       data:data,
       ...config
                   });
@@ -523,21 +584,21 @@ test('1路径 + 1请求 + 2query + 1path + 1request object', () => {
        * @param [config] request config
        */
               export async function getApiAbc(params:{
-      a:string;
+      "a":string;
       /**
        * @description xxx
        */
-      b:string;
+      "b":string;
       },c:string,data:{
       /**
        * @description yyy
        */
-      name:string;
+      "name":string;
       },config?:AxiosRequestConfig): AxiosPromise<unknown> {
                   return axios({
                       method: "get",
                       params:params,
-      url:resolveURL(BASE_URL,"/api/abc",{c}),
+      url:resolveURL(BASE_URL,"/api/abc",{c:c}),
       data:data,
       ...config
                   });
@@ -630,21 +691,21 @@ test('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive
        * @returns success
        */
               export async function getApiAbc(params:{
-      a:string;
+      "a":string;
       /**
        * @description xxx
        */
-      b:string;
+      "b":string;
       },c:string,data:{
       /**
        * @description yyy
        */
-      name:string;
+      "name":string;
       },config?:AxiosRequestConfig): AxiosPromise<string> {
                   return axios({
                       method: "get",
                       params:params,
-      url:resolveURL(BASE_URL,"/api/abc",{c}),
+      url:resolveURL(BASE_URL,"/api/abc",{c:c}),
       data:data,
       ...config
                   });
@@ -749,41 +810,41 @@ test('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', 
       "/**
        * @param params request params
        * @param data xxx
-       * @param data2 request param
+       * @param data_2 request param
        * @param [config] request config
        * @returns success
        */
               export async function getApiAbc(params:{
-      config:string;
+      "config":string;
       /**
        * @description xxx
        */
-      path:string;
-      },data:string,data2:{
+      "path":string;
+      },data:string,data_2:{
       /**
        * @description yyy
        */
-      name:string;
+      "name":string;
       },config?:AxiosRequestConfig): AxiosPromise<{
       /**
        * @description aaaa
        */
-      code?:number;
+      "code"?:number;
       /**
        * @description bbbb
        */
-      data?:{
+      "data"?:{
       /**
        * @description cccc
        */
-      name?:string;
+      "name"?:string;
       };
       }> {
                   return axios({
                       method: "get",
                       params:params,
-      url:resolveURL(BASE_URL,"/api/abc",{data}),
-      data:data2,
+      url:resolveURL(BASE_URL,"/api/abc",{data:data}),
+      data:data_2,
       ...config
                   });
               }"

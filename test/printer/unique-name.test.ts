@@ -47,7 +47,7 @@ test('unique name', () => {
         }),
     ).toMatchInlineSnapshot(`
       "export type TestAa = {
-      name?:string;
+      "name"?:string;
       };
 
       /**

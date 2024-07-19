@@ -59,19 +59,19 @@ test('v3.1 schema', () => {
        * @format int64
        * @example 1
        */
-      id?:number;
+      "id"?:number;
       /**
        * @example Dogs
        */
-      name?:string;
+      "name"?:string;
       };
 
       export type Pet = {
       /**
        * @format int64
        */
-      id?:number;
-      category?:Category;
+      "id"?:number;
+      "category":Category;
       };"
     `);
 });

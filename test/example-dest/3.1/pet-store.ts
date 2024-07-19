@@ -24,11 +24,11 @@ export type Category = {
  * @format int64
  * @example 1
  */
-id?:number;
+"id"?:number;
 /**
  * @example Dogs
  */
-name?:string;
+"name"?:string;
 };
 
 /**
@@ -39,28 +39,28 @@ export type Pet = {
  * @format int64
  * @example 10
  */
-id?:number;
+"id"?:number;
 /**
  * @description Pet Category
  */
-category?:unknown;
+"category":unknown;
 /**
  * @example doggie
  */
-name:string;
-photoUrls:((string)[]);
-tags?:((unknown)[]);
+"name":string;
+"photoUrls":((string)[]);
+"tags"?:((unknown)[]);
 /**
  * @description pet status in the store
  */
-status?:("available"|"pending"|"sold");
+"status"?:("available"|"pending"|"sold");
 /**
  * @format int32
  * @example 7
  */
-availableInstances?:number;
-petDetailsId?:unknown;
-petDetails?:PetDetails;
+"availableInstances"?:number;
+"petDetailsId":unknown;
+"petDetails":PetDetails;
 };
 
 export type PetDetails = {
@@ -68,20 +68,20 @@ export type PetDetails = {
  * @format int64
  * @example 10
  */
-id?:number;
+"id"?:number;
 /**
  * @description PetDetails Category
  */
-category?:Category;
-tag?:Tag;
+"category":Category;
+"tag":Tag;
 };
 
 export type Tag = {
 /**
  * @format int64
  */
-id?:number;
-name?:string;
+"id"?:number;
+"name"?:string;
 };
 
 /**
@@ -127,7 +127,7 @@ url:resolveURL(BASE_URL,"/pet"),
         export async function getPetById(petId:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
             return axios({
                 method: "get",
-                url:resolveURL(BASE_URL,"/pet/{petId}",{petId}),
+                url:resolveURL(BASE_URL,"/pet/{petId}",{petId:petId}),
 ...config
             });
         }

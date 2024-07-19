@@ -3,10 +3,11 @@ import { isRefParameter, type OpenApi3_Parameter, requiredKeyStringify } from '.
 import type { Named } from './Named';
 import { Schemata } from './Schemata';
 
-export type ArgKind = 'path' | 'headers' | 'cookies' | 'params' | 'data' | 'config' | 'return';
+export type ArgKind = 'path' | 'headers' | 'cookies' | 'params' | 'data' | 'config' | 'response';
 export type ArgItem = {
     kind: ArgKind;
-    name: string;
+    originName: string;
+    uniqueName: string;
     required: boolean;
     type: string;
     // 是否已经被解构了
@@ -35,7 +36,7 @@ export class Arg {
     }
 
     parse(): ArgItem | null {
-        const iternalArgItems: InternalArgItem[] = [];
+        const internalArgItems: InternalArgItem[] = [];
         const fixedParameters = this.parameters.filter((p) => !isRefParameter(p) && 'schema' in p && p.schema) as OpenApi3.ParameterObject[];
         const propLength = fixedParameters.length;
         const requiredNames: string[] = [];
@@ -44,7 +45,7 @@ export class Arg {
             const { required, schema, name } = parameter;
 
             if (required) requiredNames.push(name);
-            iternalArgItems.push({
+            internalArgItems.push({
                 parameter,
                 schema: schema!,
             });
@@ -55,7 +56,8 @@ export class Arg {
                 if (this.kind === 'path') {
                     return {
                         kind: this.kind,
-                        name: this.named.nextVarName(this.kind),
+                        originName: this.kind,
+                        uniqueName: this.named.nextVarName(this.kind),
                         required: false,
                         structured: false,
                         type: '',
@@ -67,7 +69,8 @@ export class Arg {
                     const name = this.named.nextVarName(this.kind);
                     return {
                         kind: this.kind,
-                        name,
+                        originName: this.kind,
+                        uniqueName: name,
                         required: false,
                         structured: false,
                         type: '',
@@ -82,20 +85,21 @@ export class Arg {
 
             case 1: {
                 // prop0: type0
-                const [firstArg] = iternalArgItems;
+                const [firstArg] = internalArgItems;
                 const { parameter, schema } = firstArg;
                 const result = this.schemata.print(schema);
-                const name = this.kind === 'return' ? this.kind : this.named.nextVarName(parameter.name || this.kind);
+                const name = this.kind === 'response' ? this.kind : this.named.nextVarName(parameter.name || this.kind);
                 const required = parameter.required || result.required || false;
 
                 return {
-                    name,
+                    originName: parameter.name,
+                    uniqueName: name,
                     kind: this.kind,
                     required,
                     structured: !this.isRoot,
                     type: Schemata.toString(result, true),
                     comments:
-                        this.kind === 'return'
+                        this.kind === 'response'
                             ? {
                                   returns: parameter.description || schema.description || false,
                               }
@@ -109,7 +113,7 @@ export class Arg {
                 // name: {prop0: type0, prop1: type1, ...}
                 const rootSchema: OpenApi3.SchemaObject = {
                     type: 'object',
-                    properties: iternalArgItems.reduce(
+                    properties: internalArgItems.reduce(
                         (acc, { parameter, schema }) => {
                             acc[parameter.name] = {
                                 ...schema,
@@ -126,13 +130,14 @@ export class Arg {
                 const required = requiredNames.length > 0;
 
                 return {
-                    name,
+                    originName: this.kind,
+                    uniqueName: name,
                     required,
                     kind: this.kind,
                     structured: false,
                     type: Schemata.toString(result),
                     comments:
-                        this.kind === 'return'
+                        this.kind === 'response'
                             ? {
                                   returns: result.comments.description,
                               }

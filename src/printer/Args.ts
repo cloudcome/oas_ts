@@ -10,13 +10,7 @@ export class Args {
 
     private _sort() {
         const fixedArgs = this.args.filter(Boolean) as ArgItem[];
-        const named = new Named();
-        return fixedArgs
-            .sort((a, b) => Number(b.required) - Number(a.required))
-            .map((arg) => {
-                arg.name = named.nextVarName(arg.name);
-                return arg;
-            });
+        return fixedArgs.sort((a, b) => Number(b.required) - Number(a.required));
     }
 
     toComments() {
@@ -35,7 +29,7 @@ export class Args {
         return this.fixedArgs
             .filter((arg) => arg.kind !== 'path' || arg.type !== '')
             .map((arg) => {
-                return `${arg.name}${requiredTypeStringify(arg.required)}${arg.type || configTypeName}`;
+                return `${arg.uniqueName}${requiredTypeStringify(arg.required)}${arg.type || configTypeName}`;
             })
             .join(',');
     }
@@ -47,11 +41,11 @@ export class Args {
     toValues(url: string) {
         return this.fixedArgs
             .map((arg) => {
-                const { kind, name, type } = arg;
+                const { kind, originName, uniqueName, type } = arg;
 
-                if (kind === 'config') return `...${name}`;
+                if (kind === 'config') return `...${uniqueName}`;
 
-                const propVal = arg.structured ? `{${arg.name}}` : arg.name;
+                const propVal = arg.structured ? `{${originName}:${uniqueName}}` : uniqueName;
 
                 if (kind === 'path') {
                     const args = [
@@ -65,7 +59,7 @@ export class Args {
                     return `url:resolveURL(${args.join(',')})`;
                 }
 
-                return `${kind}:${propVal}`;
+                return `${originName}:${propVal}`;
             })
             .join(',\n');
     }

@@ -17,3 +17,7 @@ export function isArray(any: unknown): any is unknown[] {
 export function isVarName(varName: string) {
     return /^[a-z_$]\w*$/i.test(varName);
 }
+
+export function isUndefined(any: unknown): any is undefined {
+    return any === undefined;
+}

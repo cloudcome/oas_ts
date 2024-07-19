@@ -40,7 +40,7 @@ export class Named {
     }
 
     nextTypeName(name: string) {
-        const refTypeName = fixVarName(name, true);
+        const refTypeName = fixVarName(name, true, 'Type');
         return nextUniqueName(refTypeName, this.varNameCountMap);
     }
 

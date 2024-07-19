@@ -192,7 +192,7 @@ export class Printer {
         const path = new Arg(argNamed, 'path', this.schemata);
         const data = new Arg(argNamed, 'data', this.schemata, true);
         const config = new Arg(argNamed, 'config', this.schemata, true);
-        const resp = new Arg(argNamed, 'return', this.schemata, true);
+        const resp = new Arg(argNamed, 'response', this.schemata, true);
         const { parameters, requestBody, responses, operationId } = operation;
         const { responseStatusCode, responseContentType, requestContentType } = this.options || {};
 
@@ -303,13 +303,13 @@ export class Printer {
     ) {
         if (isRefMedia(content)) {
             const { $ref } = content;
-            const label = arg.kind === 'return' ? '响应' : '请求';
+            const label = arg.kind === 'response' ? '响应' : '请求';
 
             throw new Error(`不支持引用${label}内容：${$ref}`);
         } else {
             arg.add({
                 in: 'query',
-                name: '',
+                name: 'data',
                 ...comments,
                 schema: content.schema,
                 required: true,

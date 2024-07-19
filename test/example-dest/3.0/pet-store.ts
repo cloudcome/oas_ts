@@ -25,27 +25,27 @@ export type Order = {
  * @format int64
  * @example 10
  */
-id?:number;
+"id"?:number;
 /**
  * @format int64
  * @example 198772
  */
-petId?:number;
+"petId"?:number;
 /**
  * @format int32
  * @example 7
  */
-quantity?:number;
+"quantity"?:number;
 /**
  * @format date-time
  */
-shipDate?:string;
+"shipDate"?:string;
 /**
  * @description Order Status
  * @example approved
  */
-status?:("placed"|"approved"|"delivered");
-complete?:boolean;
+"status"?:("placed"|"approved"|"delivered");
+"complete"?:boolean;
 };
 
 export type Customer = {
@@ -53,31 +53,31 @@ export type Customer = {
  * @format int64
  * @example 100000
  */
-id?:number;
+"id"?:number;
 /**
  * @example fehguy
  */
-username?:string;
-address?:((Address)[]);
+"username"?:string;
+"address"?:((Address)[]);
 };
 
 export type Address = {
 /**
  * @example 437 Lytton
  */
-street?:string;
+"street"?:string;
 /**
  * @example Palo Alto
  */
-city?:string;
+"city"?:string;
 /**
  * @example CA
  */
-state?:string;
+"state"?:string;
 /**
  * @example 94301
  */
-zip?:string;
+"zip"?:string;
 };
 
 export type Category = {
@@ -85,11 +85,11 @@ export type Category = {
  * @format int64
  * @example 1
  */
-id?:number;
+"id"?:number;
 /**
  * @example Dogs
  */
-name?:string;
+"name"?:string;
 };
 
 export type User = {
@@ -97,45 +97,45 @@ export type User = {
  * @format int64
  * @example 10
  */
-id?:number;
+"id"?:number;
 /**
  * @example theUser
  */
-username?:string;
+"username"?:string;
 /**
  * @example John
  */
-firstName?:string;
+"firstName"?:string;
 /**
  * @example James
  */
-lastName?:string;
+"lastName"?:string;
 /**
  * @example john@email.com
  */
-email?:string;
+"email"?:string;
 /**
  * @example 12345
  */
-password?:string;
+"password"?:string;
 /**
  * @example 12345
  */
-phone?:string;
+"phone"?:string;
 /**
  * @description User Status
  * @format int32
  * @example 1
  */
-userStatus?:number;
+"userStatus"?:number;
 };
 
 export type Tag = {
 /**
  * @format int64
  */
-id?:number;
-name?:string;
+"id"?:number;
+"name"?:string;
 };
 
 export type Pet = {
@@ -143,27 +143,27 @@ export type Pet = {
  * @format int64
  * @example 10
  */
-id?:number;
+"id"?:number;
 /**
  * @example doggie
  */
-name:string;
-category?:Category;
-photoUrls:((string)[]);
-tags?:((Tag)[]);
+"name":string;
+"category":Category;
+"photoUrls":((string)[]);
+"tags"?:((Tag)[]);
 /**
  * @description pet status in the store
  */
-status?:("available"|"pending"|"sold");
+"status"?:("available"|"pending"|"sold");
 };
 
 export type ApiResponse = {
 /**
  * @format int32
  */
-code?:number;
-type?:string;
-message?:string;
+"code"?:number;
+"type"?:string;
+"message"?:string;
 };
 
 /**
@@ -211,7 +211,7 @@ url:resolveURL(BASE_URL,"/pet"),
         export async function findPetsByStatus(status?:("available"|"pending"|"sold"),config?:AxiosRequestConfig): AxiosPromise<((Pet)[])> {
             return axios({
                 method: "get",
-                params:{status},
+                status:{status:status},
 url:resolveURL(BASE_URL,"/pet/findByStatus"),
 ...config
             });
@@ -228,7 +228,7 @@ url:resolveURL(BASE_URL,"/pet/findByStatus"),
         export async function findPetsByTags(tags?:((string)[]),config?:AxiosRequestConfig): AxiosPromise<((Pet)[])> {
             return axios({
                 method: "get",
-                params:{tags},
+                tags:{tags:tags},
 url:resolveURL(BASE_URL,"/pet/findByTags"),
 ...config
             });
@@ -245,7 +245,7 @@ url:resolveURL(BASE_URL,"/pet/findByTags"),
         export async function getPetById(petId:number,config?:AxiosRequestConfig): AxiosPromise<Pet> {
             return axios({
                 method: "get",
-                url:resolveURL(BASE_URL,"/pet/{petId}",{petId}),
+                url:resolveURL(BASE_URL,"/pet/{petId}",{petId:petId}),
 ...config
             });
         }
@@ -262,15 +262,15 @@ url:resolveURL(BASE_URL,"/pet/findByTags"),
 /**
  * @description Name of pet that needs to be updated
  */
-name?:string;
+"name"?:string;
 /**
  * @description Status of pet that needs to be updated
  */
-status?:string;
+"status"?:string;
 },config?:AxiosRequestConfig): AxiosPromise<unknown> {
             return axios({
                 method: "post",
-                url:resolveURL(BASE_URL,"/pet/{petId}",{petId}),
+                url:resolveURL(BASE_URL,"/pet/{petId}",{petId:petId}),
 params:params,
 ...config
             });
@@ -287,8 +287,8 @@ params:params,
         export async function deletePet(petId:number,apiKey?:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
             return axios({
                 method: "delete",
-                url:resolveURL(BASE_URL,"/pet/{petId}",{petId}),
-headers:{apiKey},
+                url:resolveURL(BASE_URL,"/pet/{petId}",{petId:petId}),
+api_key:{api_key:apiKey},
 ...config
             });
         }
@@ -306,9 +306,9 @@ headers:{apiKey},
         export async function uploadFile(petId:number,data:string,additionalMetadata?:string,config?:AxiosRequestConfig): AxiosPromise<ApiResponse> {
             return axios({
                 method: "post",
-                url:resolveURL(BASE_URL,"/pet/{petId}/uploadImage",{petId}),
+                url:resolveURL(BASE_URL,"/pet/{petId}/uploadImage",{petId:petId}),
 data:data,
-params:{additionalMetadata},
+additionalMetadata:{additionalMetadata:additionalMetadata},
 ...config
             });
         }
@@ -320,7 +320,12 @@ params:{additionalMetadata},
  * @param [config] request config
  * @returns successful operation
  */
-        export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<AnyObject> {
+        export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<{
+/**
+ * @format int32
+ */
+[key: string]:number;
+}> {
             return axios({
                 method: "get",
                 url:resolveURL(BASE_URL,"/store/inventory"),
@@ -356,7 +361,7 @@ url:resolveURL(BASE_URL,"/store/order"),
         export async function getOrderById(orderId:number,config?:AxiosRequestConfig): AxiosPromise<Order> {
             return axios({
                 method: "get",
-                url:resolveURL(BASE_URL,"/store/order/{orderId}",{orderId}),
+                url:resolveURL(BASE_URL,"/store/order/{orderId}",{orderId:orderId}),
 ...config
             });
         }
@@ -371,7 +376,7 @@ url:resolveURL(BASE_URL,"/store/order"),
         export async function deleteOrder(orderId:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
             return axios({
                 method: "delete",
-                url:resolveURL(BASE_URL,"/store/order/{orderId}",{orderId}),
+                url:resolveURL(BASE_URL,"/store/order/{orderId}",{orderId:orderId}),
 ...config
             });
         }
@@ -421,11 +426,11 @@ url:resolveURL(BASE_URL,"/user/createWithList"),
 /**
  * @description The user name for login
  */
-username?:string;
+"username"?:string;
 /**
  * @description The password for login in clear text
  */
-password?:string;
+"password"?:string;
 },config?:AxiosRequestConfig): AxiosPromise<string> {
             return axios({
                 method: "get",
@@ -460,7 +465,7 @@ url:resolveURL(BASE_URL,"/user/login"),
         export async function getUserByName(username:string,config?:AxiosRequestConfig): AxiosPromise<User> {
             return axios({
                 method: "get",
-                url:resolveURL(BASE_URL,"/user/{username}",{username}),
+                url:resolveURL(BASE_URL,"/user/{username}",{username:username}),
 ...config
             });
         }
@@ -476,7 +481,7 @@ url:resolveURL(BASE_URL,"/user/login"),
         export async function updateUser(username:string,data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
             return axios({
                 method: "put",
-                url:resolveURL(BASE_URL,"/user/{username}",{username}),
+                url:resolveURL(BASE_URL,"/user/{username}",{username:username}),
 data:data,
 ...config
             });
@@ -492,7 +497,7 @@ data:data,
         export async function deleteUser(username:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
             return axios({
                 method: "delete",
-                url:resolveURL(BASE_URL,"/user/{username}",{username}),
+                url:resolveURL(BASE_URL,"/user/{username}",{username:username}),
 ...config
             });
         }
