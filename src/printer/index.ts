@@ -111,14 +111,17 @@ export class Printer {
 
         return [
             //
+            '/* eslint-disable @typescript-eslint/ban-ts-comment */',
+            '/* eslint-disable @typescript-eslint/no-explicit-any */',
+            '',
             axiosNamedImport
                 ? // 具名导入
                   `import {${axiosImportName}} from "${importPath}";`
                 : // 默认导入
                   `import ${axiosImportName} from "${importPath}";`,
             `import type {${axiosRequestConfigTypeName}, ${axiosResponseTypeName}} from "${importPath}";`,
+            `import type {OneOf, AllOf, AnyOf, AnyObject, AnyArray} from "${pkgName}/client";`,
             `import {resolveURL} from "${pkgName}/client";`,
-            `import type {OneOf} from "${pkgName}/client";`,
             '',
             `const BASE_URL=${JSON.stringify(BASE_URL)};`,
         ].join('\n');
