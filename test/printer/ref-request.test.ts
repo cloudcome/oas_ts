@@ -47,6 +47,7 @@ test('ref-request', () => {
     });
     expect(
         printer.print({
+            hideLintComments: true,
             hideInfo: true,
             hideImports: true,
         }),

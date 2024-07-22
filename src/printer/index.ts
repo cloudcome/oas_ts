@@ -81,10 +81,15 @@ export class Printer {
 
     print(configs?: PrinterConfigs) {
         Object.assign(this.configs, configs);
-        const { hideInfo, hideComponents, hideImports, hidePaths } = this.configs;
+        const { hideLintComments, hideInfo, hideComponents, hideImports, hidePaths } = this.configs;
+        const eslintComments = [
+            //
+            '/* eslint-disable @typescript-eslint/ban-ts-comment */',
+            '/* eslint-disable @typescript-eslint/no-explicit-any */',
+        ].join('\n');
 
         return [
-            //
+            !hideLintComments && eslintComments,
             !hideInfo && this._printInfo(),
             !hideImports && this._printImports(),
             !hideComponents && this._printComponents(),
@@ -92,39 +97,6 @@ export class Printer {
         ]
             .filter(Boolean)
             .join('\n\n');
-    }
-
-    private _printImports() {
-        const {
-            axiosImportName = AXIOS_IMPORT_NAME,
-            axiosNamedImport,
-            axiosImportFile = AXIOS_IMPORT_FILE,
-            axiosRequestConfigTypeName = AXIOS_QUEST_CONFIG_TYPE_NAME,
-            axiosResponseTypeName = AXIOS_PROMISE_TYPE_NAME,
-            baseURL,
-        } = this.options || {};
-        const firstServer = this.document.servers?.[0];
-        const defaultBaseURL = firstServer?.url || '/';
-        const BASE_URL = isString(baseURL) ? baseURL : baseURL?.(this.document) || defaultBaseURL;
-        const { file } = this.configs;
-        const importPath = toRelative(axiosImportFile, file);
-
-        return [
-            //
-            '/* eslint-disable @typescript-eslint/ban-ts-comment */',
-            '/* eslint-disable @typescript-eslint/no-explicit-any */',
-            '',
-            axiosNamedImport
-                ? // 具名导入
-                  `import {${axiosImportName}} from "${importPath}";`
-                : // 默认导入
-                  `import ${axiosImportName} from "${importPath}";`,
-            `import type {${axiosRequestConfigTypeName}, ${axiosResponseTypeName}} from "${importPath}";`,
-            `import type {OneOf, AllOf, AnyOf, AnyObject, AnyArray} from "${pkgName}/client";`,
-            `import {resolveURL} from "${pkgName}/client";`,
-            '',
-            `const BASE_URL=${JSON.stringify(BASE_URL)};`,
-        ].join('\n');
     }
 
     private _printInfo() {
@@ -144,6 +116,36 @@ export class Printer {
             see: extDoc,
         });
         return jsDoc.print();
+    }
+
+    private _printImports() {
+        const {
+            axiosImportName = AXIOS_IMPORT_NAME,
+            axiosNamedImport,
+            axiosImportFile = AXIOS_IMPORT_FILE,
+            axiosRequestConfigTypeName = AXIOS_QUEST_CONFIG_TYPE_NAME,
+            axiosResponseTypeName = AXIOS_PROMISE_TYPE_NAME,
+            baseURL,
+        } = this.options || {};
+        const firstServer = this.document.servers?.[0];
+        const defaultBaseURL = firstServer?.url || '/';
+        const BASE_URL = isString(baseURL) ? baseURL : baseURL?.(this.document) || defaultBaseURL;
+        const { file } = this.configs;
+        const importPath = toRelative(axiosImportFile, file);
+
+        return [
+            //
+            axiosNamedImport
+                ? // 具名导入
+                  `import {${axiosImportName}} from "${importPath}";`
+                : // 默认导入
+                  `import ${axiosImportName} from "${importPath}";`,
+            `import type {${axiosRequestConfigTypeName}, ${axiosResponseTypeName}} from "${importPath}";`,
+            `import type {OneOf, AllOf, AnyOf, AnyObject, AnyArray} from "${pkgName}/client";`,
+            `import {resolveURL} from "${pkgName}/client";`,
+            '',
+            `const BASE_URL=${JSON.stringify(BASE_URL)};`,
+        ].join('\n');
     }
 
     private _printComponents() {

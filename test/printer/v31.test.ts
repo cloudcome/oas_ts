@@ -46,6 +46,7 @@ test('v3.1 schema', () => {
 
     expect(
         printer.print({
+            hideLintComments: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -71,7 +72,7 @@ test('v3.1 schema', () => {
        * @format int64
        */
       "id"?:number;
-      "category":Category;
+      "category"?:Category;
       };"
     `);
 });

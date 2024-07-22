@@ -27,8 +27,7 @@ export class Schemata {
             return {
                 comments: JsDoc.fromRef(schema),
                 type: this.named.getRefType(schema.$ref) || 'unknown',
-                // 引用类型，常规为必填
-                required: true,
+                required: false,
             };
         }
 

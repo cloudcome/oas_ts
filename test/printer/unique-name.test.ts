@@ -42,6 +42,7 @@ test('unique name', () => {
 
     expect(
         printer.print({
+            hideLintComments: true,
             hideInfo: true,
             hideImports: true,
         }),

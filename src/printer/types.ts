@@ -119,6 +119,7 @@ export type PrinterConfigs = {
      */
     file?: string;
 
+    hideLintComments?: boolean;
     hideInfo?: boolean;
     hideImports?: boolean;
     hideComponents?: boolean;

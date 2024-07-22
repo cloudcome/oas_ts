@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * @title Swagger Petstore - OpenAPI 3.1
  * @version 1.0.6
@@ -8,9 +11,6 @@ Swagger at [http://swagger.io](http://swagger.io).
  * @summary Pet Store 3.1
  * @see {@link http://swagger.io Find out more about Swagger}
  */
-
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import axios from "axios";
 import type {AxiosRequestConfig, AxiosPromise} from "axios";
@@ -46,7 +46,7 @@ export type Pet = {
 /**
  * @description Pet Category
  */
-"category":unknown;
+"category"?:unknown;
 /**
  * @example doggie
  */
@@ -62,8 +62,8 @@ export type Pet = {
  * @example 7
  */
 "availableInstances"?:number;
-"petDetailsId":unknown;
-"petDetails":PetDetails;
+"petDetailsId"?:unknown;
+"petDetails"?:PetDetails;
 };
 
 export type PetDetails = {
@@ -75,8 +75,8 @@ export type PetDetails = {
 /**
  * @description PetDetails Category
  */
-"category":Category;
-"tag":Tag;
+"category"?:Category;
+"tag"?:Tag;
 };
 
 export type Tag = {
