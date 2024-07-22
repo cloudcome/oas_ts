@@ -1,4 +1,4 @@
-import { Printer } from '../../src';
+import { Printer } from '../../src/printer';
 
 test('ref-request', () => {
     const printer = new Printer({

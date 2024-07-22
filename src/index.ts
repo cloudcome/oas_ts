@@ -1,7 +1,6 @@
+export { defineConfig } from './generators/command';
+export { createCLI } from './cli';
 export * from './const';
-export { Printer } from './printer';
-export { Generator } from './generators/Generator';
-export * from './generators/command';
 
 // types
 export type * from './types/openapi';

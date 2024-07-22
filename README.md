@@ -33,11 +33,10 @@ npm i -D openapi-axios
 const { defineConfig } = require('openapi-axios');
 
 module.exports = defineConfig({
-  modules: {
-      // 将会生成 src/apis/petStore3.ts 文件
-      'petStore3': 'https://petstore31.swagger.io/api/v31/openapi.json'
+    modules: {
+        // 将会生成 src/apis/petStore3.ts 文件
+        'petStore3': 'https://petstore31.swagger.io/api/v31/openapi.json'
     },
-  ],
 });
 ```
 

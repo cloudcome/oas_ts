@@ -30,7 +30,7 @@ export function resolveConfig(cwd: string): GeneratorOptions {
     const configFile = resolveConfigFile(cwd);
 
     if (!configFile) {
-        throw new Error(`配置文件未找到，配置文件可以是 ${configFileNameOrder.join('、')} 之一`);
+        throw new Error(`配置文件未找到，配置文件可以是 ${configFileNameOrder.join('、')} 之一\n可以使用 npx openapi-axios init 自动生成`);
     }
 
     const [err, config] = tryFlatten(() => {

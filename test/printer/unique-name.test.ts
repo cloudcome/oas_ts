@@ -1,5 +1,4 @@
-import { expect } from 'vitest';
-import { Printer } from '../../src';
+import { Printer } from '../../src/printer';
 
 test('unique name', () => {
     const printer = new Printer({

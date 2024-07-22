@@ -1,4 +1,4 @@
-import { Printer } from '../../src';
+import { Printer } from '../../src/printer';
 
 test('v3.1 schema', () => {
     const printer = new Printer({
