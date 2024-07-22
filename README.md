@@ -20,24 +20,30 @@ OpenAPI → Axios
 
 ```shell
 npm i -D openapi-axios
+npm i axios
 ```
 
 # 使用
 
 ## 创建配置文件
-
-在项目根目录下创建配置文件 openapi.config.js（也可以是 openapi.config.cjs）。
-
+```shell
+npx openapi-axios init
+```
+将在项目根目录下创建配置文件 openapi.config.cjs：
 ```js
-// openapi.config.js
+/**
+ * openapi-axios config
+ * @link https://github.com/FrontEndDev-org/openapi-axios
+ */
+
 const { defineConfig } = require('openapi-axios');
 
 module.exports = defineConfig({
     modules: {
-        // 将会生成 src/apis/petStore3.ts 文件
         'petStore3': 'https://petstore31.swagger.io/api/v31/openapi.json'
     },
 });
+
 ```
 
 ## 生成 API 文件
