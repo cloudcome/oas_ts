@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.21.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.20.0...v0.21.0) (2024-07-22)
+
+
+### Features
+
+* 丰富命令行操作 ([b6925ca](https://github.com/FrontEndDev-org/openapi-axios/commit/b6925ca1e57f7748ce81bba989c5d9de56d31a1f))
+
+
+### Bug Fixes
+
+* 修正 ref 可选性判断 ([8222d04](https://github.com/FrontEndDev-org/openapi-axios/commit/8222d045fa9bba4171267a096b4c59e64c7e28bf))
+* 修正请求参数键名错误的问题 ([31ebf30](https://github.com/FrontEndDev-org/openapi-axios/commit/31ebf30cea602638d1049fa9de5dc74c896d4a7b))
+
 ## [0.20.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.19.1...v0.20.0) (2024-07-19)
 
 
