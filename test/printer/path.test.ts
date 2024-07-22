@@ -23,13 +23,13 @@ test('1路径 + 1请求', () => {
       "/**
        * @param [config] request config
        */
-              export async function getApiAbc(config?:AxiosRequestConfig): AxiosPromise<unknown> {
-                  return axios({
-                      method: "get",
-                      url:resolveURL(BASE_URL,"/api/abc"),
+      export async function getApiAbc(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+          return axios({
+              method: "get",
+              url: resolveURL(BASE_URL,"/api/abc"),
       ...config
-                  });
-              }"
+          });
+      }"
     `);
 });
 
@@ -63,13 +63,13 @@ test('1路径 + 1请求 * module', () => {
        * @module TTT
        * @param [config] request config
        */
-              export async function getApiAbc(config?:AxiosRequestConfig): AxiosPromise<unknown> {
-                  return axios({
-                      method: "get",
-                      url:resolveURL(BASE_URL,"/api/abc"),
+      export async function getApiAbc(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+          return axios({
+              method: "get",
+              url: resolveURL(BASE_URL,"/api/abc"),
       ...config
-                  });
-              }"
+          });
+      }"
     `);
 });
 
@@ -97,28 +97,78 @@ test('1路径 + 2请求', () => {
       "/**
        * @param [config] request config
        */
-              export async function getApiAbc(config?:AxiosRequestConfig): AxiosPromise<unknown> {
-                  return axios({
-                      method: "get",
-                      url:resolveURL(BASE_URL,"/api/abc"),
+      export async function getApiAbc(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+          return axios({
+              method: "get",
+              url: resolveURL(BASE_URL,"/api/abc"),
       ...config
-                  });
-              }
+          });
+      }
 
       /**
        * @param [config] request config
        */
-              export async function postApiAbc(config?:AxiosRequestConfig): AxiosPromise<unknown> {
-                  return axios({
-                      method: "post",
-                      url:resolveURL(BASE_URL,"/api/abc"),
+      export async function postApiAbc(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+          return axios({
+              method: "post",
+              url: resolveURL(BASE_URL,"/api/abc"),
       ...config
-                  });
-              }"
+          });
+      }"
     `);
 });
 
 test('1路径 + 1请求 + 1query', () => {
+    const printer = new Printer({
+        info: {
+            title: 'api',
+            version: 'v1',
+        },
+        openapi: '3.0.0',
+        paths: {
+            '/api/abc': {
+                get: {
+                    parameters: [
+                        {
+                            name: 'userId',
+                            in: 'query',
+                            schema: {
+                                type: 'number',
+                            },
+                        },
+                    ],
+                    responses: {
+                        200: {
+                            description: 'success',
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    expect(
+        printer.print({
+            hideInfo: true,
+            hideImports: true,
+        }),
+    ).toMatchInlineSnapshot(`
+      "/**
+       * @param [userId] request param
+       * @param [config] request config
+       */
+      export async function getApiAbc(userId?:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+          return axios({
+              method: "get",
+              params: {userId},
+      url: resolveURL(BASE_URL,"/api/abc"),
+      ...config
+          });
+      }"
+    `);
+});
+
+test('1路径 + 1请求 + 1query with duplicate', () => {
     const printer = new Printer({
         info: {
             title: 'api',
@@ -157,14 +207,14 @@ test('1路径 + 1请求 + 1query', () => {
        * @param [config] request param
        * @param [config_2] request config
        */
-              export async function getApiAbc(config?:string,config_2?:AxiosRequestConfig): AxiosPromise<unknown> {
-                  return axios({
-                      method: "get",
-                      config:{config:config},
-      url:resolveURL(BASE_URL,"/api/abc"),
+      export async function getApiAbc(config?:string,config_2?:AxiosRequestConfig): AxiosPromise<unknown> {
+          return axios({
+              method: "get",
+              params: {config},
+      url: resolveURL(BASE_URL,"/api/abc"),
       ...config_2
-                  });
-              }"
+          });
+      }"
     `);
 });
 
@@ -208,13 +258,13 @@ test('1路径 + 1请求 + 1path', () => {
        * @param var_2 request param
        * @param [config] request config
        */
-              export async function getApiAbc(var_2:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
-                  return axios({
-                      method: "get",
-                      url:resolveURL(BASE_URL,"/api/abc/{var}",{var:var_2}),
+      export async function getApiAbc(var_2:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+          return axios({
+              method: "get",
+              url: resolveURL(BASE_URL,"/api/abc/{var}",{var: var_2}),
       ...config
-                  });
-              }"
+          });
+      }"
     `);
 });
 
@@ -265,19 +315,19 @@ test('1路径 + 1请求 + 2path', () => {
        * @param path request params
        * @param [config] request config
        */
-              export async function getApiAbcDef(path:{
+      export async function getApiAbcDef(path:{
       "var":string;
       /**
        * @format integer
        */
       "xyz"?:number;
       },config?:AxiosRequestConfig): AxiosPromise<unknown> {
-                  return axios({
-                      method: "get",
-                      url:resolveURL(BASE_URL,"/api/abc/{var}/def/{xyz}",path),
+          return axios({
+              method: "get",
+              url: resolveURL(BASE_URL,"/api/abc/{var}/def/{xyz}",path),
       ...config
-                  });
-              }"
+          });
+      }"
     `);
 });
 
@@ -329,20 +379,20 @@ test('1路径 + 1请求 + 2query', () => {
        * @param [params] request params
        * @param [config] request config
        */
-              export async function getApiAbc(params?:{
+      export async function getApiAbc(params?:{
       "a"?:string;
       /**
        * @description xxx
        */
       "b":string;
       },config?:AxiosRequestConfig): AxiosPromise<unknown> {
-                  return axios({
-                      method: "get",
-                      params:params,
-      url:resolveURL(BASE_URL,"/api/abc"),
+          return axios({
+              method: "get",
+              params,
+      url: resolveURL(BASE_URL,"/api/abc"),
       ...config
-                  });
-              }"
+          });
+      }"
     `);
 });
 
@@ -405,20 +455,20 @@ test('1路径 + 1请求 + 2query + 1path', () => {
        * @param params_2 xxx
        * @param [config] request config
        */
-              export async function getApiAbc(params:{
+      export async function getApiAbc(params:{
       "a":string;
       /**
        * @description xxx
        */
       "b":string;
       },params_2:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
-                  return axios({
-                      method: "get",
-                      params:params,
-      url:resolveURL(BASE_URL,"/api/abc/{params}",{params:params_2}),
+          return axios({
+              method: "get",
+              params,
+      url: resolveURL(BASE_URL,"/api/abc/{params}",{params: params_2}),
       ...config
-                  });
-              }"
+          });
+      }"
     `);
 });
 
@@ -492,21 +542,21 @@ test('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
        * @param data aaa
        * @param [config] request config
        */
-              export async function getApiAbc(params:{
+      export async function getApiAbc(params:{
       "a":string;
       /**
        * @description xxx
        */
       "b":string;
       },c:string,data:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
-                  return axios({
-                      method: "get",
-                      params:params,
-      url:resolveURL(BASE_URL,"/api/abc",{c:c}),
-      data:data,
+          return axios({
+              method: "get",
+              params,
+      url: resolveURL(BASE_URL,"/api/abc",{c}),
+      data,
       ...config
-                  });
-              }"
+          });
+      }"
     `);
 });
 
@@ -586,7 +636,7 @@ test('1路径 + 1请求 + 2query + 1path + 1request object', () => {
        * @param data request param
        * @param [config] request config
        */
-              export async function getApiAbc(params:{
+      export async function getApiAbc(params:{
       "a":string;
       /**
        * @description xxx
@@ -598,14 +648,14 @@ test('1路径 + 1请求 + 2query + 1path + 1request object', () => {
        */
       "name":string;
       },config?:AxiosRequestConfig): AxiosPromise<unknown> {
-                  return axios({
-                      method: "get",
-                      params:params,
-      url:resolveURL(BASE_URL,"/api/abc",{c:c}),
-      data:data,
+          return axios({
+              method: "get",
+              params,
+      url: resolveURL(BASE_URL,"/api/abc",{c}),
+      data,
       ...config
-                  });
-              }"
+          });
+      }"
     `);
 });
 
@@ -693,7 +743,7 @@ test('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive
        * @param [config] request config
        * @returns success
        */
-              export async function getApiAbc(params:{
+      export async function getApiAbc(params:{
       "a":string;
       /**
        * @description xxx
@@ -705,14 +755,14 @@ test('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive
        */
       "name":string;
       },config?:AxiosRequestConfig): AxiosPromise<string> {
-                  return axios({
-                      method: "get",
-                      params:params,
-      url:resolveURL(BASE_URL,"/api/abc",{c:c}),
-      data:data,
+          return axios({
+              method: "get",
+              params,
+      url: resolveURL(BASE_URL,"/api/abc",{c}),
+      data,
       ...config
-                  });
-              }"
+          });
+      }"
     `);
 });
 
@@ -817,7 +867,7 @@ test('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', 
        * @param [config] request config
        * @returns success
        */
-              export async function getApiAbc(params:{
+      export async function getApiAbc(params:{
       "config":string;
       /**
        * @description xxx
@@ -843,13 +893,13 @@ test('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', 
       "name"?:string;
       };
       }> {
-                  return axios({
-                      method: "get",
-                      params:params,
-      url:resolveURL(BASE_URL,"/api/abc",{data:data}),
-      data:data_2,
+          return axios({
+              method: "get",
+              params,
+      url: resolveURL(BASE_URL,"/api/abc",{data}),
+      data: data_2,
       ...config
-                  });
-              }"
+          });
+      }"
     `);
 });

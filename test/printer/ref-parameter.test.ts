@@ -48,12 +48,12 @@ test('ref-parameter', () => {
        * @param [userId] request param
        * @param [config] request config
        */
-              export async function postTest(userId?:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
-                  return axios({
-                      method: "post",
-                      url:resolveURL(BASE_URL,"/test/{userId}",{userId:userId}),
+      export async function postTest(userId?:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+          return axios({
+              method: "post",
+              url: resolveURL(BASE_URL,"/test/{userId}",{userId}),
       ...config
-                  });
-              }"
+          });
+      }"
     `);
 });

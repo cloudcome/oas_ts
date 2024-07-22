@@ -54,12 +54,12 @@ test('unique name', () => {
        * @param [config] request config
        * @returns success
        */
-              export async function getTest(config?:AxiosRequestConfig): AxiosPromise<TestAa> {
-                  return axios({
-                      method: "get",
-                      url:resolveURL(BASE_URL,"/test"),
+      export async function getTest(config?:AxiosRequestConfig): AxiosPromise<TestAa> {
+          return axios({
+              method: "get",
+              url: resolveURL(BASE_URL,"/test"),
       ...config
-                  });
-              }"
+          });
+      }"
     `);
 });

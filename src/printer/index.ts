@@ -270,12 +270,12 @@ export class Printer {
         const { axiosRequestConfigTypeName = AXIOS_QUEST_CONFIG_TYPE_NAME } = this.options || {};
 
         return `${jsDoc.print()}
-        export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeName)}): AxiosPromise<${respType}> {
-            return axios({
-                method: ${JSON.stringify(method)},
-                ${requestArgs.toValues(url)}
-            });
-        }`;
+export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeName)}): AxiosPromise<${respType}> {
+    return axios({
+        method: ${JSON.stringify(method)},
+        ${requestArgs.toValues(url)}
+    });
+}`;
     }
 
     private _parseContents(

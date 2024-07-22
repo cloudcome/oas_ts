@@ -60,13 +60,13 @@ test('ref-request', () => {
        * @param data 用户列表
        * @param [config] request config
        */
-              export async function postTest(data:((User)[]),config?:AxiosRequestConfig): AxiosPromise<unknown> {
-                  return axios({
-                      method: "post",
-                      data:data,
-      url:resolveURL(BASE_URL,"/test"),
+      export async function postTest(data:((User)[]),config?:AxiosRequestConfig): AxiosPromise<unknown> {
+          return axios({
+              method: "post",
+              data,
+      url: resolveURL(BASE_URL,"/test"),
       ...config
-                  });
-              }"
+          });
+      }"
     `);
 });

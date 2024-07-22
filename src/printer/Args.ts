@@ -1,6 +1,5 @@
 import type { ArgItem } from './Arg';
 import { requiredTypeStringify } from './helpers';
-import { Named } from './Named';
 
 export class Args {
     fixedArgs: ArgItem[];
@@ -45,7 +44,7 @@ export class Args {
 
                 if (kind === 'config') return `...${uniqueName}`;
 
-                const propVal = arg.structured ? `{${originName}:${uniqueName}}` : uniqueName;
+                const value = arg.structured ? (originName === uniqueName ? `{${originName}}` : `{${originName}: ${uniqueName}}`) : uniqueName;
 
                 if (kind === 'path') {
                     const args = [
@@ -54,12 +53,12 @@ export class Args {
                         JSON.stringify(url),
                     ];
 
-                    if (type !== '') args.push(propVal);
+                    if (type !== '') args.push(value);
 
-                    return `url:resolveURL(${args.join(',')})`;
+                    return `url: resolveURL(${args.join(',')})`;
                 }
 
-                return `${originName}:${propVal}`;
+                return kind === value ? kind : `${kind}: ${value}`;
             })
             .join(',\n');
     }

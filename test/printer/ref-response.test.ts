@@ -61,12 +61,12 @@ test('ref-response', () => {
       /**
        * @param [config] request config
        */
-              export async function postTest(config?:AxiosRequestConfig): AxiosPromise<((User)[])> {
-                  return axios({
-                      method: "post",
-                      url:resolveURL(BASE_URL,"/test"),
+      export async function postTest(config?:AxiosRequestConfig): AxiosPromise<((User)[])> {
+          return axios({
+              method: "post",
+              url: resolveURL(BASE_URL,"/test"),
       ...config
-                  });
-              }"
+          });
+      }"
     `);
 });

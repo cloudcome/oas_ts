@@ -13,10 +13,13 @@ Some useful links:
  * @see {@link http://swagger.io Find out more about Swagger}
  */
 
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import axios from "axios";
 import type {AxiosRequestConfig, AxiosPromise} from "axios";
+import type {OneOf, AllOf, AnyOf, AnyObject, AnyArray} from "pkg-name-for-test/client";
 import {resolveURL} from "pkg-name-for-test/client";
-import type {OneOf} from "pkg-name-for-test/client";
 
 const BASE_URL="/api/v3";
 
@@ -174,14 +177,14 @@ export type ApiResponse = {
  * @param [config] request config
  * @returns Successful operation
  */
-        export async function updatePet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
-            return axios({
-                method: "put",
-                data:data,
-url:resolveURL(BASE_URL,"/pet"),
+export async function updatePet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
+    return axios({
+        method: "put",
+        data,
+url: resolveURL(BASE_URL,"/pet"),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description Add a new pet to the store
@@ -191,14 +194,14 @@ url:resolveURL(BASE_URL,"/pet"),
  * @param [config] request config
  * @returns Successful operation
  */
-        export async function addPet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
-            return axios({
-                method: "post",
-                data:data,
-url:resolveURL(BASE_URL,"/pet"),
+export async function addPet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
+    return axios({
+        method: "post",
+        data,
+url: resolveURL(BASE_URL,"/pet"),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description Multiple status values can be provided with comma separated strings
@@ -208,14 +211,14 @@ url:resolveURL(BASE_URL,"/pet"),
  * @param [config] request config
  * @returns successful operation
  */
-        export async function findPetsByStatus(status?:("available"|"pending"|"sold"),config?:AxiosRequestConfig): AxiosPromise<((Pet)[])> {
-            return axios({
-                method: "get",
-                status:{status:status},
-url:resolveURL(BASE_URL,"/pet/findByStatus"),
+export async function findPetsByStatus(status?:("available"|"pending"|"sold"),config?:AxiosRequestConfig): AxiosPromise<((Pet)[])> {
+    return axios({
+        method: "get",
+        params: {status},
+url: resolveURL(BASE_URL,"/pet/findByStatus"),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
@@ -225,14 +228,14 @@ url:resolveURL(BASE_URL,"/pet/findByStatus"),
  * @param [config] request config
  * @returns successful operation
  */
-        export async function findPetsByTags(tags?:((string)[]),config?:AxiosRequestConfig): AxiosPromise<((Pet)[])> {
-            return axios({
-                method: "get",
-                tags:{tags:tags},
-url:resolveURL(BASE_URL,"/pet/findByTags"),
+export async function findPetsByTags(tags?:((string)[]),config?:AxiosRequestConfig): AxiosPromise<((Pet)[])> {
+    return axios({
+        method: "get",
+        params: {tags},
+url: resolveURL(BASE_URL,"/pet/findByTags"),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description Returns a single pet
@@ -242,13 +245,13 @@ url:resolveURL(BASE_URL,"/pet/findByTags"),
  * @param [config] request config
  * @returns successful operation
  */
-        export async function getPetById(petId:number,config?:AxiosRequestConfig): AxiosPromise<Pet> {
-            return axios({
-                method: "get",
-                url:resolveURL(BASE_URL,"/pet/{petId}",{petId:petId}),
+export async function getPetById(petId:number,config?:AxiosRequestConfig): AxiosPromise<Pet> {
+    return axios({
+        method: "get",
+        url: resolveURL(BASE_URL,"/pet/{petId}",{petId}),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description 
@@ -258,7 +261,7 @@ url:resolveURL(BASE_URL,"/pet/findByTags"),
  * @param [params] request params
  * @param [config] request config
  */
-        export async function updatePetWithForm(petId:number,params?:{
+export async function updatePetWithForm(petId:number,params?:{
 /**
  * @description Name of pet that needs to be updated
  */
@@ -268,13 +271,13 @@ url:resolveURL(BASE_URL,"/pet/findByTags"),
  */
 "status"?:string;
 },config?:AxiosRequestConfig): AxiosPromise<unknown> {
-            return axios({
-                method: "post",
-                url:resolveURL(BASE_URL,"/pet/{petId}",{petId:petId}),
-params:params,
+    return axios({
+        method: "post",
+        url: resolveURL(BASE_URL,"/pet/{petId}",{petId}),
+params,
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description 
@@ -284,14 +287,14 @@ params:params,
  * @param [apiKey] request param
  * @param [config] request config
  */
-        export async function deletePet(petId:number,apiKey?:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
-            return axios({
-                method: "delete",
-                url:resolveURL(BASE_URL,"/pet/{petId}",{petId:petId}),
-api_key:{api_key:apiKey},
+export async function deletePet(petId:number,apiKey?:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    return axios({
+        method: "delete",
+        url: resolveURL(BASE_URL,"/pet/{petId}",{petId}),
+headers: {api_key: apiKey},
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description 
@@ -303,15 +306,15 @@ api_key:{api_key:apiKey},
  * @param [config] request config
  * @returns successful operation
  */
-        export async function uploadFile(petId:number,data:string,additionalMetadata?:string,config?:AxiosRequestConfig): AxiosPromise<ApiResponse> {
-            return axios({
-                method: "post",
-                url:resolveURL(BASE_URL,"/pet/{petId}/uploadImage",{petId:petId}),
-data:data,
-additionalMetadata:{additionalMetadata:additionalMetadata},
+export async function uploadFile(petId:number,data:string,additionalMetadata?:string,config?:AxiosRequestConfig): AxiosPromise<ApiResponse> {
+    return axios({
+        method: "post",
+        url: resolveURL(BASE_URL,"/pet/{petId}/uploadImage",{petId}),
+data,
+params: {additionalMetadata},
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description Returns a map of status codes to quantities
@@ -320,18 +323,18 @@ additionalMetadata:{additionalMetadata:additionalMetadata},
  * @param [config] request config
  * @returns successful operation
  */
-        export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<{
+export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<{
 /**
  * @format int32
  */
 [key: string]:number;
 }> {
-            return axios({
-                method: "get",
-                url:resolveURL(BASE_URL,"/store/inventory"),
+    return axios({
+        method: "get",
+        url: resolveURL(BASE_URL,"/store/inventory"),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description Place a new order in the store
@@ -341,14 +344,14 @@ additionalMetadata:{additionalMetadata:additionalMetadata},
  * @param [config] request config
  * @returns successful operation
  */
-        export async function placeOrder(data:Order,config?:AxiosRequestConfig): AxiosPromise<Order> {
-            return axios({
-                method: "post",
-                data:data,
-url:resolveURL(BASE_URL,"/store/order"),
+export async function placeOrder(data:Order,config?:AxiosRequestConfig): AxiosPromise<Order> {
+    return axios({
+        method: "post",
+        data,
+url: resolveURL(BASE_URL,"/store/order"),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.
@@ -358,13 +361,13 @@ url:resolveURL(BASE_URL,"/store/order"),
  * @param [config] request config
  * @returns successful operation
  */
-        export async function getOrderById(orderId:number,config?:AxiosRequestConfig): AxiosPromise<Order> {
-            return axios({
-                method: "get",
-                url:resolveURL(BASE_URL,"/store/order/{orderId}",{orderId:orderId}),
+export async function getOrderById(orderId:number,config?:AxiosRequestConfig): AxiosPromise<Order> {
+    return axios({
+        method: "get",
+        url: resolveURL(BASE_URL,"/store/order/{orderId}",{orderId}),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
@@ -373,13 +376,13 @@ url:resolveURL(BASE_URL,"/store/order"),
  * @param orderId ID of the order that needs to be deleted
  * @param [config] request config
  */
-        export async function deleteOrder(orderId:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
-            return axios({
-                method: "delete",
-                url:resolveURL(BASE_URL,"/store/order/{orderId}",{orderId:orderId}),
+export async function deleteOrder(orderId:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    return axios({
+        method: "delete",
+        url: resolveURL(BASE_URL,"/store/order/{orderId}",{orderId}),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description This can only be done by the logged in user.
@@ -388,14 +391,14 @@ url:resolveURL(BASE_URL,"/store/order"),
  * @param data Created user object
  * @param [config] request config
  */
-        export async function createUser(data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
-            return axios({
-                method: "post",
-                data:data,
-url:resolveURL(BASE_URL,"/user"),
+export async function createUser(data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    return axios({
+        method: "post",
+        data,
+url: resolveURL(BASE_URL,"/user"),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description Creates list of users with given input array
@@ -405,14 +408,14 @@ url:resolveURL(BASE_URL,"/user"),
  * @param [config] request config
  * @returns Successful operation
  */
-        export async function createUsersWithListInput(data:((User)[]),config?:AxiosRequestConfig): AxiosPromise<User> {
-            return axios({
-                method: "post",
-                data:data,
-url:resolveURL(BASE_URL,"/user/createWithList"),
+export async function createUsersWithListInput(data:((User)[]),config?:AxiosRequestConfig): AxiosPromise<User> {
+    return axios({
+        method: "post",
+        data,
+url: resolveURL(BASE_URL,"/user/createWithList"),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description 
@@ -422,7 +425,7 @@ url:resolveURL(BASE_URL,"/user/createWithList"),
  * @param [config] request config
  * @returns successful operation
  */
-        export async function loginUser(params?:{
+export async function loginUser(params?:{
 /**
  * @description The user name for login
  */
@@ -432,13 +435,13 @@ url:resolveURL(BASE_URL,"/user/createWithList"),
  */
 "password"?:string;
 },config?:AxiosRequestConfig): AxiosPromise<string> {
-            return axios({
-                method: "get",
-                params:params,
-url:resolveURL(BASE_URL,"/user/login"),
+    return axios({
+        method: "get",
+        params,
+url: resolveURL(BASE_URL,"/user/login"),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description 
@@ -446,13 +449,13 @@ url:resolveURL(BASE_URL,"/user/login"),
  * @see user Operations about user
  * @param [config] request config
  */
-        export async function logoutUser(config?:AxiosRequestConfig): AxiosPromise<unknown> {
-            return axios({
-                method: "get",
-                url:resolveURL(BASE_URL,"/user/logout"),
+export async function logoutUser(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    return axios({
+        method: "get",
+        url: resolveURL(BASE_URL,"/user/logout"),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description 
@@ -462,13 +465,13 @@ url:resolveURL(BASE_URL,"/user/login"),
  * @param [config] request config
  * @returns successful operation
  */
-        export async function getUserByName(username:string,config?:AxiosRequestConfig): AxiosPromise<User> {
-            return axios({
-                method: "get",
-                url:resolveURL(BASE_URL,"/user/{username}",{username:username}),
+export async function getUserByName(username:string,config?:AxiosRequestConfig): AxiosPromise<User> {
+    return axios({
+        method: "get",
+        url: resolveURL(BASE_URL,"/user/{username}",{username}),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description This can only be done by the logged in user.
@@ -478,14 +481,14 @@ url:resolveURL(BASE_URL,"/user/login"),
  * @param data Update an existent user in the store
  * @param [config] request config
  */
-        export async function updateUser(username:string,data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
-            return axios({
-                method: "put",
-                url:resolveURL(BASE_URL,"/user/{username}",{username:username}),
-data:data,
+export async function updateUser(username:string,data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    return axios({
+        method: "put",
+        url: resolveURL(BASE_URL,"/user/{username}",{username}),
+data,
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description This can only be done by the logged in user.
@@ -494,10 +497,10 @@ data:data,
  * @param username The name that needs to be deleted
  * @param [config] request config
  */
-        export async function deleteUser(username:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
-            return axios({
-                method: "delete",
-                url:resolveURL(BASE_URL,"/user/{username}",{username:username}),
+export async function deleteUser(username:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    return axios({
+        method: "delete",
+        url: resolveURL(BASE_URL,"/user/{username}",{username}),
 ...config
-            });
-        }
+    });
+}

@@ -9,10 +9,13 @@ Swagger at [http://swagger.io](http://swagger.io).
  * @see {@link http://swagger.io Find out more about Swagger}
  */
 
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import axios from "axios";
 import type {AxiosRequestConfig, AxiosPromise} from "axios";
+import type {OneOf, AllOf, AnyOf, AnyObject, AnyArray} from "pkg-name-for-test/client";
 import {resolveURL} from "pkg-name-for-test/client";
-import type {OneOf} from "pkg-name-for-test/client";
 
 const BASE_URL="/api/v31";
 
@@ -92,14 +95,14 @@ export type Tag = {
  * @param [config] request config
  * @returns Successful operation
  */
-        export async function updatePet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
-            return axios({
-                method: "put",
-                data:data,
-url:resolveURL(BASE_URL,"/pet"),
+export async function updatePet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
+    return axios({
+        method: "put",
+        data,
+url: resolveURL(BASE_URL,"/pet"),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description Add a new pet to the store
@@ -109,14 +112,14 @@ url:resolveURL(BASE_URL,"/pet"),
  * @param [config] request config
  * @returns Successful operation
  */
-        export async function addPet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
-            return axios({
-                method: "post",
-                data:data,
-url:resolveURL(BASE_URL,"/pet"),
+export async function addPet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
+    return axios({
+        method: "post",
+        data,
+url: resolveURL(BASE_URL,"/pet"),
 ...config
-            });
-        }
+    });
+}
 
 /**
  * @description Returns a pet when 0 < ID <= 10.  ID > 10 or nonintegers will simulate API error conditions
@@ -124,10 +127,10 @@ url:resolveURL(BASE_URL,"/pet"),
  * @param petId ID of pet that needs to be fetched
  * @param [config] request config
  */
-        export async function getPetById(petId:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
-            return axios({
-                method: "get",
-                url:resolveURL(BASE_URL,"/pet/{petId}",{petId:petId}),
+export async function getPetById(petId:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    return axios({
+        method: "get",
+        url: resolveURL(BASE_URL,"/pet/{petId}",{petId}),
 ...config
-            });
-        }
+    });
+}
