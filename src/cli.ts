@@ -35,13 +35,12 @@ export function createCLI() {
             fs.writeFileSync(
                 configFilePath,
                 `
-/**
- * openapi-axios config
- * @link https://github.com/FrontEndDev-org/openapi-axios
- */
-
 const { defineConfig } = require('openapi-axios');
 
+/**
+ * openapi-axios config
+ * @ref https://github.com/FrontEndDev-org/openapi-axios
+ */
 module.exports = defineConfig({
     modules: {
         'petStore3': 'https://petstore31.swagger.io/api/v31/openapi.json'
