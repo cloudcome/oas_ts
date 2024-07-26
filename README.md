@@ -42,7 +42,6 @@ module.exports = defineConfig({
         'petStore3': 'https://petstore31.swagger.io/api/v31/openapi.json'
     },
 });
-
 ```
 
 ## 生成 API 文件
