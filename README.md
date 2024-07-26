@@ -19,7 +19,7 @@ OpenAPI → Axios
 # 安装
 
 ```shell
-npm i -D openapi-axios
+npm i -D openapi-axios@latest
 npm i axios
 ```
 
