@@ -8,6 +8,9 @@ declare global {
 
             // package version
             PKG_VERSION: string;
+
+            // package description
+            PKG_DESCRIPTION: string;
         }
     }
 }

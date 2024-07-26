@@ -1,7 +1,6 @@
 import { Command } from 'commander';
 import fs from 'fs';
 import path from 'path';
-import { description } from '../package.json';
 import { pkgName, pkgVersion } from './const';
 import { resolveConfigFile, run } from './generators/command';
 
@@ -11,7 +10,7 @@ export function createCLI() {
     program
         .name(pkgName)
         .version(pkgVersion)
-        .description(description)
+        .description(process.env.PKG_DESCRIPTION)
         .action((options, command) => {
             if (command.args.length === 0) return run();
 

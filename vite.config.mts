@@ -19,6 +19,7 @@ export default defineConfig({
     define: {
         'process.env.PKG_NAME': JSON.stringify(pkg.name),
         'process.env.PKG_VERSION': JSON.stringify(pkg.version),
+        'process.env.PKG_DESCRIPTION': JSON.stringify(pkg.description),
     },
     build: {
         minify: false,
@@ -51,6 +52,7 @@ export default defineConfig({
         env: {
             PKG_NAME: 'pkg-name-for-test',
             PKG_VERSION: 'pkg-version-for-test',
+            PKG_DESCRIPTION: 'pkg-description-for-test',
         },
         coverage: {
             all: true,
