@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.23.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.22.0...v0.23.0) (2024-07-26)
+
+
+### Features
+
+* **printer:** 添加文件头尾信息配置项 ([7ef510e](https://github.com/FrontEndDev-org/openapi-axios/commit/7ef510ed3b75557a694058d332a3160fb807cae9))
+
 ## [0.22.0](https://github.com/FrontEndDev-org/openapi-axios/compare/openapi-axios-v0.21.0...openapi-axios-v0.22.0) (2024-07-26)
 
 
