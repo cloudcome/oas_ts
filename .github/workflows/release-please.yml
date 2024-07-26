@@ -30,11 +30,11 @@ jobs:
     permissions:
         id-token: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-nvm
       - run: npm ci
       - run: npm run build
-      - uses: FrontEndDev-org/publish-node-package-action@v1
+      - uses: FrontEndDev-org/publish-node-package-action@v2
         with:
           target: npm
           token: ${{ secrets.NPM_TOKEN }}
@@ -47,10 +47,11 @@ jobs:
     permissions:
       packages: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-nvm
       - run: npm ci
       - run: npm run build
-      - uses: FrontEndDev-org/publish-node-package-action@v1
+      - uses: FrontEndDev-org/publish-node-package-action@v2
         with:
           target: github
+          token: ${{ secrets.GITHUB_TOKEN }}
