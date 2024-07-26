@@ -49,7 +49,7 @@ test('ref-response', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -132,7 +132,7 @@ test('ref-response in object', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),

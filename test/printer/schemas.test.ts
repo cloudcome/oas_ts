@@ -19,7 +19,7 @@ test('number', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -52,7 +52,7 @@ test('number enum', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -85,7 +85,7 @@ test('[number, null] enum', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -119,7 +119,7 @@ test('type[]', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -173,7 +173,7 @@ test('AllOf primitive', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -229,7 +229,7 @@ test('explicit array', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -275,7 +275,7 @@ test('generic array', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -326,7 +326,7 @@ test('explicit object', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -375,7 +375,7 @@ test('generic object', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -406,7 +406,7 @@ test('additionalProperties true', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -435,7 +435,7 @@ test('additionalProperties false', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -475,7 +475,7 @@ test('additionalProperties schema type', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -524,7 +524,7 @@ test('additionalProperties schema ref', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),

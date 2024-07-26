@@ -16,7 +16,7 @@ test('1路径 + 1请求', () => {
 
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -94,7 +94,7 @@ test('1路径 + 2请求', () => {
 
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -154,7 +154,7 @@ test('1路径 + 1请求 + 1query', () => {
 
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -205,7 +205,7 @@ test('1路径 + 1请求 + 1query with duplicate', () => {
 
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -257,7 +257,7 @@ test('1路径 + 1请求 + 1path', () => {
 
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -315,7 +315,7 @@ test('1路径 + 1请求 + 2path', () => {
 
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -380,7 +380,7 @@ test('1路径 + 1请求 + 2query', () => {
 
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -456,7 +456,7 @@ test('1路径 + 1请求 + 2query + 1path', () => {
 
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -543,7 +543,7 @@ test('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
 
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -638,7 +638,7 @@ test('1路径 + 1请求 + 2query + 1path + 1request object', () => {
 
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -745,7 +745,7 @@ test('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive
 
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -870,7 +870,7 @@ test('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', 
 
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),

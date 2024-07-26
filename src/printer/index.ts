@@ -81,19 +81,22 @@ export class Printer {
 
     print(configs?: PrinterConfigs) {
         Object.assign(this.configs, configs);
-        const { hideLintComments, hideInfo, hideComponents, hideImports, hidePaths } = this.configs;
-        const eslintComments = [
+        const { hideHeaders, hideFooters, hideInfo, hideComponents, hideImports, hidePaths } = this.configs;
+        const defaultHeaders = [
             //
             '/* eslint-disable @typescript-eslint/ban-ts-comment */',
             '/* eslint-disable @typescript-eslint/no-explicit-any */',
-        ].join('\n');
+        ];
+        const headers = (this.options?.headers || defaultHeaders).join('\n');
+        const footers = (this.options?.footers || []).join('\n');
 
         return [
-            !hideLintComments && eslintComments,
+            !hideHeaders && headers,
             !hideInfo && this._printInfo(),
             !hideImports && this._printImports(),
             !hideComponents && this._printComponents(),
             !hidePaths && this._printPaths(),
+            !hideFooters && footers,
         ]
             .filter(Boolean)
             .join('\n\n');

@@ -46,7 +46,7 @@ test('v3.1 schema', () => {
 
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),

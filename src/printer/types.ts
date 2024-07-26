@@ -106,6 +106,16 @@ export type PrinterOptions = {
      * @returns {string}
      */
     operationIdNormalize?: OperationIdNormalize;
+
+    /**
+     * 生成文件的头部信息
+     */
+    headers?: string[];
+
+    /**
+     * 生成文件的尾部信息
+     */
+    footers?: string[];
 };
 
 export type PrinterConfigs = {
@@ -119,7 +129,8 @@ export type PrinterConfigs = {
      */
     file?: string;
 
-    hideLintComments?: boolean;
+    hideHeaders?: boolean;
+    hideFooters?: boolean;
     hideInfo?: boolean;
     hideImports?: boolean;
     hideComponents?: boolean;

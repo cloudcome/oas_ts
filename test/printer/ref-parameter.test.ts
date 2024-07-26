@@ -40,7 +40,7 @@ test('ref-parameter', () => {
     });
     expect(
         printer.print({
-            hideLintComments: true,
+            hideHeaders: true,
             hideInfo: true,
             hideImports: true,
         }),
