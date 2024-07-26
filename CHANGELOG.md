@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.0 (2024-07-26)
+
+
+### Features
+
+* **release-please-config:** remove release-as version specification ([eeef20d](https://github.com/FrontEndDev-org/openapi-axios/commit/eeef20d5cb7b0ca8df285e09f121f0f5d81c12e3))
+* 指定版本 0.0.1 ([f39d2a9](https://github.com/FrontEndDev-org/openapi-axios/commit/f39d2a96a33b19154370b51fd7ab2079c9a3e96a))
+
+
+### Bug Fixes
+
+* 修正构建目录结构嵌套 ([96951f8](https://github.com/FrontEndDev-org/openapi-axios/commit/96951f85e84480ac720cc372d522795ead5813c2))
+
 ## [0.21.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.20.0...v0.21.0) (2024-07-22)
 
 
