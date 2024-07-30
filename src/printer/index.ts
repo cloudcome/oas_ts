@@ -82,7 +82,7 @@ export class Printer {
 
     print(configs?: PrinterConfigs) {
         Object.assign(this.configs, configs);
-        const { hideHeaders, hideFooters, hideInfo, hideComponents, hideImports, hidePaths } = this.configs;
+        const { hideHeaders, hideHelpers, hideFooters, hideInfo, hideComponents, hideImports, hidePaths } = this.configs;
         const defaultHeaders = [
             //
             '/* eslint-disable @typescript-eslint/ban-ts-comment */',
@@ -95,6 +95,7 @@ export class Printer {
             !hideHeaders && headers,
             !hideInfo && this._printInfo(),
             !hideImports && this._printImports(),
+            !hideHelpers && Printer.helpersCode,
             !hideComponents && this._printComponents(),
             !hidePaths && this._printPaths(),
             !hideFooters && footers,
@@ -129,11 +130,9 @@ export class Printer {
             axiosImportFile = AXIOS_IMPORT_FILE,
             axiosRequestConfigTypeName = AXIOS_QUEST_CONFIG_TYPE_NAME,
             axiosResponseTypeName = AXIOS_PROMISE_TYPE_NAME,
-            baseURL,
         } = this.options || {};
         const firstServer = this.document.servers?.[0];
         const defaultBaseURL = firstServer?.url || '/';
-        const BASE_URL = isString(baseURL) ? baseURL : baseURL?.(this.document) || defaultBaseURL;
         const { file } = this.configs;
         const importPath = toRelative(axiosImportFile, file);
 
@@ -148,7 +147,6 @@ export class Printer {
             `import type {OneOf, AllOf, AnyOf, AnyObject, AnyArray} from "${pkgName}/client";`,
             `import {resolveURL} from "${pkgName}/client";`,
             '',
-            `const BASE_URL=${JSON.stringify(BASE_URL)};`,
         ].join('\n');
     }
 
@@ -393,4 +391,14 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
 
         this._parseContents(arg, content, response, (contentType, content) => contentMatch(contentType, content, response));
     }
+
+    static helpersCode = `
+// helpers --- start
+export type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
+export type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
+export type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
+export type AnyObject = Record<string, any>;
+export type AnyArray = any[];
+// helpers --- end
+    `;
 }

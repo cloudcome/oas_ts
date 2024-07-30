@@ -80,12 +80,6 @@ export type PrinterOptions = {
     axiosResponseTypeName?: string;
 
     /**
-     * 基础路径
-     * @default /
-     */
-    baseURL?: string | ((document: OpenAPILatest.Document) => string);
-
-    /**
      * 请求内容类型判断
      */
     requestContentType?: string | RequestContentTypeMatch;
@@ -130,6 +124,7 @@ export type PrinterConfigs = {
     file?: string;
 
     hideHeaders?: boolean;
+    hideHelpers?: boolean;
     hideFooters?: boolean;
     hideInfo?: boolean;
     hideImports?: boolean;
