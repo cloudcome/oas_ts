@@ -50,6 +50,7 @@ test('ref-response', () => {
     expect(
         printer.print({
             hideHeaders: true,
+            hideHelpers: true,
             hideInfo: true,
             hideImports: true,
         }),
@@ -133,6 +134,7 @@ test('ref-response in object', () => {
     expect(
         printer.print({
             hideHeaders: true,
+            hideHelpers: true,
             hideInfo: true,
             hideImports: true,
         }),

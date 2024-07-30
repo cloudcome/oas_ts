@@ -77,14 +77,14 @@ export const INTERNAL_NAMES = [
     'Blob',
     'Array',
     'Object',
-    // client exports
+    // printer helpers
     'OneOf',
     'AllOf',
     'AnyOf',
     'AnyObject',
     'AnyArray',
+    'URL',
     'resolveURL',
-    'BASE_URL',
     // config
     AXIOS_IMPORT_NAME,
     AXIOS_QUEST_CONFIG_TYPE_NAME,

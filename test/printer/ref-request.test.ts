@@ -48,6 +48,7 @@ test('ref-request', () => {
     expect(
         printer.print({
             hideHeaders: true,
+            hideHelpers: true,
             hideInfo: true,
             hideImports: true,
         }),
