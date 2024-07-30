@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { pkgName } from '../const';
-import type { OpenAPILatest } from '../types/openapi';
+import { OpenAPIVersion, type OpenAPILatest } from '../types/openapi';
 import { never } from '../utils/func';
 import { isString, isUndefined } from '../utils/type-is';
 import { Arg } from './Arg';
@@ -47,7 +47,7 @@ export class Printer {
         const { openapi } = document;
 
         if (!openapi) throw new Error(`未找到 openapi 版本号`);
-        if (!openapi.startsWith('3.1')) throw new Error(`当前仅支持 openapi 3.1，当前版本为 ${openapi}`);
+        if (!openapi.startsWith(OpenAPIVersion.V3_1)) throw new Error(`当前仅支持 openapi ${OpenAPIVersion.V3_1}，当前版本为 ${openapi}`);
 
         this.registerComponents();
         this.named.internalVarName(options?.axiosImportName || AXIOS_IMPORT_NAME);
@@ -187,6 +187,9 @@ export class Printer {
 
             const isOperation = allowMethods.includes(method);
             if (!isOperation) return;
+
+            // 转换后可能有 undefined 的情况
+            if (isUndefined(_operation)) return;
 
             // 已经约束了是 http method
             const operation = _operation as OpenApiLatest_Operation;

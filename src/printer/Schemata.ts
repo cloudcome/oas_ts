@@ -69,20 +69,17 @@ export class Schemata {
             return {
                 comments,
                 type: withGroup(
-                    type.map((type) =>
-                        this.toString(
+                    type.map((type) => {
+                        const typeStr = this.toString(
                             type === 'null'
-                                ? { type }
-                                : ({
-                                      // 将枚举值传给子类型
-                                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                      // @ts-ignore
-                                      enum: schema.enum,
-                                      type,
-                                  } as OpenAPILatest.SchemaObject),
+                                ? // null
+                                  { type }
+                                : // origin
+                                  ({ ...schema, type } as OpenAPILatest.SchemaObject),
                             true,
-                        ),
-                    ),
+                        );
+                        return '(' + typeStr + ')';
+                    }),
                     '|',
                 ),
                 required: false,
