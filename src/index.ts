@@ -3,6 +3,6 @@ export { createCLI } from './cli';
 export * from './const';
 
 // types
-export type * from './types/openapi';
-export type * from './printer/types';
-export type * from './generators/types';
+export * from './types/openapi';
+export * from './printer/types';
+export * from './generators/types';

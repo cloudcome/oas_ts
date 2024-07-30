@@ -11,7 +11,7 @@ test('read local', async () => {
 test('read remote', async () => {
     const reader = new Reader();
     const document = await reader.read('https://gw.alipayobjects.com/os/antfincdn/LyDMjDyIhK/1611471979478-opa.json');
-    expect(document.openapi).toEqual('3.0.1');
+    expect(document.openapi).toEqual('3.1.0');
 });
 
 test('read object', async () => {
@@ -24,5 +24,5 @@ test('read object', async () => {
         openapi: '3.0.0',
         paths: {},
     });
-    expect(document.openapi).toEqual('3.0.0');
+    expect(document.openapi).toEqual('3.1.0');
 });

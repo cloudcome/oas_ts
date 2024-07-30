@@ -1,16 +1,32 @@
 import fs from 'fs';
 import path from 'path';
 import process from 'process';
-import type { OpenAPILatest } from '../types/openapi';
-import { request } from '../utils/request';
+import type { OpenAPIAll, OpenAPILatest } from '../types/openapi';
 import { isString } from '../utils/type-is';
+import { migrate } from '../migrations';
+import { bundle, bundleFromString, createConfig } from '@redocly/openapi-core';
 
-type AcceptDocument = OpenAPILatest.Document | string;
+type AcceptDocument = OpenAPIAll.Document | string;
 
 export class Reader {
     cwd = process.cwd();
 
-    async read(document: AcceptDocument): Promise<OpenAPILatest.Document> {
+    async read(document: AcceptDocument) {
+        const source = await this._read(document);
+        const config = await createConfig({});
+        const { problems, bundle } = await bundleFromString({ config, source });
+
+        if (problems.length) {
+            console.warn(`发现了 ${problems.length} 处错误，请检查文档，可能会出现非预期错误`);
+            problems.forEach((p) => {
+                console.warn(p.message);
+            });
+        }
+
+        return migrate(bundle.parsed);
+    }
+
+    private async _read(document: AcceptDocument): Promise<string> {
         if (isString(document)) {
             if (/^https?:/i.test(document)) {
                 return await this.readRemote(document);
@@ -18,24 +34,22 @@ export class Reader {
                 return this.readLocal(document);
             }
         } else {
-            return this.readObject(document);
+            return JSON.stringify(document);
         }
     }
 
-    static validate(document: AcceptDocument) {
-        // TODO
-    }
-
     protected readLocal(file: string) {
-        const data = fs.readFileSync(path.resolve(this.cwd, file), 'utf8');
-        return JSON.parse(data) as OpenAPILatest.Document;
+        return fs.readFileSync(path.resolve(this.cwd, file), 'utf8');
     }
 
     protected async readRemote(url: string) {
-        return await request<OpenAPILatest.Document>(url);
+        const resp = await fetch(url);
+        if (resp.ok) return await resp.text();
+
+        throw new Error(`${resp.status} ${resp.statusText}`);
     }
 
-    protected readObject(document: OpenAPILatest.Document) {
+    protected readObject(document: OpenAPIAll.Document) {
         return document;
     }
 }
