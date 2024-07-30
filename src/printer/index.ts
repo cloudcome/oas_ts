@@ -1,11 +1,9 @@
-import path from 'node:path';
-import { pkgName } from '../const';
 import { OpenAPIVersion, type OpenAPILatest } from '../types/openapi';
-import { never } from '../utils/func';
+import { toRelative } from '../utils/path';
 import { isString, isUndefined } from '../utils/type-is';
 import { Arg } from './Arg';
 import { Args } from './Args';
-import { AXIOS_IMPORT_FILE, AXIOS_IMPORT_NAME, AXIOS_QUEST_CONFIG_TYPE_NAME, AXIOS_PROMISE_TYPE_NAME } from './const';
+import { AXIOS_IMPORT_FILE, AXIOS_IMPORT_NAME, AXIOS_PROMISE_TYPE_NAME, AXIOS_QUEST_CONFIG_TYPE_NAME } from './const';
 import {
     filterLine,
     isRefMedia,
@@ -24,8 +22,7 @@ import {
 import { JsDoc } from './JsDoc';
 import { Named } from './Named';
 import { Schemata } from './Schemata';
-import type { PrinterOptions, PrinterConfigs, RequestStatusCodeMatch } from './types';
-import { toRelative } from '../utils/path';
+import type { PrinterConfigs, PrinterOptions } from './types';
 
 const allowMethods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 const parameterType = ['query', 'header', 'path', 'cookie'];
@@ -144,8 +141,6 @@ export class Printer {
                 : // 默认导入
                   `import ${axiosImportName} from "${importPath}";`,
             `import type {${axiosRequestConfigTypeName}, ${axiosResponseTypeName}} from "${importPath}";`,
-            `import type {OneOf, AllOf, AnyOf, AnyObject, AnyArray} from "${pkgName}/client";`,
-            `import {resolveURL} from "${pkgName}/client";`,
             '',
         ].join('\n');
     }

@@ -1,14 +1,14 @@
-import type { ArgItem } from './Arg';
+import type { ArgParsed as FixedArg } from './Arg';
 import { requiredTypeStringify } from './helpers';
 
 export class Args {
-    fixedArgs: ArgItem[];
-    constructor(private args: (ArgItem | null)[]) {
+    fixedArgs: FixedArg[];
+    constructor(private args: (FixedArg | null)[]) {
         this.fixedArgs = this._sort();
     }
 
     private _sort() {
-        const fixedArgs = this.args.filter(Boolean) as ArgItem[];
+        const fixedArgs = this.args.filter(Boolean) as FixedArg[];
         return fixedArgs.sort((a, b) => Number(b.required) - Number(a.required));
     }
 
@@ -26,9 +26,9 @@ export class Args {
 
     toArgs(configTypeName: string) {
         return this.fixedArgs
-            .filter((arg) => arg.kind !== 'path' || arg.type !== '')
-            .map((arg) => {
-                return `${arg.uniqueName}${requiredTypeStringify(arg.required)}${arg.type || configTypeName}`;
+            .filter((fixArg) => fixArg.arg.kind !== 'path' || fixArg.type !== '')
+            .map((fixArg) => {
+                return `${fixArg.uniqueName}${requiredTypeStringify(fixArg.required)}${fixArg.type || configTypeName}`;
             })
             .join(',');
     }
@@ -39,26 +39,27 @@ export class Args {
 
     toValues(url: string) {
         return this.fixedArgs
-            .map((arg) => {
-                const { kind, originName, uniqueName, type } = arg;
+            .map((fixedArg) => {
+                const { originName, uniqueName, arg, props } = fixedArg;
 
-                if (kind === 'config') return `...${uniqueName}`;
+                if (arg.kind === 'config') return `...${uniqueName}`;
 
-                const value = arg.structured ? (originName === uniqueName ? `{${originName}}` : `{${originName}: ${uniqueName}}`) : uniqueName;
+                if (arg.kind === 'path') {
+                    const resolvedURL = url.replace(/\{(.*?)}/g, (_, name) => {
+                        if (!props.includes(name)) {
+                            throw new Error(`路径参数 ${name} 不存在`);
+                        }
 
-                if (kind === 'path') {
-                    const args = [
-                        //
-                        'BASE_URL',
-                        JSON.stringify(url),
-                    ];
+                        // 只有一个路径参数时，路径值直接传入
+                        if (props.length === 1) return `\${${uniqueName}}`;
 
-                    if (type !== '') args.push(value);
-
-                    return `url: resolveURL(${args.join(',')})`;
+                        return `\${${uniqueName}['${name}']}`;
+                    });
+                    return `url: \`${resolvedURL}\``;
                 }
 
-                return kind === value ? kind : `${kind}: ${value}`;
+                const value = props.length === 1 && !arg.isSingle ? `{${originName}: ${uniqueName}}` : uniqueName;
+                return `${arg.kind}: ${value}`;
             })
             .join(',\n');
     }

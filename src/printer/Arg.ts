@@ -4,15 +4,14 @@ import type { Named } from './Named';
 import { Schemata } from './Schemata';
 
 export type ArgKind = 'path' | 'headers' | 'cookies' | 'params' | 'data' | 'config' | 'response';
-export type ArgItem = {
-    kind: ArgKind;
+export type ArgParsed = {
+    arg: Arg;
     originName: string;
     uniqueName: string;
     required: boolean;
     type: string;
-    // 是否已经被解构了
-    structured: boolean;
     comments: Record<string, unknown>;
+    props: string[];
 };
 type InternalArgItem = {
     parameter: OpenAPILatest.ParameterObject;
@@ -26,7 +25,10 @@ export class Arg {
         readonly named: Named,
         readonly kind: ArgKind,
         readonly schemata: Schemata,
-        readonly isRoot = false,
+        /**
+         * 是否单参数（如 data、config、response）
+         */
+        readonly isSingle: boolean = false,
     ) {}
 
     add(parameter?: OpenApiLatest_Parameter) {
@@ -35,10 +37,11 @@ export class Arg {
         this.parameters.push(parameter);
     }
 
-    parse(): ArgItem | null {
+    parse(): ArgParsed | null {
         const internalArgItems: InternalArgItem[] = [];
         const fixedParameters = this.parameters.filter((p) => !isRefParameter(p) && 'schema' in p && p.schema) as OpenAPILatest.ParameterObject[];
         const propLength = fixedParameters.length;
+        const props = fixedParameters.map((p) => p.name);
         const requiredNames: string[] = [];
 
         fixedParameters.forEach((parameter) => {
@@ -46,7 +49,11 @@ export class Arg {
 
             if (!schema) return;
 
-            if (required) requiredNames.push(name);
+            if (required || parameter.in === 'path') {
+                requiredNames.push(name);
+                parameter.required = true;
+            }
+
             internalArgItems.push({
                 parameter,
                 // NO ERROR PLEASE
@@ -60,28 +67,29 @@ export class Arg {
             case 0: {
                 if (this.kind === 'path') {
                     return {
-                        kind: this.kind,
+                        arg: this,
                         originName: this.kind,
                         uniqueName: this.named.nextVarName(this.kind),
-                        required: false,
-                        structured: false,
+                        // 路径参数必填
+                        required: true,
                         type: '',
                         comments: {},
+                        props,
                     };
                 }
 
                 if (this.kind === 'config') {
                     const name = this.named.nextVarName(this.kind);
                     return {
-                        kind: this.kind,
+                        arg: this,
                         originName: this.kind,
                         uniqueName: name,
                         required: false,
-                        structured: false,
                         type: '',
                         comments: {
                             [`param [${name}]`]: 'request config',
                         },
+                        props,
                     };
                 }
 
@@ -97,12 +105,12 @@ export class Arg {
                 const required = parameter.required || result.required || false;
 
                 return {
+                    arg: this,
                     originName: parameter.name,
                     uniqueName: name,
-                    kind: this.kind,
-                    required,
-                    structured: !this.isRoot,
+                    required: required,
                     type: Schemata.toString(result, true),
+                    props,
                     comments:
                         this.kind === 'response'
                             ? {
@@ -135,12 +143,12 @@ export class Arg {
                 const required = requiredNames.length > 0;
 
                 return {
+                    arg: this,
                     originName: this.kind,
                     uniqueName: name,
                     required,
-                    kind: this.kind,
-                    structured: false,
                     type: Schemata.toString(result),
+                    props,
                     comments:
                         this.kind === 'response'
                             ? {
