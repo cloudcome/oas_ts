@@ -1,5 +1,5 @@
-import type { OpenApi3 } from '../types/openapi';
-import { isRefParameter, type OpenApi3_Parameter, requiredKeyStringify } from './helpers';
+import type { OpenAPILatest } from '../types/openapi';
+import { isRefParameter, type OpenApiLatest_Parameter, requiredKeyStringify } from './helpers';
 import type { Named } from './Named';
 import { Schemata } from './Schemata';
 
@@ -15,12 +15,12 @@ export type ArgItem = {
     comments: Record<string, unknown>;
 };
 type InternalArgItem = {
-    parameter: OpenApi3.ParameterObject;
-    schema: OpenApi3.SchemaObject;
+    parameter: OpenAPILatest.ParameterObject;
+    schema: OpenAPILatest.SchemaObject;
 };
 
 export class Arg {
-    parameters: OpenApi3_Parameter[] = [];
+    parameters: OpenApiLatest_Parameter[] = [];
 
     constructor(
         readonly named: Named,
@@ -29,7 +29,7 @@ export class Arg {
         readonly isRoot = false,
     ) {}
 
-    add(parameter?: OpenApi3_Parameter) {
+    add(parameter?: OpenApiLatest_Parameter) {
         if (!parameter) return;
 
         this.parameters.push(parameter);
@@ -37,16 +37,21 @@ export class Arg {
 
     parse(): ArgItem | null {
         const internalArgItems: InternalArgItem[] = [];
-        const fixedParameters = this.parameters.filter((p) => !isRefParameter(p) && 'schema' in p && p.schema) as OpenApi3.ParameterObject[];
+        const fixedParameters = this.parameters.filter((p) => !isRefParameter(p) && 'schema' in p && p.schema) as OpenAPILatest.ParameterObject[];
         const propLength = fixedParameters.length;
         const requiredNames: string[] = [];
 
         fixedParameters.forEach((parameter) => {
             const { required, schema, name } = parameter;
 
+            if (!schema) return;
+
             if (required) requiredNames.push(name);
             internalArgItems.push({
                 parameter,
+                // NO ERROR PLEASE
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 schema: schema!,
             });
         });
@@ -111,7 +116,7 @@ export class Arg {
 
             default: {
                 // name: {prop0: type0, prop1: type1, ...}
-                const rootSchema: OpenApi3.SchemaObject = {
+                const rootSchema: OpenAPILatest.SchemaObject = {
                     type: 'object',
                     properties: internalArgItems.reduce(
                         (acc, { parameter, schema }) => {
@@ -121,7 +126,7 @@ export class Arg {
                             };
                             return acc;
                         },
-                        {} as Record<string, OpenApi3.SchemaObject>,
+                        {} as Record<string, OpenAPILatest.SchemaObject>,
                     ),
                     required: requiredNames,
                 };

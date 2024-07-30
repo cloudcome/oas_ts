@@ -1,45 +1,45 @@
-import type { OpenApi3 } from '../types/openapi';
+import type { OpenAPILatest } from '../types/openapi';
 import { isString } from '../utils/type-is';
 
-export type OpenApi3_Schema = OpenApi3.SchemaObject | OpenApi3.ReferenceObject;
+export type OpenApiLatest_Schema = OpenAPILatest.SchemaObject | OpenAPILatest.ReferenceObject;
 
-export function isRefSchema(schema: OpenApi3_Schema): schema is OpenApi3.ReferenceObject {
+export function isRefSchema(schema: OpenApiLatest_Schema): schema is OpenAPILatest.ReferenceObject {
     return '$ref' in schema;
 }
 
-export type OpenApi3_Parameter = OpenApi3.ReferenceObject | OpenApi3.ParameterObject;
+export type OpenApiLatest_Parameter = OpenAPILatest.ReferenceObject | OpenAPILatest.ParameterObject;
 
-export function isRefParameter(parameter: OpenApi3_Parameter): parameter is OpenApi3.ReferenceObject {
+export function isRefParameter(parameter: OpenApiLatest_Parameter): parameter is OpenAPILatest.ReferenceObject {
     return '$ref' in parameter;
 }
 
-export type OpenApi3_Request = OpenApi3.ReferenceObject | OpenApi3.RequestBodyObject;
+export type OpenApiLatest_Request = OpenAPILatest.ReferenceObject | OpenAPILatest.RequestBodyObject;
 
-export function isRefRequest(request: OpenApi3_Request): request is OpenApi3.ReferenceObject {
+export function isRefRequest(request: OpenApiLatest_Request): request is OpenAPILatest.ReferenceObject {
     return '$ref' in request;
 }
 
-export type OpenApi3_Media = OpenApi3.ReferenceObject | OpenApi3.MediaTypeObject;
+export type OpenApiLatest_Media = OpenAPILatest.ReferenceObject | OpenAPILatest.MediaTypeObject;
 
-export function isRefMedia(request: OpenApi3_Media): request is OpenApi3.ReferenceObject {
+export function isRefMedia(request: OpenApiLatest_Media): request is OpenAPILatest.ReferenceObject {
     return '$ref' in request;
 }
 
-export type OpenApi3_PathItem = OpenApi3.PathItemObject | OpenApi3.ReferenceObject;
+export type OpenApiLatest_PathItem = OpenAPILatest.PathItemObject | OpenAPILatest.ReferenceObject;
 
-export function isRefPathItem(pathItem: OpenApi3_PathItem): pathItem is OpenApi3.ReferenceObject {
+export function isRefPathItem(pathItem: OpenApiLatest_PathItem): pathItem is OpenAPILatest.ReferenceObject {
     return '$ref' in pathItem;
 }
 
-export type OpenApi3_Operation = OpenApi3.OperationObject | OpenApi3.ReferenceObject;
+export type OpenApiLatest_Operation = OpenAPILatest.OperationObject | OpenAPILatest.ReferenceObject;
 
-export function isRefOperation(operation: OpenApi3_Operation): operation is OpenApi3.ReferenceObject {
+export function isRefOperation(operation: OpenApiLatest_Operation): operation is OpenAPILatest.ReferenceObject {
     return '$ref' in operation;
 }
 
-export type OpenApi3_Response = OpenApi3.ResponseObject | OpenApi3.ReferenceObject;
+export type OpenApiLatest_Response = OpenAPILatest.ResponseObject | OpenAPILatest.ReferenceObject;
 
-export function isRefResponse(response: OpenApi3_Response): response is OpenApi3.ReferenceObject {
+export function isRefResponse(response: OpenApiLatest_Response): response is OpenAPILatest.ReferenceObject {
     return '$ref' in response;
 }
 

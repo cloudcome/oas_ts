@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { configFileNameOrder, resolveConfig, resolveConfigFile, run } from '../../src/generators/command';
 import { createTempDirname } from '../helpers';
-import type { OpenApi3 } from '../../src/types/openapi';
+import type { OpenAPILatest } from '../../src/types/openapi';
 
 test('resolveConfigFile', async () => {
     const [cwd, clean] = createTempDirname();
@@ -55,7 +55,7 @@ test('run', async () => {
             },
             openapi: '3.0.0',
             paths: {},
-        } as OpenApi3.Document),
+        } as OpenAPILatest.Document),
     );
     fs.writeFileSync(
         file,

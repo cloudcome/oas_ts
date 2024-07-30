@@ -1,41 +1,41 @@
-import type { OpenApi3 } from '../types/openapi';
-import type { OpenApi3_Media, OpenApi3_Operation, OpenApi3_Request, OpenApi3_Response } from './helpers';
+import type { OpenAPILatest } from '../types/openapi';
+import type { OpenApiLatest_Media, OpenApiLatest_Operation, OpenApiLatest_Request, OpenApiLatest_Response } from './helpers';
 
 export type RequestContentContext = {
     method: string;
     url: string;
-    operation: OpenApi3.OperationObject;
-    content: OpenApi3_Media;
+    operation: OpenAPILatest.OperationObject;
+    content: OpenApiLatest_Media;
 };
 
 export type ResponsesContext = {
     method: string;
     url: string;
-    operation: OpenApi3.OperationObject;
-    responses: OpenApi3.ResponsesObject;
-    response: OpenApi3_Response;
+    operation: OpenAPILatest.OperationObject;
+    responses: OpenAPILatest.ResponsesObject;
+    response: OpenApiLatest_Response;
 };
 
 export type ResponseContentContext = {
     method: string;
     url: string;
-    operation: OpenApi3.OperationObject;
-    responses: OpenApi3.ResponsesObject;
-    response: OpenApi3.ResponseObject;
-    content: OpenApi3_Media;
+    operation: OpenAPILatest.OperationObject;
+    responses: OpenAPILatest.ResponsesObject;
+    response: OpenAPILatest.ResponseObject;
+    content: OpenApiLatest_Media;
 };
 
 // TODO 请求类型组件
 export type ComponentRequestContentContext = {
     name: string;
-    requestBody: OpenApi3_Request;
-    content: OpenApi3_Media;
+    requestBody: OpenApiLatest_Request;
+    content: OpenApiLatest_Media;
 };
 
 export type OperationContext = {
     method: string;
     url: string;
-    operation: OpenApi3.OperationObject;
+    operation: OpenAPILatest.OperationObject;
 };
 
 export type RequestContentTypeMatch = (contentType: string, context: RequestContentContext) => boolean;
@@ -83,7 +83,7 @@ export type PrinterOptions = {
      * 基础路径
      * @default /
      */
-    baseURL?: string | ((document: OpenApi3.Document) => string);
+    baseURL?: string | ((document: OpenAPILatest.Document) => string);
 
     /**
      * 请求内容类型判断

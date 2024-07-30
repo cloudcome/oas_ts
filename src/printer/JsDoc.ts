@@ -1,9 +1,9 @@
-import type { OpenApi3 } from '../types/openapi';
+import type { OpenAPILatest } from '../types/openapi';
 import { isArray, isBoolean, isNumber, isString } from '../utils/type-is';
 import { filterLine } from './helpers';
 
 function formatLine(key: string, val: unknown) {
-    val = key === 'externalDocs' ? JsDoc.printExternalDoc(val as OpenApi3.ExternalDocumentationObject) : val;
+    val = key === 'externalDocs' ? JsDoc.printExternalDoc(val as OpenAPILatest.ExternalDocumentationObject) : val;
     key = key === 'externalDocs' ? 'see' : key;
 
     if (isBoolean(val) && val) return `@${key}`;
@@ -15,7 +15,7 @@ const supportTypes = ['string', 'number', 'boolean', 'object', 'array', 'null'];
 export class JsDoc {
     lines: string[] = [];
 
-    constructor(private tags: OpenApi3.TagObject[] = []) {}
+    constructor(private tags: OpenAPILatest.TagObject[] = []) {}
 
     addComments(comments: Record<string, unknown>) {
         if ('tags' in comments) {
@@ -57,12 +57,12 @@ export class JsDoc {
             .filter(filterLine) as string[];
     }
 
-    static fromRef(ref: OpenApi3.ReferenceObject) {
+    static fromRef(ref: OpenAPILatest.ReferenceObject) {
         const { description, summary } = ref;
         return { description, summary };
     }
 
-    static fromSchema(schema: OpenApi3.SchemaObject) {
+    static fromSchema(schema: OpenAPILatest.SchemaObject) {
         const { deprecated, description, default: defaultValue, format, example, title, externalDocs, type } = schema;
         const types = isArray(type) ? type : isString(type) ? [type] : undefined;
 
@@ -77,7 +77,7 @@ export class JsDoc {
         };
     }
 
-    static fromParameter(parameter: OpenApi3.ParameterObject) {
+    static fromParameter(parameter: OpenAPILatest.ParameterObject) {
         const { deprecated, description, example, examples } = parameter;
         return {
             deprecated,
@@ -86,7 +86,7 @@ export class JsDoc {
         };
     }
 
-    static fromOperation(operation: OpenApi3.OperationObject) {
+    static fromOperation(operation: OpenAPILatest.OperationObject) {
         const { deprecated, description, summary, tags } = operation;
         return {
             deprecated,
@@ -96,7 +96,7 @@ export class JsDoc {
         };
     }
 
-    static printExternalDoc(externalDoc?: OpenApi3.ExternalDocumentationObject) {
+    static printExternalDoc(externalDoc?: OpenAPILatest.ExternalDocumentationObject) {
         const { url, description } = externalDoc || {};
 
         // {@link https://github.com GitHub}

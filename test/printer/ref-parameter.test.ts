@@ -21,14 +21,12 @@ test('ref-parameter', () => {
         components: {
             parameters: {
                 test1: {
-                    $id: 'p1',
                     $ref: '#/components/parameters/test2',
                 },
                 test2: {
                     $ref: 'p3',
                 },
                 test3: {
-                    $id: 'p3',
                     in: 'path',
                     name: 'userId',
                     schema: {

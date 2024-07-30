@@ -1,7 +1,7 @@
-import type { OpenApi3 } from '../types/openapi';
+import type { OpenAPILatest } from '../types/openapi';
 import { never } from '../utils/func';
 import { isArray, isBoolean, isNumber, isString, isUndefined } from '../utils/type-is';
-import { isRefSchema, type OpenApi3_Schema, requiredTypeStringify } from './helpers';
+import { isRefSchema, type OpenApiLatest_Schema, requiredTypeStringify } from './helpers';
 import { JsDoc } from './JsDoc';
 import type { Named } from './Named';
 
@@ -15,14 +15,10 @@ function withGroup(texts: string[], separator: string, start = '(', end = ')') {
     return start + texts.join(separator) + end;
 }
 
-function withNullable(type: string, nullable?: boolean) {
-    return nullable ? `(${type}) | null` : type;
-}
-
 export class Schemata {
     constructor(private named: Named) {}
 
-    print(schema: OpenApi3_Schema): SchemaResult {
+    print(schema: OpenApiLatest_Schema): SchemaResult {
         if (isRefSchema(schema)) {
             return {
                 comments: JsDoc.fromRef(schema),
@@ -31,18 +27,15 @@ export class Schemata {
             };
         }
 
-        const { type, allOf, oneOf, anyOf, nullable } = schema;
+        const { type, allOf, oneOf, anyOf } = schema;
         const comments = JsDoc.fromSchema(schema);
 
         if (allOf) {
             return {
                 comments,
-                type: withNullable(
-                    withGroup(
-                        allOf.map((s) => this.toString(s)),
-                        '&',
-                    ),
-                    nullable,
+                type: withGroup(
+                    allOf.map((s) => this.toString(s)),
+                    '&',
                 ),
                 required: false,
             };
@@ -51,12 +44,9 @@ export class Schemata {
         if (oneOf) {
             return {
                 comments,
-                type: withNullable(
-                    withGroup(
-                        oneOf.map((s) => this.toString(s)),
-                        '|',
-                    ),
-                    nullable,
+                type: withGroup(
+                    oneOf.map((s) => this.toString(s)),
+                    '|',
                 ),
                 required: false,
             };
@@ -65,14 +55,11 @@ export class Schemata {
         if (anyOf) {
             return {
                 comments,
-                type: withNullable(
-                    withGroup(
-                        anyOf.map((s) => this.toString(s)),
-                        ',',
-                        'AnyOf<',
-                        '>',
-                    ),
-                    nullable,
+                type: withGroup(
+                    anyOf.map((s) => this.toString(s)),
+                    ',',
+                    'AnyOf<',
+                    '>',
                 ),
                 required: false,
             };
@@ -81,25 +68,22 @@ export class Schemata {
         if (isArray(type)) {
             return {
                 comments,
-                type: withNullable(
-                    withGroup(
-                        type.map((type) =>
-                            this.toString(
-                                type === 'null'
-                                    ? { type }
-                                    : ({
-                                          // 将枚举值传给子类型
-                                          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                          // @ts-ignore
-                                          enum: schema.enum,
-                                          type,
-                                      } as OpenApi3.SchemaObject),
-                                true,
-                            ),
+                type: withGroup(
+                    type.map((type) =>
+                        this.toString(
+                            type === 'null'
+                                ? { type }
+                                : ({
+                                      // 将枚举值传给子类型
+                                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                      // @ts-ignore
+                                      enum: schema.enum,
+                                      type,
+                                  } as OpenAPILatest.SchemaObject),
+                            true,
                         ),
-                        '|',
                     ),
-                    nullable,
+                    '|',
                 ),
                 required: false,
             };
@@ -110,16 +94,14 @@ export class Schemata {
                 const { enum: enumValues = [] } = schema;
                 return {
                     comments,
-                    type: withNullable(
+                    type:
                         enumValues.length > 0
                             ? withGroup(
                                   enumValues.map((e) => (isString(e) ? JSON.stringify(e) : this.named.getRefType(e.$ref) || 'unknown')),
                                   '|',
                               )
                             : type,
-                        nullable,
-                    ),
-                    required: schema.required || false,
+                    required: Boolean(schema.required),
                 };
             }
 
@@ -127,34 +109,37 @@ export class Schemata {
                 const { enum: enumValues = [] } = schema;
                 return {
                     comments,
-                    type: withNullable(
+                    type:
                         enumValues.length > 0
                             ? withGroup(
                                   enumValues.map((e) => (isBoolean(e) ? String(e) : this.named.getRefType(e.$ref) || 'unknown')),
                                   '|',
                               )
                             : type,
-                        nullable,
-                    ),
-                    required: schema.required || false,
+                    required: Boolean(schema.required),
                 };
             }
 
             case 'number':
             case 'integer': {
-                const { enum: enumValues = [] } = schema;
+                const { enum: enumValues = [], const: const_, minimum, maximum } = schema;
+
+                if (!isUndefined(const_)) enumValues.push(const_);
+
                 return {
-                    comments,
-                    type: withNullable(
+                    comments: {
+                        ...comments,
+                        minimum,
+                        maximum,
+                    },
+                    type:
                         enumValues.length > 0
                             ? withGroup(
                                   enumValues.map((e) => (isNumber(e) ? String(e) : this.named.getRefType(e.$ref) || 'unknown')),
                                   '|',
                               )
                             : 'number',
-                        nullable,
-                    ),
-                    required: schema.required || false,
+                    required: Boolean(schema.required),
                 };
             }
 
@@ -162,7 +147,7 @@ export class Schemata {
                 return {
                     comments,
                     type,
-                    required: schema.required || false,
+                    required: Boolean(schema.required),
                 };
 
             case 'array':
@@ -178,7 +163,7 @@ export class Schemata {
                 } else if ('additionalProperties' in schema) {
                     return this._printObject(schema);
                 } else if ('items' in schema) {
-                    return this._printArray(schema);
+                    return this._printArray(schema as unknown as OpenAPILatest.ArraySchemaObject);
                 } else {
                     return this._printUnknown(schema);
                 }
@@ -190,20 +175,28 @@ export class Schemata {
         }
     }
 
-    private _printArray(schema: OpenApi3.SchemaBaseObject & OpenApi3.ArraySubtype) {
+    private _printArray(schema: OpenAPILatest.ArraySchemaObject) {
         const comments = JsDoc.fromSchema(schema);
-        const items = 'items' in schema ? schema.items : undefined;
+        const { minItems, maxItems } = schema;
+        // const items = 'items' in schema ? schema.items : undefined;
 
-        if (!items) {
-            return this._printUnknown(schema, 'array');
-        }
+        // if (!items) {
+        //     return this._printUnknown(schema, 'array');
+        // }
 
-        const explicit = isArray(items);
-        const subSchemas = explicit ? items : [items];
-        const subTypes = subSchemas.map((s) => this.toString(s));
+        // const explicit = isArray(items);
+        // const subSchemas = explicit ? items : [items];
+        // const subTypes = subSchemas.map((s) => this.toString(s));
+        // const subTypes = [this.toString(items)];
+
         return {
-            comments,
-            type: withNullable(explicit ? `[${subTypes.join(',')}]` : `((${subTypes.join('|')})[])`, schema.nullable),
+            comments: {
+                ...comments,
+                minItems,
+                maxItems,
+            },
+            // type: withNullable(explicit ? `[${subTypes.join(',')}]` : `((${subTypes.join('|')})[])`, schema.nullable),
+            type: this.toString(schema.items),
             required: false,
         };
     }
@@ -216,14 +209,14 @@ export class Schemata {
         };
     }
 
-    private _printObjectProp(name: string, propSchema: boolean | OpenApi3.SchemaObject | OpenApi3.ReferenceObject, propRequired1: boolean) {
+    private _printObjectProp(name: string, propSchema: boolean | OpenAPILatest.SchemaObject | OpenAPILatest.ReferenceObject, propRequired1: boolean) {
         const { required: propRequired2, comments, type } = isBoolean(propSchema) ? this._printAddPropBoolean(propSchema) : this.print(propSchema);
         const jsDoc = new JsDoc();
         jsDoc.addComments(comments);
         return [jsDoc.print(), `${name}${requiredTypeStringify(propRequired1 || propRequired2 || false)}${type};`].filter(Boolean).join('\n');
     }
 
-    private _printObject(schema: OpenApi3.SchemaBaseObject & OpenApi3.ObjectSubtype) {
+    private _printObject(schema: OpenAPILatest.SchemaObject) {
         const comments = JsDoc.fromSchema(schema);
         const explicitProps = 'properties' in schema ? schema.properties : undefined;
         // additionalProperties: true
@@ -235,7 +228,10 @@ export class Schemata {
         const explicitTypes = explicitEntries.map(([name, propSchema]) => {
             return this._printObjectProp(JSON.stringify(name), propSchema, isArray(schema.required) ? schema.required?.includes(name) : false);
         });
-        const genericTypes = isUndefined(genericProps) ? [] : [this._printObjectProp('[key: string]', genericProps, true)];
+        const genericTypes =
+            isUndefined(genericProps) || genericProps === false || Object.keys(genericProps).length === 0
+                ? []
+                : [this._printObjectProp('[key: string]', genericProps, true)];
         const objectTypes = [...explicitTypes, ...genericTypes];
 
         if (objectTypes.length === 0) {
@@ -244,26 +240,24 @@ export class Schemata {
 
         return {
             comments,
-            type: withNullable(withGroup(objectTypes, '\n', '{\n', '\n}'), schema.nullable),
+            type: withGroup(objectTypes, '\n', '{\n', '\n}'),
             required: isBoolean(schema.required) ? schema.required : false,
         };
     }
 
-    private _printUnknown(schema: OpenApi3.SchemaBaseObject & OpenApi3_Schema, type: 'object' | 'array' | 'primitive' = 'primitive', required?: boolean) {
+    private _printUnknown(schema: OpenApiLatest_Schema, type: 'object' | 'array' | 'primitive' = 'primitive', required?: boolean) {
         const comments = JsDoc.fromSchema(schema);
 
         return {
             comments,
-            type: withNullable(
+            type:
                 //
                 type === 'object' ? 'AnyObject' : type === 'array' ? 'AnyArray' : 'unknown',
-                schema.nullable,
-            ),
             required: isBoolean(required) ? required : type === 'primitive',
         };
     }
 
-    toString(schema: OpenApi3_Schema, ignoreComments = false) {
+    toString(schema: OpenApiLatest_Schema, ignoreComments = false) {
         const result = this.print(schema);
         return Schemata.toString(result, ignoreComments);
     }

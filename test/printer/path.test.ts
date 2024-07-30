@@ -361,9 +361,9 @@ test('1路径 + 1请求 + 2query', () => {
                         {
                             name: 'b',
                             in: 'query',
+                            required: true,
                             schema: {
                                 type: 'string',
-                                required: true,
                                 description: 'xxx',
                             },
                         },
@@ -428,18 +428,18 @@ test('1路径 + 1请求 + 2query + 1path', () => {
                         {
                             name: 'b',
                             in: 'query',
+                            required: true,
                             schema: {
                                 type: 'string',
-                                required: true,
                                 description: 'xxx',
                             },
                         },
                         {
                             name: 'params',
                             in: 'path',
+                            required: true,
                             schema: {
                                 type: 'string',
-                                required: true,
                                 description: 'xxx',
                             },
                         },
@@ -505,18 +505,18 @@ test('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
                         {
                             name: 'b',
                             in: 'query',
+                            required: true,
                             schema: {
                                 type: 'string',
-                                required: true,
                                 description: 'xxx',
                             },
                         },
                         {
                             name: 'c',
                             in: 'path',
+                            required: true,
                             schema: {
                                 type: 'string',
-                                required: true,
                                 description: 'xxx',
                             },
                         },
@@ -594,18 +594,18 @@ test('1路径 + 1请求 + 2query + 1path + 1request object', () => {
                         {
                             name: 'b',
                             in: 'query',
+                            required: true,
                             schema: {
                                 type: 'string',
-                                required: true,
                                 description: 'xxx',
                             },
                         },
                         {
                             name: 'c',
                             in: 'path',
+                            required: true,
                             schema: {
                                 type: 'string',
-                                required: true,
                                 description: 'xxx',
                             },
                         },
@@ -694,18 +694,18 @@ test('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive
                         {
                             name: 'b',
                             in: 'query',
+                            required: true,
                             schema: {
                                 type: 'string',
-                                required: true,
                                 description: 'xxx',
                             },
                         },
                         {
                             name: 'c',
                             in: 'path',
+                            required: true,
                             schema: {
                                 type: 'string',
-                                required: true,
                                 description: 'xxx',
                             },
                         },

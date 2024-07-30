@@ -1,8 +1,8 @@
 import path from 'node:path';
 import { pkgName } from '../const';
-import type { OpenApi3 } from '../types/openapi';
+import type { OpenAPILatest } from '../types/openapi';
 import { never } from '../utils/func';
-import { isString } from '../utils/type-is';
+import { isString, isUndefined } from '../utils/type-is';
 import { Arg } from './Arg';
 import { Args } from './Args';
 import { AXIOS_IMPORT_FILE, AXIOS_IMPORT_NAME, AXIOS_QUEST_CONFIG_TYPE_NAME, AXIOS_PROMISE_TYPE_NAME } from './const';
@@ -14,12 +14,12 @@ import {
     isRefPathItem,
     isRefRequest,
     isRefResponse,
-    type OpenApi3_Media,
-    type OpenApi3_Operation,
-    type OpenApi3_Parameter,
-    type OpenApi3_Request,
-    type OpenApi3_Response,
-    type OpenApi3_Schema,
+    type OpenApiLatest_Media,
+    type OpenApiLatest_Operation,
+    type OpenApiLatest_Parameter,
+    type OpenApiLatest_Request,
+    type OpenApiLatest_Response,
+    type OpenApiLatest_Schema,
 } from './helpers';
 import { JsDoc } from './JsDoc';
 import { Named } from './Named';
@@ -28,11 +28,12 @@ import type { PrinterOptions, PrinterConfigs, RequestStatusCodeMatch } from './t
 import { toRelative } from '../utils/path';
 
 const allowMethods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
+const parameterType = ['query', 'header', 'path', 'cookie'];
 
-type RequestMediaMatch = (contentType: string, content: OpenApi3_Media) => boolean;
-type ResponseMediaMatch = (contentType: string, content: OpenApi3_Media, response: OpenApi3.ResponseObject) => boolean;
+type RequestMediaMatch = (contentType: string, content: OpenApiLatest_Media) => boolean;
+type ResponseMediaMatch = (contentType: string, content: OpenApiLatest_Media, response: OpenAPILatest.ResponseObject) => boolean;
 
-type ResponseMatch = (statusCode: string, response: OpenApi3_Response) => boolean;
+type ResponseMatch = (statusCode: string, response: OpenApiLatest_Response) => boolean;
 
 export class Printer {
     named = new Named();
@@ -40,41 +41,41 @@ export class Printer {
     private configs: PrinterConfigs = {};
 
     constructor(
-        private readonly document: OpenApi3.Document,
+        private readonly document: OpenAPILatest.Document,
         private options?: PrinterOptions,
     ) {
         const { openapi } = document;
 
         if (!openapi) throw new Error(`未找到 openapi 版本号`);
-        if (!openapi.startsWith('3.')) throw new Error(`当前仅支持 openapi 3.x，当前版本为 ${openapi}`);
+        if (!openapi.startsWith('3.1')) throw new Error(`当前仅支持 openapi 3.1，当前版本为 ${openapi}`);
 
         this.registerComponents();
         this.named.internalVarName(options?.axiosImportName || AXIOS_IMPORT_NAME);
     }
 
-    refRequestBodies: Record<string, OpenApi3_Request> = {};
-    refParameters: Record<string, OpenApi3_Parameter> = {};
-    refResponses: Record<string, OpenApi3_Response> = {};
+    refRequestBodies: Record<string, OpenApiLatest_Request> = {};
+    refParameters: Record<string, OpenApiLatest_Parameter> = {};
+    refResponses: Record<string, OpenApiLatest_Response> = {};
     registerComponents() {
         const { schemas = {}, requestBodies = {}, parameters = {}, responses = {} } = this.document.components || {};
 
         Object.entries(schemas).forEach(([name, schema]) => {
-            const id = '$id' in schema ? schema.$id : '';
-            this.named.nextRefName(name, id || `#/components/schemas/${name}`);
+            const id = `#/components/schemas/${name}`;
+            this.named.nextRefName(name, id);
         });
 
         Object.entries(requestBodies).forEach(([name, requestBody]) => {
-            const id = ('$id' in requestBody && requestBody.$id) || `#/components/requestBodies/${name}`;
+            const id = `#/components/requestBodies/${name}`;
             this.refRequestBodies[id] = requestBody;
         });
 
         Object.entries(parameters).forEach(([name, parameter]) => {
-            const id = ('$id' in parameter && parameter.$id) || `#/components/parameters/${name}`;
+            const id = `#/components/parameters/${name}`;
             this.refParameters[id] = parameter;
         });
 
         Object.entries(responses).forEach(([name, response]) => {
-            const id = ('$id' in response && response.$id) || `#/components/responses/${name}`;
+            const id = `#/components/responses/${name}`;
             this.refResponses[id] = response;
         });
     }
@@ -154,13 +155,13 @@ export class Printer {
     private _printComponents() {
         return Object.entries(this.document.components?.schemas || {})
             .map(([name, schema]) => {
-                const id = schema.$id || `#/components/schemas/${name}`;
+                const id = `#/components/schemas/${name}`;
                 return this._printComponent(name, id, schema);
             })
             .join('\n\n');
     }
 
-    private _printComponent(name: string, id: string, schema: OpenApi3_Schema) {
+    private _printComponent(name: string, id: string, schema: OpenApiLatest_Schema) {
         const { comments, type } = this.schemata.print(schema);
         const jsDoc = new JsDoc();
         jsDoc.addComments(comments);
@@ -172,6 +173,7 @@ export class Printer {
     private _printPaths() {
         return Object.entries(this.document.paths || {})
             .map(([url, pathItem]) => {
+                if (isUndefined(pathItem)) return;
                 if (isRefPathItem(pathItem)) return;
 
                 return this._printPathItem(url, pathItem).filter(filterLine).join('\n\n');
@@ -179,20 +181,22 @@ export class Printer {
             .join('\n\n');
     }
 
-    private _printPathItem(url: string, pathItem: OpenApi3.PathItemObject) {
+    private _printPathItem(url: string, pathItem: OpenAPILatest.PathItemObject) {
         return Object.entries(pathItem).map(([method, _operation]) => {
+            // method === 'parameters'，migration 已忽略
+
             const isOperation = allowMethods.includes(method);
             if (!isOperation) return;
 
-            const operation = _operation as OpenApi3_Operation;
-            if (isRefOperation(operation)) return;
-
-            // TODO 注释掉上句之后，不知为何这里类型没有报错，operation 包含对象和引用两种类型
+            // 已经约束了是 http method
+            const operation = _operation as OpenApiLatest_Operation;
             return this._printOperation(method, url, operation);
         });
     }
 
-    private _printOperation(method: string, url: string, operation: OpenApi3.OperationObject) {
+    private _printOperation(method: string, url: string, operation: OpenApiLatest_Operation) {
+        if (isRefOperation(operation)) return;
+
         const argNamed = new Named();
         const header = new Arg(argNamed, 'headers', this.schemata);
         const cookie = new Arg(argNamed, 'cookies', this.schemata);
@@ -285,7 +289,7 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
 
     private _parseContents(
         arg: Arg,
-        contents: { [contentType: string]: OpenApi3.MediaTypeObject | OpenApi3.ReferenceObject },
+        contents: { [contentType: string]: OpenAPILatest.MediaTypeObject | OpenAPILatest.ReferenceObject },
         comments: {
             description?: string;
             required?: boolean;
@@ -303,7 +307,7 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
 
     private _parseContent(
         arg: Arg,
-        content: OpenApi3_Media,
+        content: OpenApiLatest_Media,
         comments: {
             description?: string;
             required?: boolean;
@@ -319,13 +323,16 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
                 in: 'query',
                 name: 'data',
                 ...comments,
+                // NO TYPE ERROR
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 schema: content.schema,
                 required: true,
             });
         }
     }
 
-    private _parseParameter(parameter: OpenApi3_Parameter, args: Record<OpenApi3.ParameterObject['in'], Arg>) {
+    private _parseParameter(parameter: OpenApiLatest_Parameter, args: Record<OpenAPILatest.ParameterObject['in'], Arg>) {
         if (isRefParameter(parameter)) {
             const { $ref } = parameter;
             const refParameter = this.refParameters[$ref];
@@ -336,19 +343,12 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
             return;
         }
 
-        switch (parameter.in) {
-            case 'query':
-            case 'header':
-            case 'path':
-            case 'cookie':
-                args[parameter.in].add(parameter);
-                break;
-            default:
-                never(parameter.in);
+        if (parameterType.includes(parameter.in)) {
+            args[parameter.in].add(parameter);
         }
     }
 
-    private _parseRequestBody(arg: Arg, requestBody: OpenApi3_Request, match: RequestMediaMatch) {
+    private _parseRequestBody(arg: Arg, requestBody: OpenApiLatest_Request, match: RequestMediaMatch) {
         if (!requestBody) return;
 
         if (isRefRequest(requestBody)) {
@@ -364,7 +364,7 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
         this._parseContents(arg, requestBody.content, requestBody, match);
     }
 
-    private _parseResponses(arg: Arg, responses: OpenApi3.ResponsesObject, responseMatch: ResponseMatch, contentMatch: ResponseMediaMatch) {
+    private _parseResponses(arg: Arg, responses: OpenAPILatest.ResponsesObject, responseMatch: ResponseMatch, contentMatch: ResponseMediaMatch) {
         const response = Object.entries(responses).find(([statusCode, response]) => {
             return responseMatch(statusCode, response);
         })?.[1];
@@ -374,7 +374,7 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
         this._parseResponse(arg, response, contentMatch);
     }
 
-    private _parseResponse(arg: Arg, response: OpenApi3_Response, contentMatch: ResponseMediaMatch) {
+    private _parseResponse(arg: Arg, response: OpenApiLatest_Response, contentMatch: ResponseMediaMatch) {
         if (isRefResponse(response)) {
             const { $ref } = response;
             const refResponse = this.refResponses[$ref];

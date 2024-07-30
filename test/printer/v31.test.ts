@@ -11,7 +11,6 @@ test('v3.1 schema', () => {
         components: {
             schemas: {
                 Category: {
-                    $id: 'my-id',
                     title: 'Category Title',
                     description: 'Category Description',
                     properties: {

@@ -1,6 +1,6 @@
 import type { Options } from 'prettier';
 import type { PrinterOptions } from '../printer/types';
-import type { OpenApi3 } from '../types/openapi';
+import type { OpenAPILatest } from '../types/openapi';
 
 type RequiredWith<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
@@ -8,7 +8,7 @@ export type OpenAPIOptions = PrinterOptions & {
     /**
      * openapi 的 document，可以是一个链接地址，也可以是本地路径，也可以是一个对象
      */
-    document: OpenApi3.Document | string;
+    document: OpenAPILatest.Document | string;
 };
 
 export type GeneratorOptions = PrinterOptions & {

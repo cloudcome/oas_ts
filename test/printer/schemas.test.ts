@@ -145,7 +145,6 @@ test('AllOf primitive', () => {
             schemas: {
                 User: {
                     type: 'object',
-                    nullable: true,
                     properties: {
                         username: {
                             type: 'string',
@@ -210,19 +209,13 @@ test('explicit array', () => {
             schemas: {
                 Order: {
                     type: 'array',
-                    items: [
-                        {
-                            type: 'integer',
-                            format: 'int64',
-                            example: 10,
-                            description: 'test1',
-                            deprecated: true,
-                        },
-                        {
-                            $ref: '#/components/schemas/User',
-                            description: 'test2',
-                        },
-                    ],
+                    items: {
+                        type: 'integer',
+                        format: 'int64',
+                        example: 10,
+                        description: 'test1',
+                        deprecated: true,
+                    },
                 },
             },
         },
