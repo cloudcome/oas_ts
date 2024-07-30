@@ -1,4 +1,4 @@
-import { Logger } from '../../src/generators/Logger';
+import { Logger } from '../../src/generator/Logger';
 
 test('Logger', async () => {
     const logger = new Logger();

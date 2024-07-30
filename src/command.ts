@@ -2,9 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import process from 'process';
 import { tryFlatten } from 'try-flatten';
-import { Generator } from './Generator';
-import { Logger } from './Logger';
-import type { GeneratorOptions } from './types';
+import { Generator } from './generator/Generator';
+import { Logger } from './generator/Logger';
+import type { GeneratorOptions } from './generator/types';
 
 export function defineConfig(options: GeneratorOptions): GeneratorOptions {
     return options;
@@ -46,7 +46,7 @@ export function resolveConfig(cwd: string): GeneratorOptions {
     return config;
 }
 
-export async function run(cwd = process.cwd()) {
+export async function generate(cwd = process.cwd()) {
     const logger = new Logger();
     const [err, config] = tryFlatten(() => resolveConfig(cwd));
 

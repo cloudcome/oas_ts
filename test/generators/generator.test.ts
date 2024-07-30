@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { Generator } from '../../src/generators/Generator';
+import { Generator } from '../../src/generator/Generator';
 import { createTempDirname } from '../helpers';
 
 test('Generator', async () => {

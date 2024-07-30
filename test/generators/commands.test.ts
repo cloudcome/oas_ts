@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { configFileNameOrder, resolveConfig, resolveConfigFile, run } from '../../src/generators/command';
+import { configFileNameOrder, resolveConfig, resolveConfigFile, generate } from '../../src/command';
 import { createTempDirname } from '../helpers';
 import type { OpenAPILatest } from '../../src/types/openapi';
 
@@ -69,7 +69,7 @@ modules: {
         'utf8',
     );
 
-    await run(cwd);
+    await generate(cwd);
     expect(fs.existsSync(path.join(cwd, 'src/apis/test.ts'))).toBe(true);
 
     clean();

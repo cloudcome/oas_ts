@@ -2,7 +2,7 @@ import { Command } from 'commander';
 import fs from 'fs';
 import path from 'path';
 import { pkgName, pkgVersion } from './const';
-import { resolveConfigFile, run } from './generators/command';
+import { resolveConfigFile, generate } from './command';
 
 export function createCLI() {
     const program = new Command();
@@ -12,7 +12,7 @@ export function createCLI() {
         .version(pkgVersion)
         .description(process.env.PKG_DESCRIPTION)
         .action((options, command) => {
-            if (command.args.length === 0) return run();
+            if (command.args.length === 0) return generate();
 
             program.help();
         });

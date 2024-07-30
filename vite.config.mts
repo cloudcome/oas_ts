@@ -11,7 +11,13 @@ import pkg from './package.json';
  */
 export default defineConfig({
     plugins: [
-        externalizeDeps(),
+        externalizeDeps({
+            deps: true,
+            devDeps: true,
+            peerDeps: true,
+            optionalDeps: true,
+            nodeBuiltins: true,
+        }),
         dts({
             include: 'src',
         }),

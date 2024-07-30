@@ -1,5 +1,5 @@
 import path from 'path';
-import { Reader } from '../../src/generators/Reader';
+import { Reader } from '../../src/generator/Reader';
 
 test('read local', async () => {
     const reader = new Reader();
