@@ -394,11 +394,11 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
 
     static helpersCode = `
 // helpers --- start
-export type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
-export type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
-export type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
-export type AnyObject = Record<string, any>;
-export type AnyArray = any[];
+type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
+type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
+type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
+type AnyObject = Record<string, any>;
+type AnyArray = any[];
 // helpers --- end
     `;
 }
