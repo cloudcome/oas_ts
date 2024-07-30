@@ -2,7 +2,7 @@ import { Printer } from '../../src/printer';
 
 test('unique name', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',

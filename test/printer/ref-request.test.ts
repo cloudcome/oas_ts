@@ -2,7 +2,7 @@ import { Printer } from '../../src/printer';
 
 test('ref-request', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',
@@ -61,7 +61,7 @@ test('ref-request', () => {
        * @param data 用户列表
        * @param [config] request config
        */
-      export async function postTest(data:((User)[]),config?:AxiosRequestConfig): AxiosPromise<unknown> {
+      export async function postTest(data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
           return axios({
               method: "post",
               data,

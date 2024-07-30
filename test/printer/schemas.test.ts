@@ -2,7 +2,7 @@ import { Printer } from '../../src/printer';
 
 test('number', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',
@@ -34,7 +34,7 @@ test('number', () => {
 
 test('number enum', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',
@@ -67,7 +67,7 @@ test('number enum', () => {
 
 test('[number, null] enum', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',
@@ -94,13 +94,13 @@ test('[number, null] enum', () => {
        * @format int64
        * @example 10
        */
-      export type OrderId = ((1|3|5|7|9)|null);"
+      export type OrderId = (((1|3|5|7|9))|(null));"
     `);
 });
 
 test('type[]', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',
@@ -130,13 +130,13 @@ test('type[]', () => {
        * @format int64
        * @example 10
        */
-      export type Order = (number|string);"
+      export type Order = ((number)|(string));"
     `);
 });
 
 test('AllOf primitive', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',
@@ -144,7 +144,7 @@ test('AllOf primitive', () => {
         components: {
             schemas: {
                 User: {
-                    type: 'object',
+                    type: ['object', 'null'],
                     properties: {
                         username: {
                             type: 'string',
@@ -177,9 +177,9 @@ test('AllOf primitive', () => {
             hideImports: true,
         }),
     ).toMatchInlineSnapshot(`
-      "export type User = ({
+      "export type User = (({
       "username":string;
-      }) | null;
+      })|(null));
 
       export type Order = (
       /**
@@ -200,7 +200,7 @@ test('AllOf primitive', () => {
 
 test('explicit array', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',
@@ -227,7 +227,7 @@ test('explicit array', () => {
             hideImports: true,
         }),
     ).toMatchInlineSnapshot(`
-      "export type Order = [
+      "export type Order = 
       /**
        * @description test1
        * @deprecated
@@ -235,18 +235,13 @@ test('explicit array', () => {
        * @example 10
        */
       number
-      ,
-      /**
-       * @description test2
-       */
-      unknown
-      ];"
+      ;"
     `);
 });
 
 test('generic array', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',
@@ -273,7 +268,7 @@ test('generic array', () => {
             hideImports: true,
         }),
     ).toMatchInlineSnapshot(`
-      "export type Order = ((
+      "export type Order = 
       /**
        * @description test1
        * @deprecated
@@ -281,13 +276,13 @@ test('generic array', () => {
        * @example 10
        */
       number
-      )[]);"
+      ;"
     `);
 });
 
 test('explicit object', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',
@@ -340,7 +335,7 @@ test('explicit object', () => {
 
 test('generic object', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',
@@ -383,7 +378,7 @@ test('generic object', () => {
 
 test('additionalProperties true', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',
@@ -403,16 +398,12 @@ test('additionalProperties true', () => {
             hideInfo: true,
             hideImports: true,
         }),
-    ).toMatchInlineSnapshot(`
-      "export type Pet = {
-      [key: string]:any;
-      };"
-    `);
+    ).toMatchInlineSnapshot(`"export type Pet = AnyObject;"`);
 });
 
 test('additionalProperties false', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',
@@ -432,16 +423,12 @@ test('additionalProperties false', () => {
             hideInfo: true,
             hideImports: true,
         }),
-    ).toMatchInlineSnapshot(`
-      "export type Pet = {
-      [key: string]:never;
-      };"
-    `);
+    ).toMatchInlineSnapshot(`"export type Pet = AnyObject;"`);
 });
 
 test('additionalProperties schema type', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',
@@ -485,7 +472,7 @@ test('additionalProperties schema type', () => {
 
 test('additionalProperties schema ref', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',

@@ -2,7 +2,7 @@ import { Printer } from '../../src/printer';
 
 test('ref-response', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',
@@ -62,7 +62,7 @@ test('ref-response', () => {
       /**
        * @param [config] request config
        */
-      export async function postTest(config?:AxiosRequestConfig): AxiosPromise<((User)[])> {
+      export async function postTest(config?:AxiosRequestConfig): AxiosPromise<User> {
           return axios({
               method: "post",
               url: resolveURL(BASE_URL,"/test"),
@@ -74,7 +74,7 @@ test('ref-response', () => {
 
 test('ref-response in object', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',

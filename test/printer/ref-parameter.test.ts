@@ -2,7 +2,7 @@ import { Printer } from '../../src/printer';
 
 test('ref-parameter', () => {
     const printer = new Printer({
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
             title: 'test',
             version: '1.0.0',
@@ -12,7 +12,7 @@ test('ref-parameter', () => {
                 post: {
                     parameters: [
                         {
-                            $ref: 'p1',
+                            $ref: '#/components/parameters/test1',
                         },
                     ],
                 },
@@ -24,7 +24,7 @@ test('ref-parameter', () => {
                     $ref: '#/components/parameters/test2',
                 },
                 test2: {
-                    $ref: 'p3',
+                    $ref: '#/components/parameters/test3',
                 },
                 test3: {
                     in: 'path',

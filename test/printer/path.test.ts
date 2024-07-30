@@ -6,7 +6,7 @@ test('1路径 + 1请求', () => {
             title: 'api',
             version: 'v1',
         },
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         paths: {
             '/api/abc': {
                 get: {},
@@ -40,7 +40,7 @@ test('1路径 + 1请求 * module', () => {
             title: 'api',
             version: 'v1',
         },
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         paths: {
             '/api/abc': {
                 get: {},
@@ -83,7 +83,7 @@ test('1路径 + 2请求', () => {
             title: 'api',
             version: 'v1',
         },
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         paths: {
             '/api/abc': {
                 get: {},
@@ -129,7 +129,7 @@ test('1路径 + 1请求 + 1query', () => {
             title: 'api',
             version: 'v1',
         },
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         paths: {
             '/api/abc': {
                 get: {
@@ -180,7 +180,7 @@ test('1路径 + 1请求 + 1query with duplicate', () => {
             title: 'api',
             version: 'v1',
         },
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         paths: {
             '/api/abc': {
                 get: {
@@ -231,7 +231,7 @@ test('1路径 + 1请求 + 1path', () => {
             title: 'api',
             version: 'v1',
         },
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         paths: {
             '/api/abc/{var}': {
                 get: {
@@ -282,7 +282,7 @@ test('1路径 + 1请求 + 2path', () => {
             title: 'api',
             version: 'v1',
         },
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         paths: {
             '/api/abc/{var}/def/{xyz}': {
                 get: {
@@ -346,7 +346,7 @@ test('1路径 + 1请求 + 2query', () => {
             title: 'api',
             version: 'v1',
         },
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         paths: {
             '/api/abc': {
                 get: {
@@ -386,10 +386,10 @@ test('1路径 + 1请求 + 2query', () => {
         }),
     ).toMatchInlineSnapshot(`
       "/**
-       * @param [params] request params
+       * @param params request params
        * @param [config] request config
        */
-      export async function getApiAbc(params?:{
+      export async function getApiAbc(params:{
       "a"?:string;
       /**
        * @description xxx
@@ -412,7 +412,7 @@ test('1路径 + 1请求 + 2query + 1path', () => {
             title: 'api',
             version: 'v1',
         },
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         paths: {
             '/api/abc/{params}': {
                 get: {
@@ -489,7 +489,7 @@ test('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
             title: 'api',
             version: 'v1',
         },
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         paths: {
             '/api/abc': {
                 get: {
@@ -578,7 +578,7 @@ test('1路径 + 1请求 + 2query + 1path + 1request object', () => {
             title: 'api',
             version: 'v1',
         },
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         paths: {
             '/api/abc': {
                 get: {
@@ -678,7 +678,7 @@ test('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive
             title: 'api',
             version: 'v1',
         },
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         paths: {
             '/api/abc': {
                 get: {
@@ -786,7 +786,7 @@ test('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', 
             title: 'api',
             version: 'v1',
         },
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         paths: {
             '/api/abc': {
                 get: {

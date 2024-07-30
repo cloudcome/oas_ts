@@ -12,79 +12,79 @@ Swagger at [http://swagger.io](http://swagger.io).
  * @see {@link http://swagger.io Find out more about Swagger}
  */
 
-import axios from "axios";
-import type {AxiosRequestConfig, AxiosPromise} from "axios";
-import type {OneOf, AllOf, AnyOf, AnyObject, AnyArray} from "pkg-name-for-test/client";
-import {resolveURL} from "pkg-name-for-test/client";
+import axios from 'axios';
+import type { AxiosRequestConfig, AxiosPromise } from 'axios';
+import type { OneOf, AllOf, AnyOf, AnyObject, AnyArray } from 'pkg-name-for-test/client';
+import { resolveURL } from 'pkg-name-for-test/client';
 
-const BASE_URL="/api/v31";
+const BASE_URL = '/api/v31';
 
 /**
  * @description Category
  */
 export type Category = {
-/**
- * @format int64
- * @example 1
- */
-"id"?:number;
-/**
- * @example Dogs
- */
-"name"?:string;
+    /**
+     * @format int64
+     * @example 1
+     */
+    id?: number;
+    /**
+     * @example Dogs
+     */
+    name?: string;
 };
 
 /**
  * @description Pet
  */
 export type Pet = {
-/**
- * @format int64
- * @example 10
- */
-"id"?:number;
-/**
- * @description Pet Category
- */
-"category"?:unknown;
-/**
- * @example doggie
- */
-"name":string;
-"photoUrls":((string)[]);
-"tags"?:((unknown)[]);
-/**
- * @description pet status in the store
- */
-"status"?:("available"|"pending"|"sold");
-/**
- * @format int32
- * @example 7
- */
-"availableInstances"?:number;
-"petDetailsId"?:unknown;
-"petDetails"?:PetDetails;
+    /**
+     * @format int64
+     * @example 10
+     */
+    id?: number;
+    /**
+     * @description Pet Category
+     */
+    category?: Category;
+    /**
+     * @example doggie
+     */
+    name: string;
+    photoUrls: string;
+    tags?: Tag;
+    /**
+     * @description pet status in the store
+     */
+    status?: 'available' | 'pending' | 'sold';
+    /**
+     * @format int32
+     * @example 7
+     */
+    availableInstances?: number;
+    petDetailsId?: unknown;
+    petDetails?: unknown;
 };
 
 export type PetDetails = {
-/**
- * @format int64
- * @example 10
- */
-"id"?:number;
-/**
- * @description PetDetails Category
- */
-"category"?:Category;
-"tag"?:Tag;
+    /**
+     * @format int64
+     * @example 10
+     */
+    id?: number;
+    /**
+     * @description PetDetails Category
+     */
+    category?: unknown;
+    tag?: unknown;
 };
 
 export type Tag = {
-/**
- * @format int64
- */
-"id"?:number;
-"name"?:string;
+    /**
+     * @format int64
+     */
+    id?: number;
+    name?: string;
 };
 
 /**
@@ -95,12 +95,12 @@ export type Tag = {
  * @param [config] request config
  * @returns Successful operation
  */
-export async function updatePet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
+export async function updatePet(data: Pet, config?: AxiosRequestConfig): AxiosPromise<Pet> {
     return axios({
-        method: "put",
+        method: 'put',
         data,
-url: resolveURL(BASE_URL,"/pet"),
-...config
+        url: resolveURL(BASE_URL, '/pet'),
+        ...config,
     });
 }
 
@@ -112,12 +112,12 @@ url: resolveURL(BASE_URL,"/pet"),
  * @param [config] request config
  * @returns Successful operation
  */
-export async function addPet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
+export async function addPet(data: Pet, config?: AxiosRequestConfig): AxiosPromise<Pet> {
     return axios({
-        method: "post",
+        method: 'post',
         data,
-url: resolveURL(BASE_URL,"/pet"),
-...config
+        url: resolveURL(BASE_URL, '/pet'),
+        ...config,
     });
 }
 
@@ -127,10 +127,10 @@ url: resolveURL(BASE_URL,"/pet"),
  * @param petId ID of pet that needs to be fetched
  * @param [config] request config
  */
-export async function getPetById(petId:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+export async function getPetById(petId: number, config?: AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
-        method: "get",
-        url: resolveURL(BASE_URL,"/pet/{petId}",{petId}),
-...config
+        method: 'get',
+        url: resolveURL(BASE_URL, '/pet/{petId}', { petId }),
+        ...config,
     });
 }

@@ -35,7 +35,7 @@ test('v3.1 schema', () => {
                             format: 'int64',
                         },
                         category: {
-                            $ref: 'my-id',
+                            $ref: '#/components/schemas/Category',
                         },
                     },
                 },
