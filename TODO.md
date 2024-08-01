@@ -12,3 +12,4 @@
 - [ ] 3.1 的完全支持 https://www.apimatic.io/blog/2021/09/migrating-to-and-from-openapi-3-1
 - [ ] 支持 query 多参格式 https://swagger.io/docs/specification/serialization/
 - [ ] 支持忽略未显式在 path 中的参数
+- [ ] 修正单值 JSDOC 位置 status: /**...*/ type -> /**...*/ status: type
