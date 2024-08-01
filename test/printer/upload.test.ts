@@ -139,8 +139,8 @@ test('upload single', () => {
       },config?:AxiosRequestConfig): AxiosPromise<unknown> {
           return axios({
               method: "post",
-              params: {category: category},
-      url: \`/upload\`,
+              url: \`/upload\`,
+      params: {category: category},
       data: data,
       ...config
           });

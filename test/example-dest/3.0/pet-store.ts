@@ -307,12 +307,12 @@ headers: {api_key: apiKey},
  * @summary uploads an image
  * @see pet Everything about your Pets {@link http://swagger.io Find out more}
  * @param petId ID of pet to update
- * @param data request param
+ * @param data request data
  * @param [additionalMetadata] Additional Metadata
  * @param [config] request config
  * @returns successful operation
  */
-export async function uploadFile(petId:((number)),data:((string)),additionalMetadata?:((string)),config?:AxiosRequestConfig): AxiosPromise<ApiResponse> {
+export async function uploadFile(petId:((number)),data:((Blob)),additionalMetadata?:((string)),config?:AxiosRequestConfig): AxiosPromise<ApiResponse> {
     return axios({
         method: "post",
         url: `/pet/${petId}/uploadImage`,
@@ -346,7 +346,7 @@ export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<(({
  * @description Place a new order in the store
  * @summary Place an order for a pet
  * @see store Access to Petstore orders {@link http://swagger.io Find out more about our store}
- * @param data request param
+ * @param data request data
  * @param [config] request config
  * @returns successful operation
  */
@@ -410,7 +410,7 @@ data: data,
  * @description Creates list of users with given input array
  * @summary Creates list of users with given input array
  * @see user Operations about user
- * @param data request param
+ * @param data request data
  * @param [config] request config
  * @returns Successful operation
  */

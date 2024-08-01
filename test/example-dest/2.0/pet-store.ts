@@ -155,8 +155,8 @@ export async function findPetsByStatus(status:((
 )),config?:AxiosRequestConfig): AxiosPromise<((Pet))> {
     return axios({
         method: "get",
-        params: {status: status},
-url: `/pet/findByStatus`,
+        url: `/pet/findByStatus`,
+params: {status: status},
 ...config
     });
 }
@@ -173,8 +173,8 @@ url: `/pet/findByStatus`,
 export async function findPetsByTags(tags:((((string)))),config?:AxiosRequestConfig): AxiosPromise<((Pet))> {
     return axios({
         method: "get",
-        params: {tags: tags},
-url: `/pet/findByTags`,
+        url: `/pet/findByTags`,
+params: {tags: tags},
 ...config
     });
 }
@@ -200,7 +200,7 @@ export async function getPetById(petId:((number)),config?:AxiosRequestConfig): A
  * @summary Updates a pet in the store with form data
  * @see pet Everything about your Pets {@link http://swagger.io Find out more}
  * @param petId ID of pet that needs to be updated
- * @param data request param
+ * @param data request data
  * @param [config] request config
  */
 export async function updatePetWithForm(petId:((number)),data:(({
@@ -243,7 +243,7 @@ headers: {api_key: apiKey},
  * @summary uploads an image
  * @see pet Everything about your Pets {@link http://swagger.io Find out more}
  * @param petId ID of pet to update
- * @param data request param
+ * @param data request data
  * @param [config] request config
  * @returns successful operation
  */
@@ -256,7 +256,7 @@ export async function uploadFile(petId:((number)),data:(({
  * @description file to upload
  * @format binary
  */
-"file"?:((string));
+"file"?:((Blob));
 })),config?:AxiosRequestConfig): AxiosPromise<ApiResponse> {
     return axios({
         method: "post",
@@ -402,8 +402,8 @@ export async function loginUser(params:{
 },config?:AxiosRequestConfig): AxiosPromise<((string))> {
     return axios({
         method: "get",
-        params: params,
-url: `/user/login`,
+        url: `/user/login`,
+params: params,
 ...config
     });
 }
