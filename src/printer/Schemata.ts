@@ -88,7 +88,8 @@ export class Schemata {
 
         switch (type) {
             case 'string': {
-                const { enum: enumValues = [] } = schema;
+                const { enum: enumValues = [], format } = schema;
+                const isBlob = format === 'binary';
                 return {
                     comments,
                     type:
@@ -97,7 +98,9 @@ export class Schemata {
                                   enumValues.map((e) => (isString(e) ? JSON.stringify(e) : this.named.getRefType(e.$ref) || 'unknown')),
                                   '|',
                               )
-                            : type,
+                            : isBlob
+                              ? 'Blob'
+                              : 'string',
                     required: Boolean(schema.required),
                 };
             }

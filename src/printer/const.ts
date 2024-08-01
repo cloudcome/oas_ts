@@ -83,8 +83,6 @@ export const INTERNAL_NAMES = [
     'AnyOf',
     'AnyObject',
     'AnyArray',
-    'URL',
-    'resolveURL',
     // config
     AXIOS_IMPORT_NAME,
     AXIOS_QUEST_CONFIG_TYPE_NAME,
