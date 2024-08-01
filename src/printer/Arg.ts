@@ -132,6 +132,7 @@ export class Arg {
                             acc[parameter.name] = {
                                 ...schema,
                                 description: parameter.description || schema.description,
+                                deprecated: parameter.deprecated || schema.deprecated,
                             };
                             return acc;
                         },
