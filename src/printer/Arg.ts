@@ -117,7 +117,8 @@ export class Arg {
                                   returns: parameter.description || schema.description || false,
                               }
                             : {
-                                  [`param ${requiredKeyStringify(name, required)}`]: parameter.description || schema.description || 'request param',
+                                  [`param ${requiredKeyStringify(name, required)}`]:
+                                      parameter.description || schema.description || `request ${this.kind === 'data' ? 'data' : 'param'}`,
                               },
                 };
             }

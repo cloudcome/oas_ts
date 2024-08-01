@@ -71,6 +71,18 @@ test('upload single', () => {
                     summary: 'upload',
                     description: 'upload',
                     operationId: 'upload',
+                    parameters: [
+                        {
+                            name: 'category',
+                            in: 'query',
+                            description: 'request param',
+                            required: true,
+                            schema: {
+                                type: 'string',
+                                enum: ['a', 'b'],
+                            },
+                        },
+                    ],
                     requestBody: {
                         content: {
                             'multipart/form-data': {
@@ -82,6 +94,10 @@ test('upload single', () => {
                                             format: 'binary',
                                             description: 'A file',
                                             required: true,
+                                        },
+                                        name: {
+                                            type: 'string',
+                                            description: 'A name',
                                         },
                                     },
                                 },
@@ -106,19 +122,25 @@ test('upload single', () => {
       "/**
        * @description upload
        * @summary upload
-       * @param data request param
+       * @param category request param
+       * @param data request data
        * @param [config] request config
        */
-      export async function upload(data:{
+      export async function upload(category:("a"|"b"),data:{
       /**
        * @description A file
        * @format binary
        */
       "file":Blob;
+      /**
+       * @description A name
+       */
+      "name"?:string;
       },config?:AxiosRequestConfig): AxiosPromise<unknown> {
           return axios({
               method: "post",
-              url: \`/upload\`,
+              params: {category: category},
+      url: \`/upload\`,
       data: data,
       ...config
           });
