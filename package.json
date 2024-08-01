@@ -25,21 +25,9 @@
             "require": "./dist/index.cjs",
             "types": "./dist/index.d.ts"
         },
-        "./package.json": "./package.json",
-        "./client": {
-            "import": "./dist/client.mjs",
-            "require": "./dist/client.cjs",
-            "types": "./dist/client.d.ts"
-        }
+        "./package.json": "./package.json"
     },
     "types": "./dist/index.d.ts",
-    "typesVersions": {
-        "*": {
-            "client": [
-                "./dist/client.d.ts"
-            ]
-        }
-    },
     "files": [
         "dist"
     ],

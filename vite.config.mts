@@ -35,7 +35,6 @@ export default defineConfig({
         lib: {
             entry: {
                 index: 'src/index.ts',
-                client: 'src/client.ts',
             },
         },
         rollupOptions: {
