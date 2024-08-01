@@ -262,7 +262,7 @@ export class Printer {
         }
 
         const funcName = this.named.nextOperationId(method, url, operationId);
-        const requestArgs = new Args([header.parse(), query.parse(), path.parse(), data.parse(), config.parse()]);
+        const requestArgs = new Args([header.parse(), path.parse(), query.parse(), data.parse(), config.parse()]);
         const responseArgs = new Args([resp.parse()]);
         const respType = responseArgs.toType(0);
         const jsDoc = new JsDoc(this.document.tags);
