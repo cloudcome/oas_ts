@@ -17,17 +17,15 @@ Some useful links:
 
 import axios from "axios";
 import type {AxiosRequestConfig, AxiosPromise} from "axios";
-import type {OneOf, AllOf, AnyOf, AnyObject, AnyArray} from "pkg-name-for-test/client";
-import {resolveURL} from "pkg-name-for-test/client";
 
 
 
 // helpers --- start
-export type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
-export type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
-export type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
-export type AnyObject = Record<string, any>;
-export type AnyArray = any[];
+type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
+type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
+type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
+type AnyObject = Record<string, any>;
+type AnyArray = any[];
 // helpers --- end
     
 
@@ -188,8 +186,8 @@ export type ApiResponse = (({
 export async function addPet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
     return axios({
         method: "post",
-        data,
-url: resolveURL(BASE_URL,"/pet"),
+        url: `/pet`,
+data: data,
 ...config
     });
 }
@@ -205,8 +203,8 @@ url: resolveURL(BASE_URL,"/pet"),
 export async function updatePet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
     return axios({
         method: "put",
-        data,
-url: resolveURL(BASE_URL,"/pet"),
+        url: `/pet`,
+data: data,
 ...config
     });
 }
@@ -222,8 +220,8 @@ url: resolveURL(BASE_URL,"/pet"),
 export async function findPetsByStatus(status?:((("available"|"pending"|"sold"))),config?:AxiosRequestConfig): AxiosPromise<((Pet))> {
     return axios({
         method: "get",
-        params: {status},
-url: resolveURL(BASE_URL,"/pet/findByStatus"),
+        url: `/pet/findByStatus`,
+params: {status: status},
 ...config
     });
 }
@@ -239,8 +237,8 @@ url: resolveURL(BASE_URL,"/pet/findByStatus"),
 export async function findPetsByTags(tags?:((((string)))),config?:AxiosRequestConfig): AxiosPromise<((Pet))> {
     return axios({
         method: "get",
-        params: {tags},
-url: resolveURL(BASE_URL,"/pet/findByTags"),
+        url: `/pet/findByTags`,
+params: {tags: tags},
 ...config
     });
 }
@@ -256,7 +254,7 @@ url: resolveURL(BASE_URL,"/pet/findByTags"),
 export async function getPetById(petId:((number)),config?:AxiosRequestConfig): AxiosPromise<Pet> {
     return axios({
         method: "get",
-        url: resolveURL(BASE_URL,"/pet/{petId}",{petId}),
+        url: `/pet/${petId}`,
 ...config
     });
 }
@@ -281,8 +279,8 @@ export async function updatePetWithForm(petId:((number)),params?:{
 },config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "post",
-        url: resolveURL(BASE_URL,"/pet/{petId}",{petId}),
-params,
+        url: `/pet/${petId}`,
+params: params,
 ...config
     });
 }
@@ -298,7 +296,7 @@ params,
 export async function deletePet(petId:((number)),apiKey?:((string)),config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "delete",
-        url: resolveURL(BASE_URL,"/pet/{petId}",{petId}),
+        url: `/pet/${petId}`,
 headers: {api_key: apiKey},
 ...config
     });
@@ -317,9 +315,9 @@ headers: {api_key: apiKey},
 export async function uploadFile(petId:((number)),data:((string)),additionalMetadata?:((string)),config?:AxiosRequestConfig): AxiosPromise<ApiResponse> {
     return axios({
         method: "post",
-        url: resolveURL(BASE_URL,"/pet/{petId}/uploadImage",{petId}),
-data,
-params: {additionalMetadata},
+        url: `/pet/${petId}/uploadImage`,
+data: data,
+params: {additionalMetadata: additionalMetadata},
 ...config
     });
 }
@@ -339,7 +337,7 @@ export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<(({
 }))> {
     return axios({
         method: "get",
-        url: resolveURL(BASE_URL,"/store/inventory"),
+        url: `/store/inventory`,
 ...config
     });
 }
@@ -355,8 +353,8 @@ export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<(({
 export async function placeOrder(data:Order,config?:AxiosRequestConfig): AxiosPromise<Order> {
     return axios({
         method: "post",
-        data,
-url: resolveURL(BASE_URL,"/store/order"),
+        url: `/store/order`,
+data: data,
 ...config
     });
 }
@@ -372,7 +370,7 @@ url: resolveURL(BASE_URL,"/store/order"),
 export async function getOrderById(orderId:((number)),config?:AxiosRequestConfig): AxiosPromise<Order> {
     return axios({
         method: "get",
-        url: resolveURL(BASE_URL,"/store/order/{orderId}",{orderId}),
+        url: `/store/order/${orderId}`,
 ...config
     });
 }
@@ -387,7 +385,7 @@ export async function getOrderById(orderId:((number)),config?:AxiosRequestConfig
 export async function deleteOrder(orderId:((number)),config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "delete",
-        url: resolveURL(BASE_URL,"/store/order/{orderId}",{orderId}),
+        url: `/store/order/${orderId}`,
 ...config
     });
 }
@@ -402,8 +400,8 @@ export async function deleteOrder(orderId:((number)),config?:AxiosRequestConfig)
 export async function createUser(data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "post",
-        data,
-url: resolveURL(BASE_URL,"/user"),
+        url: `/user`,
+data: data,
 ...config
     });
 }
@@ -419,8 +417,8 @@ url: resolveURL(BASE_URL,"/user"),
 export async function createUsersWithListInput(data:((User)),config?:AxiosRequestConfig): AxiosPromise<User> {
     return axios({
         method: "post",
-        data,
-url: resolveURL(BASE_URL,"/user/createWithList"),
+        url: `/user/createWithList`,
+data: data,
 ...config
     });
 }
@@ -445,8 +443,8 @@ export async function loginUser(params?:{
 },config?:AxiosRequestConfig): AxiosPromise<((string))> {
     return axios({
         method: "get",
-        params,
-url: resolveURL(BASE_URL,"/user/login"),
+        url: `/user/login`,
+params: params,
 ...config
     });
 }
@@ -460,7 +458,7 @@ url: resolveURL(BASE_URL,"/user/login"),
 export async function logoutUser(config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "get",
-        url: resolveURL(BASE_URL,"/user/logout"),
+        url: `/user/logout`,
 ...config
     });
 }
@@ -476,7 +474,7 @@ export async function logoutUser(config?:AxiosRequestConfig): AxiosPromise<unkno
 export async function getUserByName(username:((string)),config?:AxiosRequestConfig): AxiosPromise<User> {
     return axios({
         method: "get",
-        url: resolveURL(BASE_URL,"/user/{username}",{username}),
+        url: `/user/${username}`,
 ...config
     });
 }
@@ -491,7 +489,7 @@ export async function getUserByName(username:((string)),config?:AxiosRequestConf
 export async function deleteUser(username:((string)),config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "delete",
-        url: resolveURL(BASE_URL,"/user/{username}",{username}),
+        url: `/user/${username}`,
 ...config
     });
 }
@@ -507,8 +505,8 @@ export async function deleteUser(username:((string)),config?:AxiosRequestConfig)
 export async function updateUser(username:((string)),data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "put",
-        url: resolveURL(BASE_URL,"/user/{username}",{username}),
-data,
+        url: `/user/${username}`,
+data: data,
 ...config
     });
 }

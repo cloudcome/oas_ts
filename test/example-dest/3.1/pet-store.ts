@@ -14,17 +14,15 @@ Swagger at [http://swagger.io](http://swagger.io).
 
 import axios from "axios";
 import type {AxiosRequestConfig, AxiosPromise} from "axios";
-import type {OneOf, AllOf, AnyOf, AnyObject, AnyArray} from "pkg-name-for-test/client";
-import {resolveURL} from "pkg-name-for-test/client";
 
 
 
 // helpers --- start
-export type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
-export type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
-export type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
-export type AnyObject = Record<string, any>;
-export type AnyArray = any[];
+type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
+type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
+type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
+type AnyObject = Record<string, any>;
+type AnyArray = any[];
 // helpers --- end
     
 
@@ -107,8 +105,8 @@ export type Tag = {
 export async function updatePet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
     return axios({
         method: "put",
-        data,
-url: resolveURL(BASE_URL,"/pet"),
+        url: `/pet`,
+data: data,
 ...config
     });
 }
@@ -124,8 +122,8 @@ url: resolveURL(BASE_URL,"/pet"),
 export async function addPet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
     return axios({
         method: "post",
-        data,
-url: resolveURL(BASE_URL,"/pet"),
+        url: `/pet`,
+data: data,
 ...config
     });
 }
@@ -139,7 +137,7 @@ url: resolveURL(BASE_URL,"/pet"),
 export async function getPetById(petId:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "get",
-        url: resolveURL(BASE_URL,"/pet/{petId}",{petId}),
+        url: `/pet/${petId}`,
 ...config
     });
 }

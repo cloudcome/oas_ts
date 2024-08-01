@@ -65,8 +65,8 @@ test('ref-request', () => {
       export async function postTest(data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
           return axios({
               method: "post",
-              data,
-      url: resolveURL(BASE_URL,"/test"),
+              url: \`/test\`,
+      data: data,
       ...config
           });
       }"

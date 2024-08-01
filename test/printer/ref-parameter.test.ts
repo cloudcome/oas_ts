@@ -45,13 +45,13 @@ test('ref-parameter', () => {
         }),
     ).toMatchInlineSnapshot(`
       "/**
-       * @param [userId] request param
+       * @param userId request param
        * @param [config] request config
        */
-      export async function postTest(userId?:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+      export async function postTest(userId:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
           return axios({
               method: "post",
-              url: resolveURL(BASE_URL,"/test/{userId}",{userId}),
+              url: \`/test/\${userId}\`,
       ...config
           });
       }"

@@ -66,7 +66,7 @@ test('ref-response', () => {
       export async function postTest(config?:AxiosRequestConfig): AxiosPromise<User> {
           return axios({
               method: "post",
-              url: resolveURL(BASE_URL,"/test"),
+              url: \`/test\`,
       ...config
           });
       }"
@@ -161,7 +161,7 @@ test('ref-response in object', () => {
       }> {
           return axios({
               method: "post",
-              url: resolveURL(BASE_URL,"/test"),
+              url: \`/test\`,
       ...config
           });
       }"
