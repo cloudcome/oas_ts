@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.24.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.23.0...v0.24.0) (2024-08-01)
+
+
+### Features
+
+* schema 继承 parameter 内 deprecated 属性 ([7720655](https://github.com/FrontEndDev-org/openapi-axios/commit/7720655fd47da49e4fed061810d77379fdfd80b2))
+* 内置 helpers，避免从外部导入 ([d30f674](https://github.com/FrontEndDev-org/openapi-axios/commit/d30f6746363b758b8c3e13fe8806040d73074bb6))
+* 去除 resolveURL helper ([cb09b9f](https://github.com/FrontEndDev-org/openapi-axios/commit/cb09b9fc406ae1bf2aab9ef51a232edd293a9269))
+* 去除不必要的配置 baseURL ([df0c7d2](https://github.com/FrontEndDev-org/openapi-axios/commit/df0c7d2aa3ef9b317c899b464aec56eb6077f65c))
+* 增加 openapi2.0、3.0、3.1 全类型 ([464e90a](https://github.com/FrontEndDev-org/openapi-axios/commit/464e90a4eb0cdb2eff7d5b2f60a7ffc866f17d0a))
+* 支持 openapi 2.0 逐级迁移到 3.1 ([0071649](https://github.com/FrontEndDev-org/openapi-axios/commit/00716498fb47cc6c8d2b29bad6b011a947b21ea4))
+* 支持了 format=binary ([f6235df](https://github.com/FrontEndDev-org/openapi-axios/commit/f6235df723400b744101f4ce4810299912237bd5))
+* 支持修订后的数据代码生成 ([a23e611](https://github.com/FrontEndDev-org/openapi-axios/commit/a23e611d59dbb269e0bea78650ccb60a46397ebd))
+* 支持读取 openapi json 时迁移到最新版本后进入后续解析流程 ([59cb368](https://github.com/FrontEndDev-org/openapi-axios/commit/59cb368d40215f0861fce82332687679722de85f))
+* 调整 parameter 顺序 path &gt; query ([e6667d5](https://github.com/FrontEndDev-org/openapi-axios/commit/e6667d50fdc253a959fcb8a7bde204dbcd0f3f79))
+
+
+### Bug Fixes
+
+* 修正 request param 和 request data 的注释 ([ddeb80a](https://github.com/FrontEndDev-org/openapi-axios/commit/ddeb80a20cb638153b5f8777a5bec751487a9113))
+
 ## [0.23.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.22.0...v0.23.0) (2024-07-26)
 
 
