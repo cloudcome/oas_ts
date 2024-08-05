@@ -53,7 +53,7 @@ export type ServerVariableObject = Modify<
 export type PathsObject<T extends {} = {}, P extends {} = {}> = Record<string, (PathItemObject<T> & P) | undefined>;
 export type HttpMethods = OpenAPIV3.HttpMethods;
 export type PathItemObject<T extends {} = {}> = {
-    $ref?: string;
+    $id?: string;
     summary?: string;
     description?: string;
     servers?: ServerObject[];
@@ -74,6 +74,7 @@ export type OperationObject<T extends {} = {}> = Modify<
     T;
 export type ExternalDocumentationObject = OpenAPIV3.ExternalDocumentationObject;
 export interface ParameterObject extends ParameterBaseObject {
+    $id?: string;
     name: string;
     in: 'query' | 'header' | 'path' | 'cookie';
 }
@@ -112,11 +113,14 @@ export interface MixedSchemaObject extends BaseSchemaObject {
 export type BaseSchemaObject = Modify<
     Omit<OpenAPIV3.BaseSchemaObject, 'nullable'>,
     {
+        $id?: string;
+        $anchor?: string;
         examples?: OpenAPIV3.BaseSchemaObject['example'][];
         exclusiveMinimum?: boolean | number;
         exclusiveMaximum?: boolean | number;
         contentMediaType?: string;
         $schema?: string;
+        $vocabulary?: string;
         additionalProperties?: boolean | ReferenceObject | SchemaObject;
         properties?: {
             [name: string]: ReferenceObject | SchemaObject;
@@ -152,6 +156,7 @@ export type EncodingObject = OpenAPIV3.EncodingObject;
 export type RequestBodyObject = Modify<
     OpenAPIV3.RequestBodyObject,
     {
+        $id?: string;
         content: {
             [media: string]: MediaTypeObject;
         };
@@ -161,6 +166,7 @@ export type ResponsesObject = Record<string, ReferenceObject | ResponseObject>;
 export type ResponseObject = Modify<
     OpenAPIV3.ResponseObject,
     {
+        $id?: string;
         headers?: {
             [header: string]: ReferenceObject | HeaderObject;
         };
@@ -183,7 +189,7 @@ export type SecurityRequirementObject = OpenAPIV3.SecurityRequirementObject;
 export type ComponentsObject = Modify<
     OpenAPIV3.ComponentsObject,
     {
-        schemas?: Record<string, SchemaObject>;
+        schemas?: Record<string, ReferenceObject | SchemaObject>;
         responses?: Record<string, ReferenceObject | ResponseObject>;
         parameters?: Record<string, ReferenceObject | ParameterObject>;
         examples?: Record<string, ReferenceObject | ExampleObject>;

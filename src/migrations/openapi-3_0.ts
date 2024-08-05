@@ -72,18 +72,24 @@ function migOperation(operation: OpenAPIV3.OperationObject): OpenAPIV3_1.Operati
     };
 }
 
-function migPathItem(pathItem: OpenAPIV3.PathItemObject | undefined): OpenAPIV3_1.PathItemObject | undefined {
+function migPathItem(pathItem: OpenAPIV3.PathItemObject | undefined): OpenAPIV3_1.PathItemObject | OpenAPIV3_1.ReferenceObject | undefined {
     if (!pathItem) return pathItem;
 
     // TODO parameters、reset 未处理
     const { parameters, get, post, delete: delete_, description, head, $ref, options, patch, put, trace, ...rest } = pathItem;
+
+    if ($ref) {
+        return {
+            description,
+            $ref,
+        };
+    }
 
     return {
         // ...rest,
         // 忽略
         // parameters: parameters && parameters.map(migParameter),
         description,
-        $ref,
         get: get && migOperation(get),
         post: post && migOperation(post),
         delete: delete_ && migOperation(delete_),

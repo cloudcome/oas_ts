@@ -1,5 +1,6 @@
 import { OpenAPIVersion, type OpenAPILatest } from '../types/openapi';
 import { toRelative } from '../utils/path';
+import { fixVarName } from '../utils/string';
 import { isString, isUndefined } from '../utils/type-is';
 import { Arg } from './Arg';
 import { Args } from './Args';
@@ -12,9 +13,11 @@ import {
     isRefPathItem,
     isRefRequest,
     isRefResponse,
+    isRefSchema,
     type OpenApiLatest_Media,
     type OpenApiLatest_Operation,
     type OpenApiLatest_Parameter,
+    type OpenApiLatest_PathItem,
     type OpenApiLatest_Request,
     type OpenApiLatest_Response,
     type OpenApiLatest_Schema,
@@ -50,30 +53,73 @@ export class Printer {
         this.named.internalVarName(options?.axiosImportName || AXIOS_IMPORT_NAME);
     }
 
+    refSchemas: Record<string /** refId */, string /** refType */> = {};
     refRequestBodies: Record<string, OpenApiLatest_Request> = {};
     refParameters: Record<string, OpenApiLatest_Parameter> = {};
     refResponses: Record<string, OpenApiLatest_Response> = {};
+    refPathItems: Record<string, OpenApiLatest_PathItem> = {};
     registerComponents() {
-        const { schemas = {}, requestBodies = {}, parameters = {}, responses = {} } = this.document.components || {};
+        const { schemas = {}, requestBodies = {}, parameters = {}, responses = {}, pathItems = {} } = this.document.components || {};
 
         Object.entries(schemas).forEach(([name, schema]) => {
-            const id = `#/components/schemas/${name}`;
-            this.named.nextRefName(name, id);
+            if (isRefSchema(schema)) return;
+
+            const id = schema.$id || `#/components/schemas/${name}`;
+
+            if (this.refSchemas[id]) {
+                throw new Error(`重复的 schema 引用 id：${id}`);
+            }
+
+            const refType = this.named.nextRefType(name, id);
+            this.refSchemas[id] = refType;
         });
 
         Object.entries(requestBodies).forEach(([name, requestBody]) => {
-            const id = `#/components/requestBodies/${name}`;
+            if (isRefRequest(requestBody)) return;
+
+            const id = requestBody.$id || `#/components/requestBodies/${name}`;
+
+            if (this.refRequestBodies[id]) {
+                throw new Error(`重复的 requestBody 引用 id：${id}`);
+            }
+
             this.refRequestBodies[id] = requestBody;
         });
 
         Object.entries(parameters).forEach(([name, parameter]) => {
-            const id = `#/components/parameters/${name}`;
+            if (isRefParameter(parameter)) return;
+
+            const id = parameter.$id || `#/components/parameters/${name}`;
+
+            if (this.refParameters[id]) {
+                throw new Error(`重复的 parameter 引用 id：${id}`);
+            }
+
             this.refParameters[id] = parameter;
         });
 
         Object.entries(responses).forEach(([name, response]) => {
-            const id = `#/components/responses/${name}`;
+            if (isRefResponse(response)) return;
+
+            const id = response.$id || `#/components/responses/${name}`;
+
+            if (this.refResponses[id]) {
+                throw new Error(`重复的 response 引用 id：${id}`);
+            }
+
             this.refResponses[id] = response;
+        });
+
+        Object.entries(pathItems).forEach(([name, pathItem]) => {
+            if (isRefPathItem(pathItem)) return;
+
+            const id = pathItem.$id || `#/components/pathItems/${name}`;
+
+            if (this.refPathItems[id]) {
+                throw new Error(`重复的 pathItem 引用 id：${id}`);
+            }
+
+            this.refPathItems[id] = pathItem;
         });
     }
 
@@ -128,8 +174,6 @@ export class Printer {
             axiosRequestConfigTypeName = AXIOS_QUEST_CONFIG_TYPE_NAME,
             axiosResponseTypeName = AXIOS_PROMISE_TYPE_NAME,
         } = this.options || {};
-        const firstServer = this.document.servers?.[0];
-        const defaultBaseURL = firstServer?.url || '/';
         const { file } = this.configs;
         const importPath = toRelative(axiosImportFile, file);
 
@@ -148,7 +192,8 @@ export class Printer {
     private _printComponents() {
         return Object.entries(this.document.components?.schemas || {})
             .map(([name, schema]) => {
-                const id = `#/components/schemas/${name}`;
+                const defaultId = `#/components/schemas/${name}`;
+                const id = isRefSchema(schema) ? defaultId : schema.$id || defaultId;
                 return this._printComponent(name, id, schema);
             })
             .join('\n\n');
@@ -158,16 +203,29 @@ export class Printer {
         const { comments, type } = this.schemata.print(schema);
         const jsDoc = new JsDoc();
         jsDoc.addComments(comments);
-        const typeName = this.named.getRefType(id);
+        const refType = this.refSchemas[id];
 
-        return [jsDoc.print(), `export type ${typeName} = ${type};`].filter(Boolean).join('\n');
+        if (isUndefined(refType)) {
+            throw new Error(`未发现 schema 引用：${id}`);
+        }
+
+        return [jsDoc.print(), `export type ${refType} = ${type};`].filter(Boolean).join('\n');
     }
 
     private _printPaths() {
         return Object.entries(this.document.paths || {})
             .map(([url, pathItem]) => {
                 if (isUndefined(pathItem)) return;
-                if (isRefPathItem(pathItem)) return;
+
+                if (isRefPathItem(pathItem)) {
+                    const relPathItem = this.refPathItems[pathItem.$ref];
+
+                    if (isUndefined(relPathItem)) {
+                        throw new Error(`未发现 pathItem 引用：${pathItem.$ref}`);
+                    }
+
+                    return this._printPathItem(url, relPathItem);
+                }
 
                 return this._printPathItem(url, pathItem).filter(filterLine).join('\n\n');
             })
@@ -333,7 +391,9 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
             const { $ref } = parameter;
             const refParameter = this.refParameters[$ref];
 
-            if (!refParameter) throw new Error(`未发现引用参数（${$ref}）`);
+            if (!refParameter) {
+                throw new Error(`未发现 parameter 引用：${$ref}`);
+            }
 
             this._parseParameter(refParameter, args);
             return;
@@ -351,7 +411,7 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
             const { $ref } = requestBody;
             const refRequestBody = this.refRequestBodies[$ref];
 
-            if (!refRequestBody) throw new Error(`未发现引用请求（${$ref}）`);
+            if (!refRequestBody) throw new Error(`未发现 requestBody 引用：${$ref}`);
 
             this._parseRequestBody(arg, refRequestBody, match);
             return;
@@ -375,7 +435,7 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
             const { $ref } = response;
             const refResponse = this.refResponses[$ref];
 
-            if (!refResponse) throw new Error(`未发现引用响应（${$ref}）`);
+            if (!refResponse) throw new Error(`未发现 response 引用：${$ref}`);
 
             this._parseResponse(arg, refResponse, contentMatch);
             return;

@@ -5,8 +5,7 @@ import { isString } from '../utils/type-is';
 export class Named {
     varNameCountMap = new Map<string /*var*/, number /*count*/>();
     typeNameCountMap = new Map<string /*type*/, number /*count*/>();
-    varNameRefMap = new Map<string /*name*/, string /*ref*/>();
-    refVarNameMap = new Map<string /*ref*/, string /*name*/>();
+    refIdTypeMap = new Map<string /*refId*/, string /*refType*/>();
 
     constructor() {
         KEYWORD_VARS.forEach(this.internalVarName.bind(this));
@@ -49,21 +48,20 @@ export class Named {
         return nextUniqueName(operationId, this.varNameCountMap);
     }
 
-    nextTypeName(name: string) {
-        const refTypeName = fixVarName(name, true, 'Type');
-        return nextUniqueName(refTypeName, this.typeNameCountMap);
+    nextTypeName(typeName: string) {
+        const fixedTypeName = fixVarName(typeName, true, 'Type');
+        return nextUniqueName(fixedTypeName, this.typeNameCountMap);
     }
 
-    nextRefName(name: string, ref: string) {
-        const uniqueTypeName = this.nextTypeName(name);
+    nextRefType(refType: string, refId: string) {
+        const uniqueTypeName = this.nextTypeName(refType);
 
-        this.varNameRefMap.set(uniqueTypeName, ref);
-        this.refVarNameMap.set(ref, uniqueTypeName);
+        this.refIdTypeMap.set(refId, uniqueTypeName);
 
         return uniqueTypeName;
     }
 
     getRefType(ref: string) {
-        return this.refVarNameMap.get(ref) || '';
+        return this.refIdTypeMap.get(ref) || '';
     }
 }
