@@ -159,7 +159,7 @@ test('nullable', () => {
         },
         paths: {},
     });
-    console.log(JSON.stringify(v31));
+    // console.log(JSON.stringify(v31));
 
     expect(v31).toEqual<OpenAPIV3_1.Document>({
         openapi: '3.1.0',
@@ -179,6 +179,44 @@ test('nullable', () => {
                 UserInfo: { required: ['github'], type: ['object'], properties: { github: { type: ['string', 'null'] } } },
                 Website: { required: ['url'], type: ['object'], properties: { url: { type: ['string', 'null'] } } },
             },
+            requestBodies: {},
+            responses: {},
+            parameters: {},
+            headers: {},
+        },
+    });
+});
+
+test('required=true', () => {
+    const v31 = migrate_3_0To3_1({
+        openapi: '3.0.0',
+        info: {
+            title: 'Test',
+            version: '1.0.0',
+        },
+        components: {
+            schemas: {
+                User: {
+                    type: 'object',
+                    properties: {
+                        username: {
+                            required: true,
+                            type: 'string',
+                        },
+                    },
+                },
+            },
+        },
+        paths: {},
+    });
+    // console.log(JSON.stringify(v31));
+
+    expect(v31).toEqual<OpenAPIV3_1.Document>({
+        openapi: '3.1.0',
+        info: { title: 'Test', version: '1.0.0' },
+        paths: {},
+        components: {
+            schemas: { User: { type: ['object'], properties: { username: { required: true, type: ['string'] } } } },
             requestBodies: {},
             responses: {},
             parameters: {},
