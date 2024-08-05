@@ -69,7 +69,7 @@ test('ref response', () => {
       /**
        * @param [config] request config
        */
-      export async function postTest(config?:AxiosRequestConfig): AxiosPromise<User[]> {
+      export async function postTest(config?:AxiosRequestConfig): AxiosPromise<Array<User>> {
           return axios({
               method: "post",
               url: \`/test\`,

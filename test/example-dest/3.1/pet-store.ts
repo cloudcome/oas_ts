@@ -61,8 +61,8 @@ export type Pet = {
  * @example doggie
  */
 "name":string;
-"photoUrls":string[];
-"tags"?:unknown[];
+"photoUrls":Array<string>;
+"tags"?:Array<unknown>;
 /**
  * @description pet status in the store
  */

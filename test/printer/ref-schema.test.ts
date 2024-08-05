@@ -131,10 +131,10 @@ test('ref $anchor', () => {
        * @format uuid
        */
       "aa"?:string;
-      "bb"?:{
+      "bb"?:Array<{
       "cc"?:DeepGet<T0, ["aa"]>;
       "dd"?:number;
-      }[];
+      }>;
       };
 
       export type T1 = {

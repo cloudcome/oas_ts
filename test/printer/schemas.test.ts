@@ -233,7 +233,7 @@ test('explicit array', () => {
             hideImports: true,
         }),
     ).toMatchInlineSnapshot(`
-      "export type Order = 
+      "export type Order = Array<
       /**
        * @description test1
        * @deprecated
@@ -241,7 +241,7 @@ test('explicit array', () => {
        * @example 10
        */
       number
-      ;"
+      >;"
     `);
 });
 
@@ -275,7 +275,7 @@ test('generic array', () => {
             hideImports: true,
         }),
     ).toMatchInlineSnapshot(`
-      "export type Order = 
+      "export type Order = Array<
       /**
        * @description test1
        * @deprecated
@@ -283,7 +283,7 @@ test('generic array', () => {
        * @example 10
        */
       number
-      ;"
+      >;"
     `);
 });
 
@@ -378,9 +378,9 @@ test('generic object', () => {
         }),
     ).toMatchInlineSnapshot(`
       "export type Pet = {
-      "aa":AnyObject;
-      "b-b":AnyObject;
-      "string"?:AnyObject;
+      "aa":UnknownObject;
+      "b-b":UnknownObject;
+      "string"?:UnknownObject;
       };"
     `);
 });
@@ -408,7 +408,7 @@ test('additionalProperties true', () => {
             hideInfo: true,
             hideImports: true,
         }),
-    ).toMatchInlineSnapshot(`"export type Pet = AnyObject;"`);
+    ).toMatchInlineSnapshot(`"export type Pet = UnknownObject;"`);
 });
 
 test('additionalProperties false', () => {
@@ -434,7 +434,7 @@ test('additionalProperties false', () => {
             hideInfo: true,
             hideImports: true,
         }),
-    ).toMatchInlineSnapshot(`"export type Pet = AnyObject;"`);
+    ).toMatchInlineSnapshot(`"export type Pet = {};"`);
 });
 
 test('additionalProperties schema type', () => {

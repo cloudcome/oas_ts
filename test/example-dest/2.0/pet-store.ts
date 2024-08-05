@@ -93,8 +93,8 @@ export type Pet = {
  * @example doggie
  */
 "name":string;
-"photoUrls":string[];
-"tags"?:Tag[];
+"photoUrls":Array<string>;
+"tags"?:Array<Tag>;
 /**
  * @description pet status in the store
  */
@@ -150,12 +150,12 @@ data: data,
  * @param [config] request config
  * @returns successful operation
  */
-export async function findPetsByStatus(status:
+export async function findPetsByStatus(status:Array<
 /**
  * @default available
  */
 ("available"|"pending"|"sold")
-[],config?:AxiosRequestConfig): AxiosPromise<Pet[]> {
+>,config?:AxiosRequestConfig): AxiosPromise<Array<Pet>> {
     return axios({
         method: "get",
         url: `/pet/findByStatus`,
@@ -173,7 +173,7 @@ params: {status: status},
  * @param [config] request config
  * @returns successful operation
  */
-export async function findPetsByTags(tags:string[],config?:AxiosRequestConfig): AxiosPromise<Pet[]> {
+export async function findPetsByTags(tags:Array<string>,config?:AxiosRequestConfig): AxiosPromise<Array<Pet>> {
     return axios({
         method: "get",
         url: `/pet/findByTags`,
@@ -360,7 +360,7 @@ data: data,
  * @param data List of user object
  * @param [config] request config
  */
-export async function createUsersWithArrayInput(data:User[],config?:AxiosRequestConfig): AxiosPromise<unknown> {
+export async function createUsersWithArrayInput(data:Array<User>,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "post",
         url: `/user/createWithArray`,
@@ -376,7 +376,7 @@ data: data,
  * @param data List of user object
  * @param [config] request config
  */
-export async function createUsersWithListInput(data:User[],config?:AxiosRequestConfig): AxiosPromise<unknown> {
+export async function createUsersWithListInput(data:Array<User>,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "post",
         url: `/user/createWithList`,

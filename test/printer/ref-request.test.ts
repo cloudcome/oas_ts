@@ -68,7 +68,7 @@ test('ref request', () => {
        * @param data 用户列表
        * @param [config] request config
        */
-      export async function postTest(data:User[],config?:AxiosRequestConfig): AxiosPromise<unknown> {
+      export async function postTest(data:Array<User>,config?:AxiosRequestConfig): AxiosPromise<unknown> {
           return axios({
               method: "post",
               url: \`/test\`,

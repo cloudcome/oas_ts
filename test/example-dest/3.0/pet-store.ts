@@ -70,7 +70,7 @@ export type Customer = {
  * @example fehguy
  */
 "username"?:string;
-"address"?:Address[];
+"address"?:Array<Address>;
 };
 
 export type Address = {
@@ -161,8 +161,8 @@ export type Pet = {
  */
 "name":string;
 "category"?:Category;
-"photoUrls":string[];
-"tags"?:Tag[];
+"photoUrls":Array<string>;
+"tags"?:Array<Tag>;
 /**
  * @description pet status in the store
  */
@@ -220,7 +220,7 @@ data: data,
  * @param [config] request config
  * @returns successful operation
  */
-export async function findPetsByStatus(status?:("available"|"pending"|"sold"),config?:AxiosRequestConfig): AxiosPromise<Pet[]> {
+export async function findPetsByStatus(status?:("available"|"pending"|"sold"),config?:AxiosRequestConfig): AxiosPromise<Array<Pet>> {
     return axios({
         method: "get",
         url: `/pet/findByStatus`,
@@ -237,7 +237,7 @@ params: {status: status},
  * @param [config] request config
  * @returns successful operation
  */
-export async function findPetsByTags(tags?:string[],config?:AxiosRequestConfig): AxiosPromise<Pet[]> {
+export async function findPetsByTags(tags?:Array<string>,config?:AxiosRequestConfig): AxiosPromise<Array<Pet>> {
     return axios({
         method: "get",
         url: `/pet/findByTags`,
@@ -417,7 +417,7 @@ data: data,
  * @param [config] request config
  * @returns Successful operation
  */
-export async function createUsersWithListInput(data:User[],config?:AxiosRequestConfig): AxiosPromise<User> {
+export async function createUsersWithListInput(data:Array<User>,config?:AxiosRequestConfig): AxiosPromise<User> {
     return axios({
         method: "post",
         url: `/user/createWithList`,
