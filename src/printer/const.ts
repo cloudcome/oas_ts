@@ -94,6 +94,8 @@ export const INTERNAL_TYPES = [
     'object',
     'symbol',
     'bigint',
+    'Record',
+    'NonNullable',
     // printer helpers
     'OneOf',
     'AllOf',
