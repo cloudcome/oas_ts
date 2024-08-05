@@ -510,7 +510,7 @@ test('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
         },
         openapi: '3.1.0',
         paths: {
-            '/api/abc': {
+            '/api/abc/{c}': {
                 get: {
                     parameters: [
                         {
@@ -583,7 +583,7 @@ test('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
       },data:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
           return axios({
               method: "get",
-              url: \`/api/abc\`,
+              url: \`/api/abc/\${c}\`,
       params: params,
       data: data,
       ...config
@@ -600,7 +600,7 @@ test('1路径 + 1请求 + 2query + 1path + 1request object', () => {
         },
         openapi: '3.1.0',
         paths: {
-            '/api/abc': {
+            '/api/abc/{c}': {
                 get: {
                     parameters: [
                         {
@@ -685,7 +685,7 @@ test('1路径 + 1请求 + 2query + 1path + 1request object', () => {
       },config?:AxiosRequestConfig): AxiosPromise<unknown> {
           return axios({
               method: "get",
-              url: \`/api/abc\`,
+              url: \`/api/abc/\${c}\`,
       params: params,
       data: data,
       ...config
