@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.25.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.24.0...v0.25.0) (2024-08-05)
+
+
+### Features
+
+* 优化 jsDoc 多行显示 ([adfdfdd](https://github.com/FrontEndDev-org/openapi-axios/commit/adfdfdd5608c898cdd407262d3d845120d083c2b))
+* 增加 typeScript 内置类型唯一性 ([ffd42b3](https://github.com/FrontEndDev-org/openapi-axios/commit/ffd42b3dd3b78751d2718c86947db2b351bc831d))
+* 忽略未明确的 path 参数 ([29312cc](https://github.com/FrontEndDev-org/openapi-axios/commit/29312cce5f1bd9016f3fe2d42f79f5788c7adb5a))
+* 支持 ref.$anchor ([aef3726](https://github.com/FrontEndDev-org/openapi-axios/commit/aef37261fbd1a94c7aedc097e8870d0ee07174f8))
+* 支持 ref.$id ([1c0896a](https://github.com/FrontEndDev-org/openapi-axios/commit/1c0896a4072eabd195860a4d8094864188e15ad9))
+
+
+### Bug Fixes
+
+* 优化下一个唯一变量生成方法 ([cc83da4](https://github.com/FrontEndDev-org/openapi-axios/commit/cc83da452ba632e2af7e437d104edd91d6249c0d))
+* 修复 UnknownObject ([6959961](https://github.com/FrontEndDev-org/openapi-axios/commit/695996101a652981f55ffffb0b4bd41def37ac96))
+* 修正 nullable 的升级兼容 ([c565fdc](https://github.com/FrontEndDev-org/openapi-axios/commit/c565fdc82f57dce0210b604a29b74ddf20556ff9))
+* 唯一变量与唯一类型区分 ([799b459](https://github.com/FrontEndDev-org/openapi-axios/commit/799b45932064b87fb3b077364c8144131e1339b4))
+* 新增内部类型 UnknownObject UnknownArray ([d7594cd](https://github.com/FrontEndDev-org/openapi-axios/commit/d7594cd69622d2ab3f4eed654834841a99704bd1))
+
 ## [0.24.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.23.0...v0.24.0) (2024-08-01)
 
 
