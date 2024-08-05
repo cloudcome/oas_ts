@@ -41,7 +41,7 @@ test('nullable + array', () => {
     // console.log(type);
     expect(type).toMatchInlineSnapshot(`
       "{
-      "t0":((T1[])|(null));
+      "t0":((Array<T1>)|(null));
       }"
     `);
 });

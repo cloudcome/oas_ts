@@ -3,8 +3,8 @@
  * @version 1.0.6
  * @contact <apiteam@swagger.io>
  * @description This is a sample Pet Store Server based on the OpenAPI 3.1 specification.
-You can find out more about
-Swagger at [http://swagger.io](http://swagger.io).
+ * You can find out more about
+ * Swagger at [http://swagger.io](http://swagger.io).
  * @summary Pet Store 3.1
  * @see {@link http://swagger.io Find out more about Swagger}
  */
