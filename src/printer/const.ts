@@ -81,8 +81,8 @@ export const INTERNAL_NAMES = [
     'OneOf',
     'AllOf',
     'AnyOf',
-    'AnyObject',
-    'AnyArray',
+    'UnknownObject',
+    'UnknownArray',
     // config
     AXIOS_IMPORT_NAME,
     AXIOS_QUEST_CONFIG_TYPE_NAME,
