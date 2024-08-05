@@ -173,7 +173,7 @@ test('nullable', () => {
                     type: ['object'],
                     properties: {
                         meta: { oneOf: [{ $ref: '#/components/schemas/UserInfo' }, { type: 'null' }] },
-                        website: { oneOf: [{ type: 'null' }, { allOf: [{ $ref: '#/components/schemas/Website' }] }] },
+                        website: { oneOf: [{ allOf: [{ $ref: '#/components/schemas/Website' }] }, { type: 'null' }] },
                     },
                 },
                 UserInfo: { required: ['github'], type: ['object'], properties: { github: { type: ['string', 'null'] } } },

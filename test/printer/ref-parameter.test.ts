@@ -1,6 +1,6 @@
 import { Printer } from '../../src/printer';
 
-test('ref-parameter', () => {
+test('ref parameter', () => {
     const printer = new Printer({
         openapi: '3.1.0',
         info: {

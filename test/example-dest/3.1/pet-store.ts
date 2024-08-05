@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 /**
  * @title Swagger Petstore - OpenAPI 3.1
  * @version 1.0.6
@@ -18,11 +15,17 @@ import type {AxiosRequestConfig, AxiosPromise} from "axios";
 
 
 // helpers --- start
-type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
-type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
 type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
-type AnyObject = Record<string, any>;
-type AnyArray = any[];
+type UnknownObject = Record<string, unknown>;
+type DeepGet<O, K> = K extends [infer P, ...infer R]
+    ? O extends Record<string, unknown> | Array<unknown>
+        ? P extends keyof O
+            ? R['length'] extends 0
+                ? O[P]
+                : DeepGet<NonNullable<O[P]>, R>
+            : never
+        : never
+    : never;
 // helpers --- end
     
 
@@ -53,13 +56,13 @@ export type Pet = {
 /**
  * @description Pet Category
  */
-"category"?:Category;
+"category"?:unknown;
 /**
  * @example doggie
  */
 "name":string;
-"photoUrls":string;
-"tags"?:Tag;
+"photoUrls":string[];
+"tags"?:unknown[];
 /**
  * @description pet status in the store
  */
@@ -69,8 +72,8 @@ export type Pet = {
  * @example 7
  */
 "availableInstances"?:number;
-"petDetailsId"?:unknown;
-"petDetails"?:unknown;
+"petDetailsId"?:DeepGet<PetDetails, ["id"]>;
+"petDetails"?:PetDetails;
 };
 
 export type PetDetails = {
@@ -82,8 +85,8 @@ export type PetDetails = {
 /**
  * @description PetDetails Category
  */
-"category"?:unknown;
-"tag"?:unknown;
+"category"?:Category;
+"tag"?:Tag;
 };
 
 export type Tag = {

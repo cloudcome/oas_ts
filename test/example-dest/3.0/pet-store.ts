@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 /**
  * @title Swagger Petstore - OpenAPI 3.0
  * @version 1.0.19
@@ -21,159 +18,165 @@ import type {AxiosRequestConfig, AxiosPromise} from "axios";
 
 
 // helpers --- start
-type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
-type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
 type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
-type AnyObject = Record<string, any>;
-type AnyArray = any[];
+type UnknownObject = Record<string, unknown>;
+type DeepGet<O, K> = K extends [infer P, ...infer R]
+    ? O extends Record<string, unknown> | Array<unknown>
+        ? P extends keyof O
+            ? R['length'] extends 0
+                ? O[P]
+                : DeepGet<NonNullable<O[P]>, R>
+            : never
+        : never
+    : never;
 // helpers --- end
     
 
-export type Order = (({
+export type Order = {
 /**
  * @format int64
  * @example 10
  */
-"id"?:((number));
+"id"?:number;
 /**
  * @format int64
  * @example 198772
  */
-"petId"?:((number));
+"petId"?:number;
 /**
  * @format int32
  * @example 7
  */
-"quantity"?:((number));
+"quantity"?:number;
 /**
  * @format date-time
  */
-"shipDate"?:((string));
+"shipDate"?:string;
 /**
  * @description Order Status
  * @example approved
  */
-"status"?:((("placed"|"approved"|"delivered")));
-"complete"?:((boolean));
-}));
+"status"?:("placed"|"approved"|"delivered");
+"complete"?:boolean;
+};
 
-export type Customer = (({
+export type Customer = {
 /**
  * @format int64
  * @example 100000
  */
-"id"?:((number));
+"id"?:number;
 /**
  * @example fehguy
  */
-"username"?:((string));
-"address"?:((Address));
-}));
+"username"?:string;
+"address"?:Address[];
+};
 
-export type Address = (({
+export type Address = {
 /**
  * @example 437 Lytton
  */
-"street"?:((string));
+"street"?:string;
 /**
  * @example Palo Alto
  */
-"city"?:((string));
+"city"?:string;
 /**
  * @example CA
  */
-"state"?:((string));
+"state"?:string;
 /**
  * @example 94301
  */
-"zip"?:((string));
-}));
+"zip"?:string;
+};
 
-export type Category = (({
+export type Category = {
 /**
  * @format int64
  * @example 1
  */
-"id"?:((number));
+"id"?:number;
 /**
  * @example Dogs
  */
-"name"?:((string));
-}));
+"name"?:string;
+};
 
-export type User = (({
+export type User = {
 /**
  * @format int64
  * @example 10
  */
-"id"?:((number));
+"id"?:number;
 /**
  * @example theUser
  */
-"username"?:((string));
+"username"?:string;
 /**
  * @example John
  */
-"firstName"?:((string));
+"firstName"?:string;
 /**
  * @example James
  */
-"lastName"?:((string));
+"lastName"?:string;
 /**
  * @example john@email.com
  */
-"email"?:((string));
+"email"?:string;
 /**
  * @example 12345
  */
-"password"?:((string));
+"password"?:string;
 /**
  * @example 12345
  */
-"phone"?:((string));
+"phone"?:string;
 /**
  * @description User Status
  * @format int32
  * @example 1
  */
-"userStatus"?:((number));
-}));
+"userStatus"?:number;
+};
 
-export type Tag = (({
+export type Tag = {
 /**
  * @format int64
  */
-"id"?:((number));
-"name"?:((string));
-}));
+"id"?:number;
+"name"?:string;
+};
 
-export type Pet = (({
+export type Pet = {
 /**
  * @format int64
  * @example 10
  */
-"id"?:((number));
+"id"?:number;
 /**
  * @example doggie
  */
-"name":((string));
+"name":string;
 "category"?:Category;
-"photoUrls":((((string))));
-"tags"?:((Tag));
+"photoUrls":string[];
+"tags"?:Tag[];
 /**
  * @description pet status in the store
  */
-"status"?:((("available"|"pending"|"sold")));
-}));
+"status"?:("available"|"pending"|"sold");
+};
 
-export type ApiResponse = (({
+export type ApiResponse = {
 /**
  * @format int32
  */
-"code"?:((number));
-"type"?:((string));
-"message"?:((string));
-}));
+"code"?:number;
+"type"?:string;
+"message"?:string;
+};
 
 /**
  * @description Add a new pet to the store
@@ -217,7 +220,7 @@ data: data,
  * @param [config] request config
  * @returns successful operation
  */
-export async function findPetsByStatus(status?:((("available"|"pending"|"sold"))),config?:AxiosRequestConfig): AxiosPromise<((Pet))> {
+export async function findPetsByStatus(status?:("available"|"pending"|"sold"),config?:AxiosRequestConfig): AxiosPromise<Pet[]> {
     return axios({
         method: "get",
         url: `/pet/findByStatus`,
@@ -234,7 +237,7 @@ params: {status: status},
  * @param [config] request config
  * @returns successful operation
  */
-export async function findPetsByTags(tags?:((((string)))),config?:AxiosRequestConfig): AxiosPromise<((Pet))> {
+export async function findPetsByTags(tags?:string[],config?:AxiosRequestConfig): AxiosPromise<Pet[]> {
     return axios({
         method: "get",
         url: `/pet/findByTags`,
@@ -251,7 +254,7 @@ params: {tags: tags},
  * @param [config] request config
  * @returns successful operation
  */
-export async function getPetById(petId:((number)),config?:AxiosRequestConfig): AxiosPromise<Pet> {
+export async function getPetById(petId:number,config?:AxiosRequestConfig): AxiosPromise<Pet> {
     return axios({
         method: "get",
         url: `/pet/${petId}`,
@@ -267,15 +270,15 @@ export async function getPetById(petId:((number)),config?:AxiosRequestConfig): A
  * @param [params] request params
  * @param [config] request config
  */
-export async function updatePetWithForm(petId:((number)),params?:{
+export async function updatePetWithForm(petId:number,params?:{
 /**
  * @description Name of pet that needs to be updated
  */
-"name"?:((string));
+"name"?:string;
 /**
  * @description Status of pet that needs to be updated
  */
-"status"?:((string));
+"status"?:string;
 },config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "post",
@@ -293,7 +296,7 @@ params: params,
  * @param [apiKey] request param
  * @param [config] request config
  */
-export async function deletePet(petId:((number)),apiKey?:((string)),config?:AxiosRequestConfig): AxiosPromise<unknown> {
+export async function deletePet(petId:number,apiKey?:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "delete",
         url: `/pet/${petId}`,
@@ -312,7 +315,7 @@ headers: {api_key: apiKey},
  * @param [config] request config
  * @returns successful operation
  */
-export async function uploadFile(petId:((number)),data:((Blob)),additionalMetadata?:((string)),config?:AxiosRequestConfig): AxiosPromise<ApiResponse> {
+export async function uploadFile(petId:number,data:Blob,additionalMetadata?:string,config?:AxiosRequestConfig): AxiosPromise<ApiResponse> {
     return axios({
         method: "post",
         url: `/pet/${petId}/uploadImage`,
@@ -329,12 +332,12 @@ params: {additionalMetadata: additionalMetadata},
  * @param [config] request config
  * @returns successful operation
  */
-export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<(({
+export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<{
 /**
  * @format int32
  */
-[key: string]:((number));
-}))> {
+[key: string]:number;
+}> {
     return axios({
         method: "get",
         url: `/store/inventory`,
@@ -367,7 +370,7 @@ data: data,
  * @param [config] request config
  * @returns successful operation
  */
-export async function getOrderById(orderId:((number)),config?:AxiosRequestConfig): AxiosPromise<Order> {
+export async function getOrderById(orderId:number,config?:AxiosRequestConfig): AxiosPromise<Order> {
     return axios({
         method: "get",
         url: `/store/order/${orderId}`,
@@ -382,7 +385,7 @@ export async function getOrderById(orderId:((number)),config?:AxiosRequestConfig
  * @param orderId ID of the order that needs to be deleted
  * @param [config] request config
  */
-export async function deleteOrder(orderId:((number)),config?:AxiosRequestConfig): AxiosPromise<unknown> {
+export async function deleteOrder(orderId:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "delete",
         url: `/store/order/${orderId}`,
@@ -414,7 +417,7 @@ data: data,
  * @param [config] request config
  * @returns Successful operation
  */
-export async function createUsersWithListInput(data:((User)),config?:AxiosRequestConfig): AxiosPromise<User> {
+export async function createUsersWithListInput(data:User[],config?:AxiosRequestConfig): AxiosPromise<User> {
     return axios({
         method: "post",
         url: `/user/createWithList`,
@@ -435,12 +438,12 @@ export async function loginUser(params?:{
 /**
  * @description The user name for login
  */
-"username"?:((string));
+"username"?:string;
 /**
  * @description The password for login in clear text
  */
-"password"?:((string));
-},config?:AxiosRequestConfig): AxiosPromise<((string))> {
+"password"?:string;
+},config?:AxiosRequestConfig): AxiosPromise<string> {
     return axios({
         method: "get",
         url: `/user/login`,
@@ -471,7 +474,7 @@ export async function logoutUser(config?:AxiosRequestConfig): AxiosPromise<unkno
  * @param [config] request config
  * @returns successful operation
  */
-export async function getUserByName(username:((string)),config?:AxiosRequestConfig): AxiosPromise<User> {
+export async function getUserByName(username:string,config?:AxiosRequestConfig): AxiosPromise<User> {
     return axios({
         method: "get",
         url: `/user/${username}`,
@@ -486,7 +489,7 @@ export async function getUserByName(username:((string)),config?:AxiosRequestConf
  * @param username The name that needs to be deleted
  * @param [config] request config
  */
-export async function deleteUser(username:((string)),config?:AxiosRequestConfig): AxiosPromise<unknown> {
+export async function deleteUser(username:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "delete",
         url: `/user/${username}`,
@@ -502,7 +505,7 @@ export async function deleteUser(username:((string)),config?:AxiosRequestConfig)
  * @param data Update an existent user in the store
  * @param [config] request config
  */
-export async function updateUser(username:((string)),data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+export async function updateUser(username:string,data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "put",
         url: `/user/${username}`,

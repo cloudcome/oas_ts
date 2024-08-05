@@ -1,6 +1,6 @@
 import { Printer } from '../../src/printer';
 
-test('ref-request', () => {
+test('ref request', () => {
     const printer = new Printer({
         openapi: '3.1.0',
         info: {
@@ -11,7 +11,7 @@ test('ref-request', () => {
             '/test': {
                 post: {
                     requestBody: {
-                        $ref: '#/components/requestBodies/test',
+                        $ref: '#/components/requestBodies/test1',
                     },
                 },
             },
@@ -30,7 +30,13 @@ test('ref-request', () => {
                 },
             },
             requestBodies: {
-                test: {
+                test1: {
+                    $ref: '#/components/requestBodies/test2',
+                },
+                test2: {
+                    $ref: '#/components/requestBodies/test3',
+                },
+                test3: {
                     content: {
                         'application/json': {
                             schema: {
@@ -62,7 +68,7 @@ test('ref-request', () => {
        * @param data 用户列表
        * @param [config] request config
        */
-      export async function postTest(data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+      export async function postTest(data:User[],config?:AxiosRequestConfig): AxiosPromise<unknown> {
           return axios({
               method: "post",
               url: \`/test\`,

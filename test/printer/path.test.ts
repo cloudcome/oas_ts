@@ -56,10 +56,7 @@ test('1路径 + 1请求 * module', () => {
             hideHelpers: true,
         }),
     ).toMatchInlineSnapshot(`
-      "/* eslint-disable @typescript-eslint/ban-ts-comment */
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-
-      /**
+      "/**
        * @module TTT
        * @title api
        * @version v1
