@@ -100,3 +100,89 @@ test('pet store', () => {
     // console.log(JSON.stringify(v3_1));
     expect(v3_1).toEqual(petStore3_1);
 });
+
+test('nullable', () => {
+    const v31 = migrate_3_0To3_1({
+        openapi: '3.0.0',
+        info: {
+            title: 'Nullable',
+            version: '1.0.0',
+        },
+        components: {
+            schemas: {
+                Users: {
+                    type: 'array',
+                    nullable: true,
+                    items: {
+                        $ref: '#/components/schemas/User',
+                    },
+                },
+                User: {
+                    type: 'object',
+                    required: ['meta'],
+                    properties: {
+                        meta: {
+                            nullable: true,
+                            $ref: '#/components/schemas/UserInfo',
+                        },
+                        website: {
+                            nullable: true,
+                            allOf: [
+                                {
+                                    $ref: '#/components/schemas/Website',
+                                },
+                            ],
+                        },
+                    },
+                },
+                UserInfo: {
+                    type: 'object',
+                    required: ['github'],
+                    properties: {
+                        github: {
+                            type: 'string',
+                            nullable: true,
+                        },
+                    },
+                },
+                Website: {
+                    type: 'object',
+                    required: ['url'],
+                    properties: {
+                        url: {
+                            type: 'string',
+                            nullable: true,
+                        },
+                    },
+                },
+            },
+        },
+        paths: {},
+    });
+    console.log(JSON.stringify(v31));
+
+    expect(v31).toEqual<OpenAPIV3_1.Document>({
+        openapi: '3.1.0',
+        info: { title: 'Nullable', version: '1.0.0' },
+        paths: {},
+        components: {
+            schemas: {
+                Users: { items: { $ref: '#/components/schemas/User' }, type: ['array', 'null'] },
+                User: {
+                    required: ['meta'],
+                    type: ['object'],
+                    properties: {
+                        meta: { oneOf: [{ $ref: '#/components/schemas/UserInfo' }, { type: 'null' }] },
+                        website: { oneOf: [{ type: 'null' }, { allOf: [{ $ref: '#/components/schemas/Website' }] }] },
+                    },
+                },
+                UserInfo: { required: ['github'], type: ['object'], properties: { github: { type: ['string', 'null'] } } },
+                Website: { required: ['url'], type: ['object'], properties: { url: { type: ['string', 'null'] } } },
+            },
+            requestBodies: {},
+            responses: {},
+            parameters: {},
+            headers: {},
+        },
+    });
+});
