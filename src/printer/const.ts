@@ -1,5 +1,5 @@
 // @ref https://github.com/microsoft/TypeScript/issues/2536
-export const KEYWORD_NAMES = [
+export const KEYWORD_VARS = [
     // 保留字
     'break',
     'case',
@@ -72,7 +72,11 @@ export const AXIOS_IMPORT_NAME = 'axios';
 export const AXIOS_IMPORT_FILE = 'axios';
 export const AXIOS_QUEST_CONFIG_TYPE_NAME = 'AxiosRequestConfig';
 export const AXIOS_PROMISE_TYPE_NAME = 'AxiosPromise';
-export const INTERNAL_NAMES = [
+export const INTERNAL_VARS = [
+    // config
+    AXIOS_IMPORT_NAME,
+];
+export const INTERNAL_TYPES = [
     // native
     'Blob',
     'Array',
@@ -84,7 +88,6 @@ export const INTERNAL_NAMES = [
     'UnknownObject',
     'UnknownArray',
     // config
-    AXIOS_IMPORT_NAME,
     AXIOS_QUEST_CONFIG_TYPE_NAME,
     AXIOS_PROMISE_TYPE_NAME,
 ];

@@ -1,23 +1,33 @@
-import { INTERNAL_NAMES, KEYWORD_NAMES } from './const';
+import { INTERNAL_TYPES, INTERNAL_VARS, KEYWORD_VARS } from './const';
 import { fixVarName, nextUniqueName } from '../utils/string';
 import { isString } from '../utils/type-is';
 
 export class Named {
-    varNameCountMap = new Map<string /*name*/, number /*count*/>();
+    varNameCountMap = new Map<string /*var*/, number /*count*/>();
+    typeNameCountMap = new Map<string /*type*/, number /*count*/>();
     varNameRefMap = new Map<string /*name*/, string /*ref*/>();
     refVarNameMap = new Map<string /*ref*/, string /*name*/>();
 
     constructor() {
-        KEYWORD_NAMES.forEach(this.internalVarName.bind(this));
-        INTERNAL_NAMES.forEach(this.internalVarName.bind(this));
+        KEYWORD_VARS.forEach(this.internalVarName.bind(this));
+        INTERNAL_VARS.forEach(this.internalVarName.bind(this));
+        INTERNAL_TYPES.forEach(this.internalTypeName.bind(this));
     }
 
     /**
-     * 注册内部名称
-     * @param {string} name
+     * 注册内部变量
+     * @param {string} varName
      */
-    internalVarName(name: string) {
-        this.varNameCountMap.set(name, 1);
+    internalVarName(varName: string) {
+        this.varNameCountMap.set(varName, 1);
+    }
+
+    /**
+     * 注册内部类型
+     * @param {string} typeName
+     */
+    internalTypeName(typeName: string) {
+        this.typeNameCountMap.set(typeName, 1);
     }
 
     nextVarName(name: string) {
@@ -41,7 +51,7 @@ export class Named {
 
     nextTypeName(name: string) {
         const refTypeName = fixVarName(name, true, 'Type');
-        return nextUniqueName(refTypeName, this.varNameCountMap);
+        return nextUniqueName(refTypeName, this.typeNameCountMap);
     }
 
     nextRefName(name: string, ref: string) {
