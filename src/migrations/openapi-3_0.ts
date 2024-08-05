@@ -7,17 +7,34 @@ import { isArray, isBoolean, isUndefined } from '../utils/type-is';
 
 function migSchema(schema: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject): OpenAPIV3_1.SchemaObject | OpenAPIV3_1.ReferenceObject {
     if (isUndefined(schema)) return schema;
-    if ('$ref' in schema) return schema;
+
+    if ('$ref' in schema) {
+        if (schema.nullable) {
+            return {
+                oneOf: [{ $ref: schema.$ref }, { type: 'null' }],
+            };
+        }
+
+        return schema;
+    }
 
     const { type, nullable, properties, additionalProperties, allOf, oneOf, anyOf, ...rest } = schema;
 
     if (allOf || oneOf || anyOf) {
-        return {
+        const schemaOf = {
             ...rest,
             allOf: allOf && allOf.map(migSchema),
             oneOf: oneOf && oneOf.map(migSchema),
             anyOf: anyOf && anyOf.map(migSchema),
         };
+
+        if (nullable) {
+            return {
+                oneOf: [schemaOf, { type: 'null' }],
+            };
+        }
+
+        return schemaOf;
     }
 
     if (type === 'array') {

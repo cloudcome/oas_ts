@@ -30,7 +30,7 @@ export class Schemata {
         const { type, allOf, oneOf, anyOf } = schema;
         const comments = JsDoc.fromSchema(schema);
 
-        if (allOf) {
+        if (allOf && allOf.length > 0) {
             return {
                 comments,
                 type: withGroup(
@@ -41,7 +41,7 @@ export class Schemata {
             };
         }
 
-        if (oneOf) {
+        if (oneOf && oneOf.length > 0) {
             return {
                 comments,
                 type: withGroup(
@@ -52,14 +52,14 @@ export class Schemata {
             };
         }
 
-        if (anyOf) {
+        if (anyOf && anyOf.length > 0) {
             return {
                 comments,
                 type: withGroup(
                     anyOf.map((s) => this.toString(s)),
                     ',',
-                    'AnyOf<',
-                    '>',
+                    'AnyOf<[',
+                    ']>',
                 ),
                 required: false,
             };
@@ -196,7 +196,7 @@ export class Schemata {
                 maxItems,
             },
             // type: withNullable(explicit ? `[${subTypes.join(',')}]` : `((${subTypes.join('|')})[])`, schema.nullable),
-            type: this.toString(schema.items),
+            type: this.toString(schema.items) + '[]',
             required: false,
         };
     }

@@ -174,6 +174,7 @@ export interface XMLObject {
 }
 export interface ReferenceObject {
     $ref: string;
+    nullable?: boolean;
 }
 export interface ExampleObject {
     summary?: string;
