@@ -199,7 +199,7 @@ export class Schemata {
                 minItems,
                 maxItems,
             },
-            type: this.toString(items) + '[]',
+            type: 'Array<' + this.toString(items) + '>',
             required: false,
         };
     }
@@ -238,7 +238,7 @@ export class Schemata {
         const objectTypes = [...explicitTypes, ...genericTypes];
 
         if (objectTypes.length === 0) {
-            return this._printUnknown(schema, isBoolean(schema.required) ? schema.required : false, 'UnknownObject');
+            return this._printUnknown(schema, isBoolean(schema.required) ? schema.required : false, genericProps === false ? '{}' : 'UnknownObject');
         }
 
         return {
