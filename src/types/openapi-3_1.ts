@@ -50,7 +50,7 @@ export type ServerVariableObject = Modify<
         enum?: [string, ...string[]];
     }
 >;
-export type PathsObject<T extends {} = {}, P extends {} = {}> = Record<string, (PathItemObject<T> & P) | undefined>;
+export type PathsObject<T extends {} = {}, P extends {} = {}> = Record<string, (PathItemObject<T> & P) | ReferenceObject>;
 export type HttpMethods = OpenAPIV3.HttpMethods;
 export type PathItemObject<T extends {} = {}> = {
     $id?: string;

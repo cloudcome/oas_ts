@@ -52,75 +52,69 @@ export class Printer {
         this.named.internalVarName(options?.axiosImportName || AXIOS_IMPORT_NAME);
     }
 
-    refSchemas: Record<string /** refId */, string /** refType */> = {};
-    refAnchors: Record<string /** anchorId */, string /** anchorType */> = {};
-    refRequestBodies: Record<string, OpenApiLatest_Request> = {};
-    refParameters: Record<string, OpenApiLatest_Parameter> = {};
-    refResponses: Record<string, OpenApiLatest_Response> = {};
-    refPathItems: Record<string, OpenApiLatest_PathItem> = {};
+    schemas: Record<string /** refId */, string /** refType */> = {};
+    anchors: Record<string /** anchorId */, string /** anchorType */> = {};
+    requestBodies: Record<string, OpenApiLatest_Request> = {};
+    parameters: Record<string, OpenApiLatest_Parameter> = {};
+    responses: Record<string, OpenApiLatest_Response> = {};
+    pathItems: Record<string, OpenApiLatest_PathItem> = {};
     registerComponents() {
         const { schemas = {}, requestBodies = {}, parameters = {}, responses = {}, pathItems = {} } = this.document.components || {};
 
         Object.entries(schemas).forEach(([name, schema]) => {
-            if (isRefSchema(schema)) return;
+            const id = isRefSchema(schema) ? schema.$ref : schema.$id || `#/components/schemas/${name}`;
 
-            const id = schema.$id || `#/components/schemas/${name}`;
-
-            if (this.refSchemas[id]) {
+            if (this.schemas[id]) {
                 throw new Error(`重复的 schema 引用 id：${id}`);
             }
 
             const refType = this.named.nextRefType(name, id);
-            this.refSchemas[id] = refType;
+            this.schemas[id] = refType;
             this._registerAnchors(id, refType, schema, []);
         });
 
         Object.entries(requestBodies).forEach(([name, requestBody]) => {
-            if (isRefRequest(requestBody)) return;
+            const defaultId = `#/components/requestBodies/${name}`;
+            const id = isRefRequest(requestBody) ? defaultId : requestBody.$id || defaultId;
 
-            const id = requestBody.$id || `#/components/requestBodies/${name}`;
-
-            if (this.refRequestBodies[id]) {
+            if (this.requestBodies[id]) {
                 throw new Error(`重复的 requestBody 引用 id：${id}`);
             }
 
-            this.refRequestBodies[id] = requestBody;
+            this.requestBodies[id] = requestBody;
         });
 
         Object.entries(parameters).forEach(([name, parameter]) => {
-            if (isRefParameter(parameter)) return;
+            const defaultId = `#/components/parameters/${name}`;
+            const id = isRefParameter(parameter) ? defaultId : parameter.$id || defaultId;
 
-            const id = parameter.$id || `#/components/parameters/${name}`;
-
-            if (this.refParameters[id]) {
+            if (this.parameters[id]) {
                 throw new Error(`重复的 parameter 引用 id：${id}`);
             }
 
-            this.refParameters[id] = parameter;
+            this.parameters[id] = parameter;
         });
 
         Object.entries(responses).forEach(([name, response]) => {
-            if (isRefResponse(response)) return;
+            const defaultId = `#/components/responses/${name}`;
+            const id = isRefResponse(response) ? defaultId : response.$id || defaultId;
 
-            const id = response.$id || `#/components/responses/${name}`;
-
-            if (this.refResponses[id]) {
+            if (this.responses[id]) {
                 throw new Error(`重复的 response 引用 id：${id}`);
             }
 
-            this.refResponses[id] = response;
+            this.responses[id] = response;
         });
 
         Object.entries(pathItems).forEach(([name, pathItem]) => {
-            if (isRefPathItem(pathItem)) return;
+            const defaultId = `#/components/pathItems/${name}`;
+            const id = isRefPathItem(pathItem) ? defaultId : pathItem.$id || defaultId;
 
-            const id = pathItem.$id || `#/components/pathItems/${name}`;
-
-            if (this.refPathItems[id]) {
+            if (this.pathItems[id]) {
                 throw new Error(`重复的 pathItem 引用 id：${id}`);
             }
 
-            this.refPathItems[id] = pathItem;
+            this.pathItems[id] = pathItem;
         });
     }
 
@@ -131,11 +125,11 @@ export class Printer {
             const anchorId = rootId + '#' + schema.$anchor;
             const anchorType = `DeepGet<${rootType}, [${props.join(', ')}]>`;
 
-            if (this.refAnchors[anchorId]) {
+            if (this.anchors[anchorId]) {
                 throw new Error(`重复的 anchor 引用 id：${anchorId}`);
             }
 
-            this.refAnchors[anchorId] = anchorType;
+            this.anchors[anchorId] = anchorType;
             this.named.refIdTypeMap.set(anchorId, anchorType);
         }
 
@@ -223,7 +217,7 @@ export class Printer {
         const { comments, type } = this.schemata.print(schema);
         const jsDoc = new JsDoc();
         jsDoc.addComments(comments);
-        const refType = this.refSchemas[id];
+        const refType = this.schemas[id];
 
         if (isUndefined(refType)) {
             throw new Error(`未发现 schema 引用：${id}`);
@@ -235,24 +229,22 @@ export class Printer {
     private _printPaths() {
         return Object.entries(this.document.paths || {})
             .map(([url, pathItem]) => {
-                if (isUndefined(pathItem)) return;
-
-                if (isRefPathItem(pathItem)) {
-                    const relPathItem = this.refPathItems[pathItem.$ref];
-
-                    if (isUndefined(relPathItem)) {
-                        throw new Error(`未发现 pathItem 引用：${pathItem.$ref}`);
-                    }
-
-                    return this._printPathItem(url, relPathItem);
-                }
-
                 return this._printPathItem(url, pathItem).filter(filterLine).join('\n\n');
             })
             .join('\n\n');
     }
 
-    private _printPathItem(url: string, pathItem: OpenAPILatest.PathItemObject) {
+    private _printPathItem(url: string, pathItem: OpenApiLatest_PathItem): Array<string | undefined> {
+        if (isRefPathItem(pathItem)) {
+            const relPathItem = this.pathItems[pathItem.$ref];
+
+            if (isUndefined(relPathItem)) {
+                throw new Error(`未发现 pathItem 引用：${pathItem.$ref}`);
+            }
+
+            return this._printPathItem(url, relPathItem);
+        }
+
         return Object.entries(pathItem).map(([method, _operation]) => {
             // method === 'parameters'，migration 已忽略
 
@@ -409,7 +401,7 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
     private _parseParameter(parameter: OpenApiLatest_Parameter, args: Record<OpenAPILatest.ParameterObject['in'], Arg>) {
         if (isRefParameter(parameter)) {
             const { $ref } = parameter;
-            const refParameter = this.refParameters[$ref];
+            const refParameter = this.parameters[$ref];
 
             if (!refParameter) {
                 throw new Error(`未发现 parameter 引用：${$ref}`);
@@ -429,7 +421,7 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
 
         if (isRefRequest(requestBody)) {
             const { $ref } = requestBody;
-            const refRequestBody = this.refRequestBodies[$ref];
+            const refRequestBody = this.requestBodies[$ref];
 
             if (!refRequestBody) throw new Error(`未发现 requestBody 引用：${$ref}`);
 
@@ -453,7 +445,7 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
     private _parseResponse(arg: Arg, response: OpenApiLatest_Response, contentMatch: ResponseMediaMatch) {
         if (isRefResponse(response)) {
             const { $ref } = response;
-            const refResponse = this.refResponses[$ref];
+            const refResponse = this.responses[$ref];
 
             if (!refResponse) throw new Error(`未发现 response 引用：${$ref}`);
 
