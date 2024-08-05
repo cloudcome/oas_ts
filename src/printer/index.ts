@@ -1,6 +1,5 @@
 import { OpenAPIVersion, type OpenAPILatest } from '../types/openapi';
 import { toRelative } from '../utils/path';
-import { fixVarName } from '../utils/string';
 import { isString, isUndefined } from '../utils/type-is';
 import { Arg } from './Arg';
 import { Args } from './Args';
@@ -54,6 +53,7 @@ export class Printer {
     }
 
     refSchemas: Record<string /** refId */, string /** refType */> = {};
+    refAnchors: Record<string /** anchorId */, string /** anchorType */> = {};
     refRequestBodies: Record<string, OpenApiLatest_Request> = {};
     refParameters: Record<string, OpenApiLatest_Parameter> = {};
     refResponses: Record<string, OpenApiLatest_Response> = {};
@@ -72,6 +72,7 @@ export class Printer {
 
             const refType = this.named.nextRefType(name, id);
             this.refSchemas[id] = refType;
+            this._registerAnchors(id, refType, schema, []);
         });
 
         Object.entries(requestBodies).forEach(([name, requestBody]) => {
@@ -123,15 +124,34 @@ export class Printer {
         });
     }
 
+    private _registerAnchors(rootId: string, rootType: string, schema: OpenApiLatest_Schema, props: string[]) {
+        if (isRefSchema(schema)) return;
+
+        if (props.length && schema.$anchor) {
+            const anchorId = rootId + '#' + schema.$anchor;
+            const anchorType = `DeepGet<${rootType}, [${props.join(', ')}]>`;
+
+            if (this.refAnchors[anchorId]) {
+                throw new Error(`重复的 anchor 引用 id：${anchorId}`);
+            }
+
+            this.refAnchors[anchorId] = anchorType;
+            this.named.refIdTypeMap.set(anchorId, anchorType);
+        }
+
+        if ('items' in schema && schema.items) {
+            this._registerAnchors(rootId, rootType, schema.items, [...props, 'number']);
+        } else if ('properties' in schema && schema.properties) {
+            Object.entries(schema.properties).forEach(([prop, property]) => {
+                this._registerAnchors(rootId, rootType, property, [...props, JSON.stringify(prop)]);
+            });
+        }
+    }
+
     print(configs?: PrinterConfigs) {
         Object.assign(this.configs, configs);
         const { hideHeaders, hideHelpers, hideFooters, hideInfo, hideComponents, hideImports, hidePaths } = this.configs;
-        const defaultHeaders = [
-            //
-            '/* eslint-disable @typescript-eslint/ban-ts-comment */',
-            '/* eslint-disable @typescript-eslint/no-explicit-any */',
-        ];
-        const headers = (this.options?.headers || defaultHeaders).join('\n');
+        const headers = (this.options?.headers || []).join('\n');
         const footers = (this.options?.footers || []).join('\n');
 
         return [
@@ -447,12 +467,49 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
         this._parseContents(arg, content, response, (contentType, content) => contentMatch(contentType, content, response));
     }
 
-    // type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
-    // type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
     static helpersCode = `
 // helpers --- start
 type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
 type UnknownObject = Record<string, unknown>;
+type DeepGet<O, K> = K extends [infer P, ...infer R]
+    ? O extends Record<string, unknown> | Array<unknown>
+        ? P extends keyof O
+            ? R['length'] extends 0
+                ? O[P]
+                : DeepGet<NonNullable<O[P]>, R>
+            : never
+        : never
+    : never;
 // helpers --- end
     `;
 }
+
+// type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
+// type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
+type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
+type UnknownObject = Record<string, unknown>;
+type DeepGet<O, K> = K extends [infer P, ...infer R]
+    ? O extends Record<string, unknown> | Array<unknown>
+        ? P extends keyof O
+            ? R['length'] extends 0
+                ? O[P]
+                : DeepGet<NonNullable<O[P]>, R>
+            : never
+        : never
+    : never;
+
+type T0 = {
+    aa?: string;
+    bb?: {
+        cc?: T0['aa'];
+        dd?: number;
+    }[];
+};
+type T1 = {
+    aa?: DeepGet<T0, ['aa']>;
+    dd?: DeepGet<T0, ['bb', number, 'dd']>;
+};
+const t1: T1 = {
+    aa: 'aa',
+    dd: 1,
+};

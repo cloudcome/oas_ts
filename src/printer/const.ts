@@ -87,6 +87,7 @@ export const INTERNAL_TYPES = [
     'AnyOf',
     'UnknownObject',
     'UnknownArray',
+    'DeepGet',
     // config
     AXIOS_QUEST_CONFIG_TYPE_NAME,
     AXIOS_PROMISE_TYPE_NAME,
