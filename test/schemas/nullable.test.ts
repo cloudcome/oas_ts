@@ -5,7 +5,7 @@ import { Schemata } from '../../src/printer/Schemata';
 
 test('nullable + required', () => {
     const named = new Named();
-    named.nextRefName('T1', '#/components/schemas/T1');
+    named.nextRefType('T1', '#/components/schemas/T1');
     const schemata = new Schemata(named);
     const type = schemata.toString({
         type: 'object',
@@ -26,7 +26,7 @@ test('nullable + required', () => {
 
 test('nullable + array', () => {
     const named = new Named();
-    named.nextRefName('T1', '#/components/schemas/T1');
+    named.nextRefType('T1', '#/components/schemas/T1');
     const schemata = new Schemata(named);
     const type = schemata.toString({
         type: 'object',
@@ -48,8 +48,8 @@ test('nullable + array', () => {
 
 test('nullable + allOf', () => {
     const named = new Named();
-    named.nextRefName('T1', '#/components/schemas/T1');
-    named.nextRefName('T2', '#/components/schemas/T2');
+    named.nextRefType('T1', '#/components/schemas/T1');
+    named.nextRefType('T2', '#/components/schemas/T2');
     const schemata = new Schemata(named);
     const type = schemata.toString({
         type: 'object',
@@ -67,8 +67,8 @@ test('nullable + allOf', () => {
 
 test('nullable + oneOf', () => {
     const named = new Named();
-    named.nextRefName('T1', '#/components/schemas/T1');
-    named.nextRefName('T2', '#/components/schemas/T2');
+    named.nextRefType('T1', '#/components/schemas/T1');
+    named.nextRefType('T2', '#/components/schemas/T2');
     const schemata = new Schemata(named);
     const type = schemata.toString({
         type: 'object',
@@ -86,8 +86,8 @@ test('nullable + oneOf', () => {
 
 test('nullable + anyOf', () => {
     const named = new Named();
-    named.nextRefName('T1', '#/components/schemas/T1');
-    named.nextRefName('T2', '#/components/schemas/T2');
+    named.nextRefType('T1', '#/components/schemas/T1');
+    named.nextRefType('T2', '#/components/schemas/T2');
     const schemata = new Schemata(named);
     const type = schemata.toString({
         type: 'object',
