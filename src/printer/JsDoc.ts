@@ -42,7 +42,10 @@ export class JsDoc {
         return [
             //
             '/**',
-            ...this.lines.map((line) => ` * ${line}`),
+            ...this.lines.map((line) => {
+                const slices = line.split('\n');
+                return slices.map((s) => ` * ${s}`).join('\n');
+            }),
             ' */',
         ].join('\n');
     }
