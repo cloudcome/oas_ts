@@ -10,7 +10,7 @@ export function fixVarName(origin: string, bigger = false, fallback = 'var') {
             .replace(/_(.)/g, ($0, $1: string) => $1.toUpperCase())
             .replace(/^\d+/, '') || fallback;
 
-    return (bigger ? name[0].toUpperCase() : name[0].toLowerCase()) + name.slice(1);
+    return bigger ? name[0].toUpperCase() + name.slice(1) : name;
 }
 
 export function nextUniqueName(refName: string, nameCountMap: Map<string, number>) {

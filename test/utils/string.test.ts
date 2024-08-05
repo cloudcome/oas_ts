@@ -23,6 +23,8 @@ test('nextUniqueName', () => {
     expect(nextUniqueName('abc', map)).toBe('abc_2');
     expect(nextUniqueName('abc', map)).toBe('abc_3');
     expect(nextUniqueName('abc2', map)).toBe('abc2');
+    expect(nextUniqueName('Abc', map)).toBe('Abc');
+    expect(nextUniqueName('Abc', map)).toBe('Abc_2');
 });
 
 test('formatTsCode', async () => {
