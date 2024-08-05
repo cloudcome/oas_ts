@@ -27,7 +27,8 @@ export class Schemata {
             };
         }
 
-        const { type, allOf, oneOf, anyOf } = schema;
+        const { type, allOf, oneOf, anyOf, required } = schema;
+        const requiredBool = isBoolean(required) ? required : false;
         const comments = JsDoc.fromSchema(schema);
 
         if (allOf && allOf.length > 0) {
@@ -66,6 +67,19 @@ export class Schemata {
         }
 
         if (isArray(type)) {
+            if (type.length === 0) {
+                return this._printUnknown(schema, requiredBool);
+            }
+
+            if (type.length === 1) {
+                return this.print({
+                    ...schema,
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    type: type[0],
+                });
+            }
+
             return {
                 comments,
                 type: withGroup(
@@ -165,29 +179,19 @@ export class Schemata {
                 } else if ('items' in schema) {
                     return this._printArray(schema as unknown as OpenAPILatest.ArraySchemaObject);
                 } else {
-                    return this._printUnknown(schema);
+                    return this._printUnknown(schema, requiredBool);
                 }
             }
 
             default:
                 never(type);
-                return this._printUnknown(schema);
+                return this._printUnknown(schema, requiredBool);
         }
     }
 
     private _printArray(schema: OpenAPILatest.ArraySchemaObject) {
         const comments = JsDoc.fromSchema(schema);
-        const { minItems, maxItems } = schema;
-        // const items = 'items' in schema ? schema.items : undefined;
-
-        // if (!items) {
-        //     return this._printUnknown(schema, 'array');
-        // }
-
-        // const explicit = isArray(items);
-        // const subSchemas = explicit ? items : [items];
-        // const subTypes = subSchemas.map((s) => this.toString(s));
-        // const subTypes = [this.toString(items)];
+        const { minItems, maxItems, items } = schema;
 
         return {
             comments: {
@@ -195,8 +199,7 @@ export class Schemata {
                 minItems,
                 maxItems,
             },
-            // type: withNullable(explicit ? `[${subTypes.join(',')}]` : `((${subTypes.join('|')})[])`, schema.nullable),
-            type: this.toString(schema.items) + '[]',
+            type: this.toString(items) + '[]',
             required: false,
         };
     }
@@ -235,7 +238,7 @@ export class Schemata {
         const objectTypes = [...explicitTypes, ...genericTypes];
 
         if (objectTypes.length === 0) {
-            return this._printUnknown(schema, 'object', isBoolean(schema.required) ? schema.required : false);
+            return this._printUnknown(schema, isBoolean(schema.required) ? schema.required : false, 'UnknownObject');
         }
 
         return {
@@ -245,15 +248,13 @@ export class Schemata {
         };
     }
 
-    private _printUnknown(schema: OpenApiLatest_Schema, type: 'object' | 'array' | 'primitive' = 'primitive', required?: boolean) {
+    private _printUnknown(schema: OpenApiLatest_Schema, required = false, type = 'unknown') {
         const comments = JsDoc.fromSchema(schema);
 
         return {
             comments,
-            type:
-                //
-                type === 'object' ? 'AnyObject' : type === 'array' ? 'AnyArray' : 'unknown',
-            required: isBoolean(required) ? required : type === 'primitive',
+            type,
+            required,
         };
     }
 

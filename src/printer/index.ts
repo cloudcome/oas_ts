@@ -387,13 +387,12 @@ export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeNam
         this._parseContents(arg, content, response, (contentType, content) => contentMatch(contentType, content, response));
     }
 
+    // type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
+    // type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
     static helpersCode = `
 // helpers --- start
-type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
-type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
 type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
-type AnyObject = Record<string, any>;
-type AnyArray = any[];
+type UnknownObject = Record<string, unknown>;
 // helpers --- end
     `;
 }
