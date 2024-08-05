@@ -263,16 +263,18 @@ export class Printer {
     private _printOperation(method: string, url: string, operation: OpenApiLatest_Operation) {
         if (isRefOperation(operation)) return;
 
+        const { responseStatusCode, responseContentType, requestContentType, axiosRequestConfigTypeName = AXIOS_QUEST_CONFIG_TYPE_NAME } = this.options || {};
         const argNamed = new Named();
         const header = new Arg(argNamed, 'headers', this.schemata);
         const cookie = new Arg(argNamed, 'cookies', this.schemata);
         const query = new Arg(argNamed, 'params', this.schemata);
         const path = new Arg(argNamed, 'path', this.schemata);
+        path.setUrl(url); // 设置 url，用于解析 path 参数
         const data = new Arg(argNamed, 'data', this.schemata, true);
         const config = new Arg(argNamed, 'config', this.schemata, true);
+        config.setDefaultType(axiosRequestConfigTypeName);
         const resp = new Arg(argNamed, 'response', this.schemata, true);
         const { parameters, requestBody, responses, operationId } = operation;
-        const { responseStatusCode, responseContentType, requestContentType } = this.options || {};
 
         if (parameters) {
             parameters.forEach((parameter) => {
@@ -342,13 +344,12 @@ export class Printer {
         jsDoc.addComments(comments);
         jsDoc.addComments(requestArgs.toComments());
         jsDoc.addComments(responseArgs.toComments());
-        const { axiosRequestConfigTypeName = AXIOS_QUEST_CONFIG_TYPE_NAME } = this.options || {};
 
         return `${jsDoc.print()}
-export async function ${funcName}(${requestArgs.toArgs(axiosRequestConfigTypeName)}): AxiosPromise<${respType}> {
+export async function ${funcName}(${requestArgs.toArgs()}): AxiosPromise<${respType}> {
     return axios({
         method: ${JSON.stringify(method)},
-        ${requestArgs.toValues(url)}
+        ${requestArgs.toValues()}
     });
 }`;
     }

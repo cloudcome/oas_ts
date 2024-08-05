@@ -24,11 +24,11 @@ export class Args {
         );
     }
 
-    toArgs(configTypeName: string) {
+    toArgs() {
         return this.fixedArgs
-            .filter((fixArg) => fixArg.arg.kind !== 'path' || fixArg.type !== '')
+            .filter((fixArg) => fixArg.type !== '')
             .map((fixArg) => {
-                return `${fixArg.uniqueName}${requiredTypeStringify(fixArg.required)}${fixArg.type || configTypeName}`;
+                return `${fixArg.uniqueName}${requiredTypeStringify(fixArg.required)}${fixArg.type}`;
             })
             .join(',');
     }
@@ -37,7 +37,7 @@ export class Args {
         return this.fixedArgs[index]?.type || 'unknown';
     }
 
-    toValues(url: string) {
+    toValues() {
         return this.fixedArgs
             .map((fixedArg) => {
                 const { originName, uniqueName, arg, props } = fixedArg;
@@ -45,7 +45,7 @@ export class Args {
                 if (arg.kind === 'config') return `...${uniqueName}`;
 
                 if (arg.kind === 'path') {
-                    const resolvedURL = url.replace(/\{(.*?)}/g, (_, name) => {
+                    const resolvedURL = arg.url.replace(/\{(.*?)}/g, (_, name) => {
                         if (!props.includes(name)) {
                             throw new Error(`路径参数 ${name} 不存在`);
                         }

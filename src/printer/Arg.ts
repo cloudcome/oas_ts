@@ -31,8 +31,26 @@ export class Arg {
         readonly isSingle: boolean = false,
     ) {}
 
+    url: string = '';
+    urlParams: string[] = [];
+    setUrl(url: string) {
+        this.url = url;
+        url.replace(/\{(.*?)}/g, (_, name) => {
+            this.urlParams.push(name);
+            return _;
+        });
+    }
+
+    defaultType = '';
+    setDefaultType(type: string) {
+        this.defaultType = type;
+    }
+
     add(parameter?: OpenApiLatest_Parameter) {
         if (!parameter) return;
+
+        // 忽略 url 无参数的情况
+        if (this.kind === 'path' && this.urlParams.length === 0) return;
 
         this.parameters.push(parameter);
     }
@@ -72,7 +90,7 @@ export class Arg {
                         uniqueName: this.named.nextVarName(this.kind),
                         // 路径参数必填
                         required: true,
-                        type: '',
+                        type: this.defaultType,
                         comments: {},
                         props,
                     };
@@ -85,7 +103,7 @@ export class Arg {
                         originName: this.kind,
                         uniqueName: name,
                         required: false,
-                        type: '',
+                        type: this.defaultType,
                         comments: {
                             [`param [${name}]`]: 'request config',
                         },
