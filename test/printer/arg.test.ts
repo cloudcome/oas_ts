@@ -214,3 +214,110 @@ test('parameter name 不是合法 JS 变量 + 单值', () => {
       }"
     `);
 });
+
+test('parameter name 不是合法 JS 变量 + 多值', () => {
+    const printer = new Printer({
+        openapi: '3.1.0',
+        info: {
+            title: 'test',
+            version: '1.0.0',
+        },
+        paths: {
+            '/zoo/{zoo-id}/pets/{pet-id}': {
+                get: {
+                    operationId: 'getPet',
+                    parameters: [
+                        {
+                            in: 'path',
+                            name: 'pet-id',
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                        {
+                            in: 'path',
+                            name: 'zoo-id',
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                        {
+                            in: 'query',
+                            name: 'category-id',
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                        {
+                            in: 'query',
+                            name: 'kind-id',
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                        {
+                            in: 'header',
+                            name: 'x-auth-key',
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                        {
+                            in: 'header',
+                            name: 'x-auth-ver',
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                    ],
+                    requestBody: {
+                        content: {
+                            '*': {
+                                schema: {
+                                    type: 'string',
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    expect(
+        printer.print({
+            hideImports: true,
+            hideHeaders: true,
+            hideFooters: true,
+            hideInfo: true,
+            hideHelpers: true,
+        }),
+    ).toMatchInlineSnapshot(`
+      "/**
+       * @param path request params
+       * @param data request data
+       * @param [headers] request params
+       * @param [params] request params
+       * @param [config] request config
+       */
+      export async function getPet(path:{
+      "pet-id":string;
+      "zoo-id":string;
+      },data:string,headers?:{
+      "x-auth-key"?:string;
+      "x-auth-ver"?:string;
+      },params?:{
+      "category-id"?:string;
+      "kind-id"?:string;
+      },config?:AxiosRequestConfig): AxiosPromise<unknown> {
+          return axios({
+              method: "get",
+              url: \`/zoo/\${path['zoo-id']}/pets/\${path['pet-id']}\`,
+      data: data,
+      headers: headers,
+      params: params,
+      ...config
+          });
+      }"
+    `);
+});
