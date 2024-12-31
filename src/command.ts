@@ -1,64 +1,68 @@
-import fs from 'fs';
-import path from 'path';
-import process from 'process';
+import type { GeneratorOptions } from './generator/types';
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
 import { tryFlatten } from 'try-flatten';
 import { Generator } from './generator/Generator';
 import { Logger } from './generator/Logger';
-import type { GeneratorOptions } from './generator/types';
 
 export function defineConfig(options: GeneratorOptions): GeneratorOptions {
-    return options;
+  return options;
 }
 
 export const configFileNameOrder = [
-    //
-    'openapi.config.cjs',
-    'openapi.config.js',
+  //
+  'openapi.config.cjs',
+  'openapi.config.js',
 ];
 
 export function resolveConfigFile(cwd: string) {
-    for (const fileName of configFileNameOrder.values()) {
-        const filePath = path.join(cwd, fileName);
+  for (const fileName of configFileNameOrder.values()) {
+    const filePath = path.join(cwd, fileName);
 
-        if (fs.existsSync(filePath)) {
-            return filePath;
-        }
+    if (fs.existsSync(filePath)) {
+      return filePath;
     }
+  }
 }
 
 export function resolveConfig(cwd: string): GeneratorOptions {
-    const configFile = resolveConfigFile(cwd);
+  const configFile = resolveConfigFile(cwd);
 
-    if (!configFile) {
-        throw new Error(`配置文件未找到，配置文件可以是 ${configFileNameOrder.join('、')} 之一\n可以使用 npx openapi-axios init 自动生成`);
-    }
+  if (!configFile) {
+    throw new Error(
+      `配置文件未找到，配置文件可以是 ${configFileNameOrder.join('、')} 之一\n可以使用 npx openapi-axios init 自动生成`,
+    );
+  }
 
-    const [err, config] = tryFlatten(() => {
-        delete require.cache[require.resolve(configFile)];
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        return require(configFile) as GeneratorOptions;
-    });
+  const [err, config] = tryFlatten(() => {
+    delete require.cache[require.resolve(configFile)];
 
-    if (err) {
-        throw err;
-    }
+    // eslint-disable-next-line ts/no-require-imports
+    return require(configFile) as GeneratorOptions;
+  });
 
-    return config;
+  if (err) {
+    throw err;
+  }
+
+  return config;
 }
 
 export async function generate(cwd = process.cwd()) {
-    const logger = new Logger();
-    const [err, config] = tryFlatten(() => resolveConfig(cwd));
+  const logger = new Logger();
+  const [err, config] = tryFlatten(() => resolveConfig(cwd));
 
-    if (err) return logger.pipeConfigError(err);
+  if (err)
+    return logger.pipeConfigError(err);
 
-    config.cwd = config.cwd || cwd;
-    const generator = new Generator(config);
+  config.cwd = config.cwd || cwd;
+  const generator = new Generator(config);
 
-    generator.on('start', logger.pipeStartEvent);
-    generator.on('end', logger.pipeEndEvent);
-    generator.on('error', logger.pipeErrorEvent);
-    generator.on('process', logger.pipeProcessEvent);
+  generator.on('start', logger.pipeStartEvent);
+  generator.on('end', logger.pipeEndEvent);
+  generator.on('error', logger.pipeErrorEvent);
+  generator.on('process', logger.pipeProcessEvent);
 
-    await tryFlatten(generator.generate());
+  await tryFlatten(generator.generate());
 }

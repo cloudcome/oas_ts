@@ -1,27 +1,27 @@
 import { Printer } from '../../src/printer';
 
-test('1路径 + 1请求', () => {
-    const printer = new Printer({
-        info: {
-            title: 'api',
-            version: 'v1',
-        },
-        openapi: '3.1.0',
-        paths: {
-            '/api/abc': {
-                get: {},
-            },
-        },
-    });
+it('1路径 + 1请求', () => {
+  const printer = new Printer({
+    info: {
+      title: 'api',
+      version: 'v1',
+    },
+    openapi: '3.1.0',
+    paths: {
+      '/api/abc': {
+        get: {},
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideHeaders: true,
-            hideHelpers: true,
-            hideInfo: true,
-            hideImports: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideHeaders: true,
+      hideHelpers: true,
+      hideInfo: true,
+      hideImports: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @param [config] request config
        */
@@ -35,27 +35,27 @@ test('1路径 + 1请求', () => {
     `);
 });
 
-test('1路径 + 1请求 * module', () => {
-    const printer = new Printer({
-        info: {
-            title: 'api',
-            version: 'v1',
-        },
-        openapi: '3.1.0',
-        paths: {
-            '/api/abc': {
-                get: {},
-            },
-        },
-    });
+it('1路径 + 1请求 * module', () => {
+  const printer = new Printer({
+    info: {
+      title: 'api',
+      version: 'v1',
+    },
+    openapi: '3.1.0',
+    paths: {
+      '/api/abc': {
+        get: {},
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            module: 'TTT',
-            hideImports: true,
-            hideHelpers: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      module: 'TTT',
+      hideImports: true,
+      hideHelpers: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @module TTT
        * @title api
@@ -76,29 +76,29 @@ test('1路径 + 1请求 * module', () => {
     `);
 });
 
-test('1路径 + 2请求', () => {
-    const printer = new Printer({
-        info: {
-            title: 'api',
-            version: 'v1',
-        },
-        openapi: '3.1.0',
-        paths: {
-            '/api/abc': {
-                get: {},
-                post: {},
-            },
-        },
-    });
+it('1路径 + 2请求', () => {
+  const printer = new Printer({
+    info: {
+      title: 'api',
+      version: 'v1',
+    },
+    openapi: '3.1.0',
+    paths: {
+      '/api/abc': {
+        get: {},
+        post: {},
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideHeaders: true,
-            hideHelpers: true,
-            hideInfo: true,
-            hideImports: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideHeaders: true,
+      hideHelpers: true,
+      hideInfo: true,
+      hideImports: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @param [config] request config
        */
@@ -123,45 +123,45 @@ test('1路径 + 2请求', () => {
     `);
 });
 
-test('1路径 + 1请求 + 1query', () => {
-    const printer = new Printer({
-        info: {
-            title: 'api',
-            version: 'v1',
-        },
-        openapi: '3.1.0',
-        paths: {
-            '/api/abc': {
-                get: {
-                    parameters: [
-                        {
-                            name: 'var',
-                            in: 'query',
-                            description: 'description 1',
-                            schema: {
-                                description: 'description 2',
-                                type: 'number',
-                            },
-                        },
-                    ],
-                    responses: {
-                        200: {
-                            description: 'success',
-                        },
-                    },
-                },
+it('1路径 + 1请求 + 1query', () => {
+  const printer = new Printer({
+    info: {
+      title: 'api',
+      version: 'v1',
+    },
+    openapi: '3.1.0',
+    paths: {
+      '/api/abc': {
+        get: {
+          parameters: [
+            {
+              name: 'var',
+              in: 'query',
+              description: 'description 1',
+              schema: {
+                description: 'description 2',
+                type: 'number',
+              },
             },
+          ],
+          responses: {
+            200: {
+              description: 'success',
+            },
+          },
         },
-    });
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideHeaders: true,
-            hideHelpers: true,
-            hideInfo: true,
-            hideImports: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideHeaders: true,
+      hideHelpers: true,
+      hideInfo: true,
+      hideImports: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @param [var_2] description 1
        * @param [config] request config
@@ -177,43 +177,43 @@ test('1路径 + 1请求 + 1query', () => {
     `);
 });
 
-test('1路径 + 1请求 + 1query with duplicate', () => {
-    const printer = new Printer({
-        info: {
-            title: 'api',
-            version: 'v1',
-        },
-        openapi: '3.1.0',
-        paths: {
-            '/api/abc': {
-                get: {
-                    parameters: [
-                        {
-                            name: 'config',
-                            in: 'query',
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                    ],
-                    responses: {
-                        200: {
-                            description: 'success',
-                        },
-                    },
-                },
+it('1路径 + 1请求 + 1query with duplicate', () => {
+  const printer = new Printer({
+    info: {
+      title: 'api',
+      version: 'v1',
+    },
+    openapi: '3.1.0',
+    paths: {
+      '/api/abc': {
+        get: {
+          parameters: [
+            {
+              name: 'config',
+              in: 'query',
+              schema: {
+                type: 'string',
+              },
             },
+          ],
+          responses: {
+            200: {
+              description: 'success',
+            },
+          },
         },
-    });
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideHeaders: true,
-            hideHelpers: true,
-            hideInfo: true,
-            hideImports: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideHeaders: true,
+      hideHelpers: true,
+      hideInfo: true,
+      hideImports: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @param [config] request param
        * @param [config_2] request config
@@ -229,44 +229,44 @@ test('1路径 + 1请求 + 1query with duplicate', () => {
     `);
 });
 
-test('1路径 + 1请求 + 1path', () => {
-    const printer = new Printer({
-        info: {
-            title: 'api',
-            version: 'v1',
-        },
-        openapi: '3.1.0',
-        paths: {
-            '/api/abc/{var}': {
-                get: {
-                    parameters: [
-                        {
-                            name: 'var',
-                            required: true,
-                            in: 'path',
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                    ],
-                    responses: {
-                        200: {
-                            description: 'success',
-                        },
-                    },
-                },
+it('1路径 + 1请求 + 1path', () => {
+  const printer = new Printer({
+    info: {
+      title: 'api',
+      version: 'v1',
+    },
+    openapi: '3.1.0',
+    paths: {
+      '/api/abc/{var}': {
+        get: {
+          parameters: [
+            {
+              name: 'var',
+              required: true,
+              in: 'path',
+              schema: {
+                type: 'string',
+              },
             },
+          ],
+          responses: {
+            200: {
+              description: 'success',
+            },
+          },
         },
-    });
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideHeaders: true,
-            hideHelpers: true,
-            hideInfo: true,
-            hideImports: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideHeaders: true,
+      hideHelpers: true,
+      hideInfo: true,
+      hideImports: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @param var_2 request param
        * @param [config] request config
@@ -281,51 +281,51 @@ test('1路径 + 1请求 + 1path', () => {
     `);
 });
 
-test('1路径 + 1请求 + 2path', () => {
-    const printer = new Printer({
-        info: {
-            title: 'api',
-            version: 'v1',
-        },
-        openapi: '3.1.0',
-        paths: {
-            '/api/abc/{var}/def/{xyz}': {
-                get: {
-                    parameters: [
-                        {
-                            name: 'var',
-                            required: true,
-                            in: 'path',
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                        {
-                            name: 'xyz',
-                            in: 'path',
-                            schema: {
-                                type: 'integer',
-                            },
-                        },
-                    ],
-                    responses: {
-                        200: {
-                            description: 'success',
-                        },
-                    },
-                },
+it('1路径 + 1请求 + 2path', () => {
+  const printer = new Printer({
+    info: {
+      title: 'api',
+      version: 'v1',
+    },
+    openapi: '3.1.0',
+    paths: {
+      '/api/abc/{var}/def/{xyz}': {
+        get: {
+          parameters: [
+            {
+              name: 'var',
+              required: true,
+              in: 'path',
+              schema: {
+                type: 'string',
+              },
             },
+            {
+              name: 'xyz',
+              in: 'path',
+              schema: {
+                type: 'integer',
+              },
+            },
+          ],
+          responses: {
+            200: {
+              description: 'success',
+            },
+          },
         },
-    });
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideHeaders: true,
-            hideHelpers: true,
-            hideInfo: true,
-            hideImports: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideHeaders: true,
+      hideHelpers: true,
+      hideInfo: true,
+      hideImports: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @param path request params
        * @param [config] request config
@@ -346,54 +346,54 @@ test('1路径 + 1请求 + 2path', () => {
     `);
 });
 
-test('1路径 + 1请求 + 2query', () => {
-    const printer = new Printer({
-        info: {
-            title: 'api',
-            version: 'v1',
-        },
-        openapi: '3.1.0',
-        paths: {
-            '/api/abc': {
-                get: {
-                    parameters: [
-                        {
-                            name: 'a',
-                            in: 'query',
-                            description: 'description 1',
-                            schema: {
-                                description: 'description 2',
-                                type: 'string',
-                            },
-                        },
-                        {
-                            name: 'b',
-                            in: 'query',
-                            required: true,
-                            schema: {
-                                description: 'description 3',
-                                type: 'string',
-                            },
-                        },
-                    ],
-                    responses: {
-                        200: {
-                            description: 'success',
-                        },
-                    },
-                },
+it('1路径 + 1请求 + 2query', () => {
+  const printer = new Printer({
+    info: {
+      title: 'api',
+      version: 'v1',
+    },
+    openapi: '3.1.0',
+    paths: {
+      '/api/abc': {
+        get: {
+          parameters: [
+            {
+              name: 'a',
+              in: 'query',
+              description: 'description 1',
+              schema: {
+                description: 'description 2',
+                type: 'string',
+              },
             },
+            {
+              name: 'b',
+              in: 'query',
+              required: true,
+              schema: {
+                description: 'description 3',
+                type: 'string',
+              },
+            },
+          ],
+          responses: {
+            200: {
+              description: 'success',
+            },
+          },
         },
-    });
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideHeaders: true,
-            hideHelpers: true,
-            hideInfo: true,
-            hideImports: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideHeaders: true,
+      hideHelpers: true,
+      hideInfo: true,
+      hideImports: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @param params request params
        * @param [config] request config
@@ -418,64 +418,64 @@ test('1路径 + 1请求 + 2query', () => {
     `);
 });
 
-test('1路径 + 1请求 + 2query + 1path', () => {
-    const printer = new Printer({
-        info: {
-            title: 'api',
-            version: 'v1',
-        },
-        openapi: '3.1.0',
-        paths: {
-            '/api/abc/{params}': {
-                get: {
-                    parameters: [
-                        {
-                            name: 'a',
-                            in: 'query',
-                            required: true,
-                            description: 'test--',
-                            deprecated: true,
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                        {
-                            name: 'b',
-                            in: 'query',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                                description: 'xxx',
-                            },
-                        },
-                        {
-                            name: 'params',
-                            in: 'path',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                                description: 'xxx',
-                            },
-                        },
-                    ],
-                    responses: {
-                        200: {
-                            description: 'success',
-                        },
-                    },
-                },
+it('1路径 + 1请求 + 2query + 1path', () => {
+  const printer = new Printer({
+    info: {
+      title: 'api',
+      version: 'v1',
+    },
+    openapi: '3.1.0',
+    paths: {
+      '/api/abc/{params}': {
+        get: {
+          parameters: [
+            {
+              name: 'a',
+              in: 'query',
+              required: true,
+              description: 'test--',
+              deprecated: true,
+              schema: {
+                type: 'string',
+              },
             },
+            {
+              name: 'b',
+              in: 'query',
+              required: true,
+              schema: {
+                type: 'string',
+                description: 'xxx',
+              },
+            },
+            {
+              name: 'params',
+              in: 'path',
+              required: true,
+              schema: {
+                type: 'string',
+                description: 'xxx',
+              },
+            },
+          ],
+          responses: {
+            200: {
+              description: 'success',
+            },
+          },
         },
-    });
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideHeaders: true,
-            hideHelpers: true,
-            hideInfo: true,
-            hideImports: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideHeaders: true,
+      hideHelpers: true,
+      hideInfo: true,
+      hideImports: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @param params xxx
        * @param params_2 request params
@@ -502,72 +502,72 @@ test('1路径 + 1请求 + 2query + 1path', () => {
     `);
 });
 
-test('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
-    const printer = new Printer({
-        info: {
-            title: 'api',
-            version: 'v1',
-        },
-        openapi: '3.1.0',
-        paths: {
-            '/api/abc/{c}': {
-                get: {
-                    parameters: [
-                        {
-                            name: 'a',
-                            in: 'query',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                        {
-                            name: 'b',
-                            in: 'query',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                                description: 'xxx',
-                            },
-                        },
-                        {
-                            name: 'c',
-                            in: 'path',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                                description: 'xxx',
-                            },
-                        },
-                    ],
-                    requestBody: {
-                        content: {
-                            'application/json': {
-                                schema: {
-                                    type: 'string',
-                                    description: 'aaa',
-                                },
-                            },
-                        },
-                    },
-                    responses: {
-                        200: {
-                            description: 'success',
-                        },
-                    },
-                },
+it('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
+  const printer = new Printer({
+    info: {
+      title: 'api',
+      version: 'v1',
+    },
+    openapi: '3.1.0',
+    paths: {
+      '/api/abc/{c}': {
+        get: {
+          parameters: [
+            {
+              name: 'a',
+              in: 'query',
+              required: true,
+              schema: {
+                type: 'string',
+              },
             },
+            {
+              name: 'b',
+              in: 'query',
+              required: true,
+              schema: {
+                type: 'string',
+                description: 'xxx',
+              },
+            },
+            {
+              name: 'c',
+              in: 'path',
+              required: true,
+              schema: {
+                type: 'string',
+                description: 'xxx',
+              },
+            },
+          ],
+          requestBody: {
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'string',
+                  description: 'aaa',
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: 'success',
+            },
+          },
         },
-    });
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideHeaders: true,
-            hideHelpers: true,
-            hideInfo: true,
-            hideImports: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideHeaders: true,
+      hideHelpers: true,
+      hideInfo: true,
+      hideImports: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @param c xxx
        * @param params request params
@@ -592,79 +592,79 @@ test('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
     `);
 });
 
-test('1路径 + 1请求 + 2query + 1path + 1request object', () => {
-    const printer = new Printer({
-        info: {
-            title: 'api',
-            version: 'v1',
-        },
-        openapi: '3.1.0',
-        paths: {
-            '/api/abc/{c}': {
-                get: {
-                    parameters: [
-                        {
-                            name: 'a',
-                            in: 'query',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                        {
-                            name: 'b',
-                            in: 'query',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                                description: 'xxx',
-                            },
-                        },
-                        {
-                            name: 'c',
-                            in: 'path',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                                description: 'xxx',
-                            },
-                        },
-                    ],
-                    requestBody: {
-                        description: 'request--data--description',
-                        content: {
-                            'application/json': {
-                                schema: {
-                                    type: 'object',
-                                    properties: {
-                                        name: {
-                                            type: 'string',
-                                            required: true,
-                                            description: 'yyy',
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    responses: {
-                        200: {
-                            description: 'success',
-                        },
-                    },
-                },
+it('1路径 + 1请求 + 2query + 1path + 1request object', () => {
+  const printer = new Printer({
+    info: {
+      title: 'api',
+      version: 'v1',
+    },
+    openapi: '3.1.0',
+    paths: {
+      '/api/abc/{c}': {
+        get: {
+          parameters: [
+            {
+              name: 'a',
+              in: 'query',
+              required: true,
+              schema: {
+                type: 'string',
+              },
             },
+            {
+              name: 'b',
+              in: 'query',
+              required: true,
+              schema: {
+                type: 'string',
+                description: 'xxx',
+              },
+            },
+            {
+              name: 'c',
+              in: 'path',
+              required: true,
+              schema: {
+                type: 'string',
+                description: 'xxx',
+              },
+            },
+          ],
+          requestBody: {
+            description: 'request--data--description',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    name: {
+                      type: 'string',
+                      required: true,
+                      description: 'yyy',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: 'success',
+            },
+          },
         },
-    });
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideHeaders: true,
-            hideHelpers: true,
-            hideInfo: true,
-            hideImports: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideHeaders: true,
+      hideHelpers: true,
+      hideInfo: true,
+      hideImports: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @param c xxx
        * @param params request params
@@ -694,85 +694,85 @@ test('1路径 + 1请求 + 2query + 1path + 1request object', () => {
     `);
 });
 
-test('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive', () => {
-    const printer = new Printer({
-        info: {
-            title: 'api',
-            version: 'v1',
-        },
-        openapi: '3.1.0',
-        paths: {
-            '/api/abc/{c}': {
-                get: {
-                    parameters: [
-                        {
-                            name: 'a',
-                            in: 'query',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                        {
-                            name: 'b',
-                            in: 'query',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                                description: 'xxx',
-                            },
-                        },
-                        {
-                            name: 'c',
-                            in: 'path',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                                description: 'xxx',
-                            },
-                        },
-                    ],
-                    requestBody: {
-                        content: {
-                            'application/json': {
-                                schema: {
-                                    type: 'object',
-                                    properties: {
-                                        name: {
-                                            type: 'string',
-                                            required: true,
-                                            description: 'yyy',
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    responses: {
-                        200: {
-                            description: 'success',
-                            content: {
-                                'application/json': {
-                                    schema: {
-                                        type: 'string',
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
+it('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive', () => {
+  const printer = new Printer({
+    info: {
+      title: 'api',
+      version: 'v1',
+    },
+    openapi: '3.1.0',
+    paths: {
+      '/api/abc/{c}': {
+        get: {
+          parameters: [
+            {
+              name: 'a',
+              in: 'query',
+              required: true,
+              schema: {
+                type: 'string',
+              },
             },
+            {
+              name: 'b',
+              in: 'query',
+              required: true,
+              schema: {
+                type: 'string',
+                description: 'xxx',
+              },
+            },
+            {
+              name: 'c',
+              in: 'path',
+              required: true,
+              schema: {
+                type: 'string',
+                description: 'xxx',
+              },
+            },
+          ],
+          requestBody: {
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    name: {
+                      type: 'string',
+                      required: true,
+                      description: 'yyy',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: 'success',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'string',
+                  },
+                },
+              },
+            },
+          },
         },
-    });
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideHeaders: true,
-            hideHelpers: true,
-            hideInfo: true,
-            hideImports: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideHeaders: true,
+      hideHelpers: true,
+      hideInfo: true,
+      hideImports: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @param c xxx
        * @param params request params
@@ -803,102 +803,102 @@ test('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive
     `);
 });
 
-test('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', () => {
-    const printer = new Printer({
-        info: {
-            title: 'api',
-            version: 'v1',
-        },
-        openapi: '3.1.0',
-        paths: {
-            '/api/abc/{data}/def': {
-                get: {
-                    parameters: [
-                        {
-                            name: 'config',
-                            in: 'query',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                        {
-                            name: 'path',
-                            in: 'query',
-                            schema: {
-                                type: 'string',
-                                required: true,
-                                description: 'xxx',
-                            },
-                        },
-                        {
-                            name: 'data',
-                            in: 'path',
-                            schema: {
-                                type: 'string',
-                                required: true,
-                                description: 'xxx',
-                            },
-                        },
-                    ],
-                    requestBody: {
-                        content: {
-                            'application/json': {
-                                schema: {
-                                    type: 'object',
-                                    properties: {
-                                        name: {
-                                            type: 'string',
-                                            required: true,
-                                            description: 'yyy',
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    responses: {
-                        200: {
-                            description: 'success',
-                            content: {
-                                'application/json': {
-                                    schema: {
-                                        type: 'object',
-                                        description: 'resp---123',
-                                        properties: {
-                                            code: {
-                                                type: 'number',
-                                                description: 'aaaa',
-                                            },
-                                            data: {
-                                                type: 'object',
-                                                description: 'bbbb',
-                                                properties: {
-                                                    name: {
-                                                        type: 'string',
-                                                        description: 'cccc',
-                                                    },
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
+it('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', () => {
+  const printer = new Printer({
+    info: {
+      title: 'api',
+      version: 'v1',
+    },
+    openapi: '3.1.0',
+    paths: {
+      '/api/abc/{data}/def': {
+        get: {
+          parameters: [
+            {
+              name: 'config',
+              in: 'query',
+              required: true,
+              schema: {
+                type: 'string',
+              },
             },
+            {
+              name: 'path',
+              in: 'query',
+              schema: {
+                type: 'string',
+                required: true,
+                description: 'xxx',
+              },
+            },
+            {
+              name: 'data',
+              in: 'path',
+              schema: {
+                type: 'string',
+                required: true,
+                description: 'xxx',
+              },
+            },
+          ],
+          requestBody: {
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    name: {
+                      type: 'string',
+                      required: true,
+                      description: 'yyy',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: 'success',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    description: 'resp---123',
+                    properties: {
+                      code: {
+                        type: 'number',
+                        description: 'aaaa',
+                      },
+                      data: {
+                        type: 'object',
+                        description: 'bbbb',
+                        properties: {
+                          name: {
+                            type: 'string',
+                            description: 'cccc',
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
-    });
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideHeaders: true,
-            hideHelpers: true,
-            hideInfo: true,
-            hideImports: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideHeaders: true,
+      hideHelpers: true,
+      hideInfo: true,
+      hideImports: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @param data xxx
        * @param params request params

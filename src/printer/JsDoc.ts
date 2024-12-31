@@ -3,109 +3,117 @@ import { isArray, isBoolean, isNumber, isString } from '../utils/type-is';
 import { filterLine } from './helpers';
 
 function formatLine(key: string, val: unknown) {
-    val = key === 'externalDocs' ? JsDoc.printExternalDoc(val as OpenAPILatest.ExternalDocumentationObject) : val;
-    key = key === 'externalDocs' ? 'see' : key;
+  val = key === 'externalDocs' ? JsDoc.printExternalDoc(val as OpenAPILatest.ExternalDocumentationObject) : val;
+  key = key === 'externalDocs' ? 'see' : key;
 
-    if (isBoolean(val) && val) return `@${key}`;
-    if (isString(val) || isNumber(val)) return `@${key} ${val}`;
+  if (isBoolean(val) && val)
+    return `@${key}`;
+  if (isString(val) || isNumber(val))
+    return `@${key} ${val}`;
 }
 
 const supportTypes = ['string', 'number', 'boolean', 'object', 'array', 'null'];
 
 export class JsDoc {
-    lines: string[] = [];
+  lines: string[] = [];
 
-    constructor(private tags: OpenAPILatest.TagObject[] = []) {}
+  constructor(private tags: OpenAPILatest.TagObject[] = []) {}
 
-    addComments(comments: Record<string, unknown>) {
-        if ('tags' in comments) {
-            const tags = (comments.tags || []) as string[];
-            comments.tags = undefined;
-            tags.forEach((tag) => {
-                const info = this.tags.find((t) => t.name === tag);
-                if (!info) return;
+  addComments(comments: Record<string, unknown>) {
+    if ('tags' in comments) {
+      const tags = (comments.tags || []) as string[];
+      comments.tags = undefined;
+      tags.forEach((tag) => {
+        const info = this.tags.find(t => t.name === tag);
+        if (!info)
+          return;
 
-                comments[`see ${tag}`] = [info.description, JsDoc.printExternalDoc(info.externalDocs)].filter(Boolean).join(' ');
-            });
-        }
-
-        this.addLines(JsDoc.toLines(comments));
+        comments[`see ${tag}`] = [info.description, JsDoc.printExternalDoc(info.externalDocs)].filter(Boolean).join(' ');
+      });
     }
 
-    addLines(lines: string[]) {
-        this.lines.push(...lines);
-    }
+    this.addLines(JsDoc.toLines(comments));
+  }
 
-    print() {
-        if (this.lines.length === 0) return '';
+  addLines(lines: string[]) {
+    this.lines.push(...lines);
+  }
 
-        return [
-            //
-            '/**',
-            ...this.lines.map((line) => {
-                const slices = line.split('\n');
-                return slices.map((s) => ` * ${s}`).join('\n');
-            }),
-            ' */',
-        ].join('\n');
-    }
+  print() {
+    if (this.lines.length === 0)
+      return '';
 
-    static toLines(comments: Record<string, unknown>) {
-        return Object.entries(comments)
-            .map(([key, val]) => {
-                if (isArray(val)) return val.map((v) => formatLine(key, v));
-                return formatLine(key, val);
-            })
-            .flat()
-            .filter(filterLine) as string[];
-    }
+    return [
+      //
+      '/**',
+      ...this.lines.map((line) => {
+        const slices = line.split('\n');
+        return slices.map(s => ` * ${s}`).join('\n');
+      }),
+      ' */',
+    ].join('\n');
+  }
 
-    static fromRef(ref: OpenAPILatest.ReferenceObject) {
-        const { description, summary } = ref;
-        return { description, summary };
-    }
+  static toLines(comments: Record<string, unknown>) {
+    return Object.entries(comments)
+      .map(([key, val]) => {
+        if (isArray(val))
+          return val.map(v => formatLine(key, v));
+        return formatLine(key, val);
+      })
+      .flat()
+      .filter(filterLine) as string[];
+  }
 
-    static fromSchema(schema: OpenAPILatest.SchemaObject) {
-        const { deprecated, description, default: defaultValue, format, example, title, externalDocs, type } = schema;
-        const types = isArray(type) ? type : isString(type) ? [type] : undefined;
+  static fromRef(ref: OpenAPILatest.ReferenceObject) {
+    const { description, summary } = ref;
+    return { description, summary };
+  }
 
-        return {
-            summary: title,
-            description,
-            deprecated,
-            default: defaultValue,
-            format: format || types?.filter((type) => !supportTypes.includes(type)).join(' | ') || false,
-            example,
-            externalDocs,
-        };
-    }
+  static fromSchema(schema: OpenAPILatest.SchemaObject) {
+    const { deprecated, description, default: defaultValue, format, example, title, externalDocs, type } = schema;
+    const types = isArray(type) ? type : isString(type) ? [type] : undefined;
 
-    static fromParameter(parameter: OpenAPILatest.ParameterObject) {
-        const { deprecated, description, example, examples } = parameter;
-        return {
-            deprecated,
-            description,
-            example,
-        };
-    }
+    return {
+      summary: title,
+      description,
+      deprecated,
+      default: defaultValue,
+      format: format || types?.filter(type => !supportTypes.includes(type)).join(' | ') || false,
+      example,
+      externalDocs,
+    };
+  }
 
-    static fromOperation(operation: OpenAPILatest.OperationObject) {
-        const { deprecated, description, summary, tags } = operation;
-        return {
-            deprecated,
-            description,
-            summary,
-            tags,
-        };
-    }
+  static fromParameter(parameter: OpenAPILatest.ParameterObject) {
+    const { deprecated, description, example, examples } = parameter;
+    return {
+      deprecated,
+      description,
+      example,
+    };
+  }
 
-    static printExternalDoc(externalDoc?: OpenAPILatest.ExternalDocumentationObject) {
-        const { url, description } = externalDoc || {};
+  static fromOperation(operation: OpenAPILatest.OperationObject) {
+    const { deprecated, description, summary, tags } = operation;
+    return {
+      deprecated,
+      description,
+      summary,
+      tags,
+    };
+  }
 
-        // {@link https://github.com GitHub}
-        if (url && description) return `{@link ${url} ${description}}`;
-        if (url) return `{@link ${url}}`;
-        if (description) return description;
-        return false;
-    }
+  static printExternalDoc(externalDoc?: OpenAPILatest.ExternalDocumentationObject) {
+    const { url, description } = externalDoc || {};
+
+    // {@link https://github.com GitHub}
+    if (url && description)
+      return `{@link ${url} ${description}}`;
+    if (url)
+      return `{@link ${url}}`;
+    if (description)
+      return description;
+    return false;
+  }
 }

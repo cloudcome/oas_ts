@@ -27,7 +27,7 @@ jobs:
     if: needs.release.outputs.release_created
     runs-on: ubuntu-latest
     permissions:
-        id-token: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-nvm

@@ -1,46 +1,46 @@
 import { Printer } from '../../src/printer';
 
-test('top', () => {
-    const printer = new Printer({
-        openapi: '3.1.0',
-        info: {
-            title: 'test',
-            version: '1.0.0',
-        },
-        paths: {
-            '/': {
-                get: {
-                    deprecated: true,
-                    description: 'aaa\nbbb\nccc',
-                    summary: 'test1',
-                    operationId: 'test2',
-                    requestBody: {
-                        content: {
-                            '*': {
-                                schema: {
-                                    type: 'string',
-                                    description: 'test4',
-                                    deprecated: true,
-                                    default: 'test5',
-                                    example: 'test6',
-                                },
-                            },
-                        },
-                    },
+it('top', () => {
+  const printer = new Printer({
+    openapi: '3.1.0',
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
+    paths: {
+      '/': {
+        get: {
+          deprecated: true,
+          description: 'aaa\nbbb\nccc',
+          summary: 'test1',
+          operationId: 'test2',
+          requestBody: {
+            content: {
+              '*': {
+                schema: {
+                  type: 'string',
+                  description: 'test4',
+                  deprecated: true,
+                  default: 'test5',
+                  example: 'test6',
                 },
+              },
             },
+          },
         },
-    });
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideImports: true,
-            hideHeaders: true,
-            hideFooters: true,
-            hideInfo: true,
-            hideHelpers: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideImports: true,
+      hideHeaders: true,
+      hideFooters: true,
+      hideInfo: true,
+      hideHelpers: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @deprecated
        * @description aaa
@@ -61,58 +61,58 @@ test('top', () => {
     `);
 });
 
-test('ignore miss path parameter', () => {
-    const printer = new Printer({
-        openapi: '3.1.0',
-        info: {
-            title: 'test',
-            version: '1.0.0',
-        },
-        paths: {
-            '/': {
-                get: {
-                    parameters: [
-                        {
-                            in: 'path',
-                            name: 'id',
-                            deprecated: true,
-                            description: 'request param',
-                            schema: {
-                                type: 'string',
-                                description: 'test7',
-                                deprecated: true,
-                                default: 'test8',
-                                example: 'test9',
-                            },
-                        },
-                    ],
-                    requestBody: {
-                        content: {
-                            '*': {
-                                schema: {
-                                    type: 'string',
-                                    description: 'test4',
-                                    deprecated: true,
-                                    default: 'test5',
-                                    example: 'test6',
-                                },
-                            },
-                        },
-                    },
-                },
+it('ignore miss path parameter', () => {
+  const printer = new Printer({
+    openapi: '3.1.0',
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
+    paths: {
+      '/': {
+        get: {
+          parameters: [
+            {
+              in: 'path',
+              name: 'id',
+              deprecated: true,
+              description: 'request param',
+              schema: {
+                type: 'string',
+                description: 'test7',
+                deprecated: true,
+                default: 'test8',
+                example: 'test9',
+              },
             },
+          ],
+          requestBody: {
+            content: {
+              '*': {
+                schema: {
+                  type: 'string',
+                  description: 'test4',
+                  deprecated: true,
+                  default: 'test5',
+                  example: 'test6',
+                },
+              },
+            },
+          },
         },
-    });
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideImports: true,
-            hideHeaders: true,
-            hideFooters: true,
-            hideInfo: true,
-            hideHelpers: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideImports: true,
+      hideHeaders: true,
+      hideFooters: true,
+      hideInfo: true,
+      hideHelpers: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @param data test4
        * @param [config] request config
@@ -128,73 +128,73 @@ test('ignore miss path parameter', () => {
     `);
 });
 
-test('parameter name 不是合法 JS 变量 + 单值', () => {
-    const printer = new Printer({
-        openapi: '3.1.0',
-        info: {
-            title: 'test',
-            version: '1.0.0',
-        },
-        paths: {
-            '/pets/{pet-id}': {
-                get: {
-                    operationId: 'getPet',
-                    parameters: [
-                        {
-                            in: 'path',
-                            name: 'pet-id',
-                            deprecated: true,
-                            description: 'request param',
-                            schema: {
-                                type: 'string',
-                                description: 'test7',
-                                deprecated: true,
-                                default: 'test8',
-                                example: 'test9',
-                            },
-                        },
-                        {
-                            in: 'query',
-                            name: 'category-id',
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                        {
-                            in: 'header',
-                            name: 'x-auth-key',
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                    ],
-                    requestBody: {
-                        content: {
-                            '*': {
-                                schema: {
-                                    type: 'string',
-                                    description: 'test4',
-                                    deprecated: true,
-                                    default: 'test5',
-                                    example: 'test6',
-                                },
-                            },
-                        },
-                    },
-                },
+it('parameter name 不是合法 JS 变量 + 单值', () => {
+  const printer = new Printer({
+    openapi: '3.1.0',
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
+    paths: {
+      '/pets/{pet-id}': {
+        get: {
+          operationId: 'getPet',
+          parameters: [
+            {
+              in: 'path',
+              name: 'pet-id',
+              deprecated: true,
+              description: 'request param',
+              schema: {
+                type: 'string',
+                description: 'test7',
+                deprecated: true,
+                default: 'test8',
+                example: 'test9',
+              },
             },
+            {
+              in: 'query',
+              name: 'category-id',
+              schema: {
+                type: 'string',
+              },
+            },
+            {
+              in: 'header',
+              name: 'x-auth-key',
+              schema: {
+                type: 'string',
+              },
+            },
+          ],
+          requestBody: {
+            content: {
+              '*': {
+                schema: {
+                  type: 'string',
+                  description: 'test4',
+                  deprecated: true,
+                  default: 'test5',
+                  example: 'test6',
+                },
+              },
+            },
+          },
         },
-    });
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideImports: true,
-            hideHeaders: true,
-            hideFooters: true,
-            hideInfo: true,
-            hideHelpers: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideImports: true,
+      hideHeaders: true,
+      hideFooters: true,
+      hideInfo: true,
+      hideHelpers: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @param petId request param
        * @param data test4
@@ -215,84 +215,84 @@ test('parameter name 不是合法 JS 变量 + 单值', () => {
     `);
 });
 
-test('parameter name 不是合法 JS 变量 + 多值', () => {
-    const printer = new Printer({
-        openapi: '3.1.0',
-        info: {
-            title: 'test',
-            version: '1.0.0',
-        },
-        paths: {
-            '/zoo/{zoo-id}/pets/{pet-id}': {
-                get: {
-                    operationId: 'getPet',
-                    parameters: [
-                        {
-                            in: 'path',
-                            name: 'pet-id',
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                        {
-                            in: 'path',
-                            name: 'zoo-id',
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                        {
-                            in: 'query',
-                            name: 'category-id',
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                        {
-                            in: 'query',
-                            name: 'kind-id',
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                        {
-                            in: 'header',
-                            name: 'x-auth-key',
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                        {
-                            in: 'header',
-                            name: 'x-auth-ver',
-                            schema: {
-                                type: 'string',
-                            },
-                        },
-                    ],
-                    requestBody: {
-                        content: {
-                            '*': {
-                                schema: {
-                                    type: 'string',
-                                },
-                            },
-                        },
-                    },
-                },
+it('parameter name 不是合法 JS 变量 + 多值', () => {
+  const printer = new Printer({
+    openapi: '3.1.0',
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
+    paths: {
+      '/zoo/{zoo-id}/pets/{pet-id}': {
+        get: {
+          operationId: 'getPet',
+          parameters: [
+            {
+              in: 'path',
+              name: 'pet-id',
+              schema: {
+                type: 'string',
+              },
             },
+            {
+              in: 'path',
+              name: 'zoo-id',
+              schema: {
+                type: 'string',
+              },
+            },
+            {
+              in: 'query',
+              name: 'category-id',
+              schema: {
+                type: 'string',
+              },
+            },
+            {
+              in: 'query',
+              name: 'kind-id',
+              schema: {
+                type: 'string',
+              },
+            },
+            {
+              in: 'header',
+              name: 'x-auth-key',
+              schema: {
+                type: 'string',
+              },
+            },
+            {
+              in: 'header',
+              name: 'x-auth-ver',
+              schema: {
+                type: 'string',
+              },
+            },
+          ],
+          requestBody: {
+            content: {
+              '*': {
+                schema: {
+                  type: 'string',
+                },
+              },
+            },
+          },
         },
-    });
+      },
+    },
+  });
 
-    expect(
-        printer.print({
-            hideImports: true,
-            hideHeaders: true,
-            hideFooters: true,
-            hideInfo: true,
-            hideHelpers: true,
-        }),
-    ).toMatchInlineSnapshot(`
+  expect(
+    printer.print({
+      hideImports: true,
+      hideHeaders: true,
+      hideFooters: true,
+      hideInfo: true,
+      hideHelpers: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "/**
        * @param path request params
        * @param data request data

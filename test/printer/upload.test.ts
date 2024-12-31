@@ -1,45 +1,45 @@
 import { Printer } from '../../src/printer';
 
-test('upload root', () => {
-    const printer = new Printer({
-        openapi: '3.1.0',
-        info: {
-            title: 'test',
-            version: '1.0.0',
-        },
-        paths: {
-            '/upload': {
-                post: {
-                    tags: ['upload'],
-                    summary: 'upload',
-                    description: 'upload',
-                    operationId: 'upload',
-                    requestBody: {
-                        content: {
-                            'multipart/form-data': {
-                                schema: {
-                                    type: 'string',
-                                    format: 'binary',
-                                    description: 'A file',
-                                },
-                            },
-                        },
-                    },
+it('upload root', () => {
+  const printer = new Printer({
+    openapi: '3.1.0',
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
+    paths: {
+      '/upload': {
+        post: {
+          tags: ['upload'],
+          summary: 'upload',
+          description: 'upload',
+          operationId: 'upload',
+          requestBody: {
+            content: {
+              'multipart/form-data': {
+                schema: {
+                  type: 'string',
+                  format: 'binary',
+                  description: 'A file',
                 },
+              },
             },
+          },
         },
-    });
+      },
+    },
+  });
 
-    const output = printer.print({
-        hideComponents: true,
-        hideInfo: true,
-        hideFooters: true,
-        hideHeaders: true,
-        hideImports: true,
-        hideHelpers: true,
-    });
+  const output = printer.print({
+    hideComponents: true,
+    hideInfo: true,
+    hideFooters: true,
+    hideHeaders: true,
+    hideImports: true,
+    hideHelpers: true,
+  });
 
-    expect(output).toMatchInlineSnapshot(`
+  expect(output).toMatchInlineSnapshot(`
       "/**
        * @description upload
        * @summary upload
@@ -57,68 +57,68 @@ test('upload root', () => {
     `);
 });
 
-test('upload single', () => {
-    const printer = new Printer({
-        openapi: '3.1.0',
-        info: {
-            title: 'test',
-            version: '1.0.0',
-        },
-        paths: {
-            '/upload': {
-                post: {
-                    tags: ['upload'],
-                    summary: 'upload',
-                    description: 'upload',
-                    operationId: 'upload',
-                    parameters: [
-                        {
-                            name: 'category',
-                            in: 'query',
-                            description: 'request param',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                                enum: ['a', 'b'],
-                            },
-                        },
-                    ],
-                    requestBody: {
-                        content: {
-                            'multipart/form-data': {
-                                schema: {
-                                    type: 'object',
-                                    properties: {
-                                        file: {
-                                            type: 'string',
-                                            format: 'binary',
-                                            description: 'A file',
-                                            required: true,
-                                        },
-                                        name: {
-                                            type: 'string',
-                                            description: 'A name',
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
+it('upload single', () => {
+  const printer = new Printer({
+    openapi: '3.1.0',
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
+    paths: {
+      '/upload': {
+        post: {
+          tags: ['upload'],
+          summary: 'upload',
+          description: 'upload',
+          operationId: 'upload',
+          parameters: [
+            {
+              name: 'category',
+              in: 'query',
+              description: 'request param',
+              required: true,
+              schema: {
+                type: 'string',
+                enum: ['a', 'b'],
+              },
             },
+          ],
+          requestBody: {
+            content: {
+              'multipart/form-data': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    file: {
+                      type: 'string',
+                      format: 'binary',
+                      description: 'A file',
+                      required: true,
+                    },
+                    name: {
+                      type: 'string',
+                      description: 'A name',
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
-    });
+      },
+    },
+  });
 
-    const output = printer.print({
-        hideComponents: true,
-        hideInfo: true,
-        hideFooters: true,
-        hideHeaders: true,
-        hideImports: true,
-        hideHelpers: true,
-    });
+  const output = printer.print({
+    hideComponents: true,
+    hideInfo: true,
+    hideFooters: true,
+    hideHeaders: true,
+    hideImports: true,
+    hideHelpers: true,
+  });
 
-    expect(output).toMatchInlineSnapshot(`
+  expect(output).toMatchInlineSnapshot(`
       "/**
        * @description upload
        * @summary upload
@@ -148,71 +148,71 @@ test('upload single', () => {
     `);
 });
 
-test('upload multiple', () => {
-    const printer = new Printer({
-        openapi: '3.1.0',
-        info: {
-            title: 'test',
-            version: '1.0.0',
-        },
-        paths: {
-            '/upload': {
-                post: {
-                    tags: ['upload'],
-                    summary: 'upload',
-                    description: 'upload',
-                    operationId: 'upload',
-                    parameters: [
-                        {
-                            name: 'category',
-                            in: 'query',
-                            description: 'request param',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                                enum: ['a', 'b'],
-                            },
-                        },
-                    ],
-                    requestBody: {
-                        content: {
-                            'multipart/form-data': {
-                                schema: {
-                                    type: 'object',
-                                    properties: {
-                                        file: {
-                                            type: 'array',
-                                            items: {
-                                                type: 'string',
-                                                format: 'binary',
-                                                description: 'A file',
-                                                required: true,
-                                            },
-                                        },
-                                        name: {
-                                            type: 'string',
-                                            description: 'A name',
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
+it('upload multiple', () => {
+  const printer = new Printer({
+    openapi: '3.1.0',
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
+    paths: {
+      '/upload': {
+        post: {
+          tags: ['upload'],
+          summary: 'upload',
+          description: 'upload',
+          operationId: 'upload',
+          parameters: [
+            {
+              name: 'category',
+              in: 'query',
+              description: 'request param',
+              required: true,
+              schema: {
+                type: 'string',
+                enum: ['a', 'b'],
+              },
             },
+          ],
+          requestBody: {
+            content: {
+              'multipart/form-data': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    file: {
+                      type: 'array',
+                      items: {
+                        type: 'string',
+                        format: 'binary',
+                        description: 'A file',
+                        required: true,
+                      },
+                    },
+                    name: {
+                      type: 'string',
+                      description: 'A name',
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
-    });
+      },
+    },
+  });
 
-    const output = printer.print({
-        hideComponents: true,
-        hideInfo: true,
-        hideFooters: true,
-        hideHeaders: true,
-        hideImports: true,
-        hideHelpers: true,
-    });
+  const output = printer.print({
+    hideComponents: true,
+    hideInfo: true,
+    hideFooters: true,
+    hideHeaders: true,
+    hideImports: true,
+    hideHelpers: true,
+  });
 
-    expect(output).toMatchInlineSnapshot(`
+  expect(output).toMatchInlineSnapshot(`
       "/**
        * @description upload
        * @summary upload

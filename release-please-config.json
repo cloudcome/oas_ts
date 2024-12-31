@@ -1,10 +1,10 @@
 {
-    "$schema": "https://raw.githubusercontent.com/googleapis/release-please/ace2bd5dc778f83c33ad5dee6807db5d0afdba36/schemas/config.json",
-    "release-type": "node",
-    "bootstrap-sha": "c0337c2a8aed848aac7f623209da5335843d748c",
-    "bump-minor-pre-major": true,
-    "include-component-in-tag": false,
-    "packages": {
-        ".": {}
-    }
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/ace2bd5dc778f83c33ad5dee6807db5d0afdba36/schemas/config.json",
+  "release-type": "node",
+  "bootstrap-sha": "c0337c2a8aed848aac7f623209da5335843d748c",
+  "bump-minor-pre-major": true,
+  "include-component-in-tag": false,
+  "packages": {
+    ".": {}
+  }
 }

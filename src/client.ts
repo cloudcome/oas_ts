@@ -5,22 +5,20 @@ export type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | O
 export type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
 export type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyObject = Record<string, any>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyArray = any[];
 
 export function resolveURL(baseURL: string, url: string, vars: Record<string, string | number> = {}) {
-    // @ref https://github.com/FrontEndDev-org/openapi-axios/security/code-scanning/1
-    return (
-        baseURL.replace(/(?<!\/)\/+$/, '') +
-        '/' +
-        url
-            .replace(/\{(.*?)}/g, ($0, $1) => {
-                const val = vars[$1];
-                return typeof val === 'number' || typeof val === 'string' ? String(val) : '';
-            })
-            .replace(/^\/+/, '')
-    );
+  // @ref https://github.com/FrontEndDev-org/openapi-axios/security/code-scanning/1
+  return (
+    `${baseURL.replace(/(?<!\/)\/+$/, '')
+    }/${
+      url
+        .replace(/\{(.*?)\}/g, ($0, $1) => {
+          const val = vars[$1];
+          return typeof val === 'number' || typeof val === 'string' ? String(val) : '';
+        })
+        .replace(/^\/+/, '')}`
+  );
 }

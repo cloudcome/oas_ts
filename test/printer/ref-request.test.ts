@@ -1,64 +1,64 @@
 import { Printer } from '../../src/printer';
 
-test('ref request', () => {
-    const printer = new Printer({
-        openapi: '3.1.0',
-        info: {
-            title: 'test',
-            version: '1.0.0',
+it('ref request', () => {
+  const printer = new Printer({
+    openapi: '3.1.0',
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
+    paths: {
+      '/test': {
+        post: {
+          requestBody: {
+            $ref: '#/components/requestBodies/test1',
+          },
         },
-        paths: {
-            '/test': {
-                post: {
-                    requestBody: {
-                        $ref: '#/components/requestBodies/test1',
-                    },
-                },
+      },
+    },
+    components: {
+      schemas: {
+        User: {
+          properties: {
+            username: {
+              type: 'string',
             },
+            password: {
+              type: 'string',
+            },
+          },
         },
-        components: {
-            schemas: {
-                User: {
-                    properties: {
-                        username: {
-                            type: 'string',
-                        },
-                        password: {
-                            type: 'string',
-                        },
-                    },
-                },
-            },
-            requestBodies: {
-                test1: {
-                    $ref: '#/components/requestBodies/test2',
-                },
-                test2: {
-                    $ref: '#/components/requestBodies/test3',
-                },
-                test3: {
-                    content: {
-                        'application/json': {
-                            schema: {
-                                description: '用户列表',
-                                items: {
-                                    $ref: '#/components/schemas/User',
-                                },
-                            },
-                        },
-                    },
-                },
-            },
+      },
+      requestBodies: {
+        test1: {
+          $ref: '#/components/requestBodies/test2',
         },
-    });
-    expect(
-        printer.print({
-            hideHeaders: true,
-            hideHelpers: true,
-            hideInfo: true,
-            hideImports: true,
-        }),
-    ).toMatchInlineSnapshot(`
+        test2: {
+          $ref: '#/components/requestBodies/test3',
+        },
+        test3: {
+          content: {
+            'application/json': {
+              schema: {
+                description: '用户列表',
+                items: {
+                  $ref: '#/components/schemas/User',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  expect(
+    printer.print({
+      hideHeaders: true,
+      hideHelpers: true,
+      hideInfo: true,
+      hideImports: true,
+    }),
+  ).toMatchInlineSnapshot(`
       "export type User = {
       "username"?:string;
       "password"?:string;

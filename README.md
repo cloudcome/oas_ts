@@ -38,9 +38,9 @@ const { defineConfig } = require('openapi-axios');
  * @ref https://github.com/FrontEndDev-org/openapi-axios
  */
 module.exports = defineConfig({
-    modules: {
-        'petStore3': 'https://petstore31.swagger.io/api/v31/openapi.json'
-    },
+  modules: {
+    petStore3: 'https://petstore31.swagger.io/api/v31/openapi.json'
+  },
 });
 ```
 
@@ -67,42 +67,42 @@ Swagger at [http://swagger.io](http://swagger.io).
  * @see {@link http://swagger.io Find out more about Swagger}
  */
 
-import axios from "axios";
-import type {AxiosRequestConfig, AxiosPromise} from "axios";
+import type { AxiosPromise, AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 
 // ... 省略 ...
 
 /**
  * @description Pet
  */
-export type Pet = {
-    /**
-     * @format int64
-     * @example 10
-     */
-    id?: number;
-    /**
-     * @description Pet Category
-     */
-    category?: Category;
-    /**
-     * @example doggie
-     */
-    name: string;
-    photoUrls: string;
-    tags?: Tag;
-    /**
-     * @description pet status in the store
-     */
-    status?: 'available' | 'pending' | 'sold';
-    /**
-     * @format int32
-     * @example 7
-     */
-    availableInstances?: number;
-    petDetailsId?: unknown;
-    petDetails?: unknown;
-};
+export interface Pet {
+  /**
+   * @format int64
+   * @example 10
+   */
+  id?: number;
+  /**
+   * @description Pet Category
+   */
+  category?: Category;
+  /**
+   * @example doggie
+   */
+  name: string;
+  photoUrls: string;
+  tags?: Tag;
+  /**
+   * @description pet status in the store
+   */
+  status?: 'available' | 'pending' | 'sold';
+  /**
+   * @format int32
+   * @example 7
+   */
+  availableInstances?: number;
+  petDetailsId?: unknown;
+  petDetails?: unknown;
+}
 
 // ... 省略 ...
 
@@ -115,12 +115,12 @@ export type Pet = {
  * @returns Successful operation
  */
 export async function updatePet(data: Pet, config?: AxiosRequestConfig): AxiosPromise<Pet> {
-    return axios({
-        method: 'put',
-        url: `/pet`,
-        data: data,
-        ...config,
-    });
+  return axios({
+    method: 'put',
+    url: `/pet`,
+    data,
+    ...config,
+  });
 }
 
 // ... 省略 ...
@@ -141,5 +141,3 @@ const { data: pet } = await updatePet({
 // 类型安全
 console.log(pet);
 ```
-
-

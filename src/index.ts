@@ -1,10 +1,10 @@
 // export { Generator } from './generators/Generator';
 
-export { defineConfig, resolveConfigFile, resolveConfig, generate } from './command';
 export { createCLI } from './cli';
+export { defineConfig, generate, resolveConfig, resolveConfigFile } from './command';
 export * from './const';
 
+export * from './generator/types';
+export * from './printer/types';
 // types
 export * from './types/openapi';
-export * from './printer/types';
-export * from './generator/types';
