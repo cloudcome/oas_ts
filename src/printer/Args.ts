@@ -58,7 +58,7 @@ export class Args {
                     return `url: \`${resolvedURL}\``;
                 }
 
-                const value = props.length === 1 && !arg.isSingle ? `{${originName}: ${uniqueName}}` : uniqueName;
+                const value = props.length === 1 && !arg.isSingle ? `{${JSON.stringify(originName)}: ${uniqueName}}` : uniqueName;
                 return `${arg.kind}: ${value}`;
             })
             .join(',\n');
