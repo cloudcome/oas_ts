@@ -42,7 +42,7 @@
     "build": "NODE_ENV=production vite build",
     "lint:js": "eslint",
     "lint:js:fix": "eslint --fix",
-    "lint:type": " tsc --project tsconfig.json",
+    "lint:type": " tsc --noEmit",
     "lint": "npm run lint:js && npm run lint:type",
     "lint:fix": "npm run lint:js:fix && npm run lint:type",
     "test": "vitest run",
