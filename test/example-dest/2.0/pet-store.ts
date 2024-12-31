@@ -159,7 +159,7 @@ export async function findPetsByStatus(status:Array<
     return axios({
         method: "get",
         url: `/pet/findByStatus`,
-params: {status: status},
+params: {"status": status},
 ...config
     });
 }
@@ -177,7 +177,7 @@ export async function findPetsByTags(tags:Array<string>,config?:AxiosRequestConf
     return axios({
         method: "get",
         url: `/pet/findByTags`,
-params: {tags: tags},
+params: {"tags": tags},
 ...config
     });
 }
@@ -236,7 +236,7 @@ export async function deletePet(petId:number,apiKey?:string,config?:AxiosRequest
     return axios({
         method: "delete",
         url: `/pet/${petId}`,
-headers: {api_key: apiKey},
+headers: {"api_key": apiKey},
 ...config
     });
 }

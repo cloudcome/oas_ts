@@ -224,7 +224,7 @@ export async function findPetsByStatus(status?:("available"|"pending"|"sold"),co
     return axios({
         method: "get",
         url: `/pet/findByStatus`,
-params: {status: status},
+params: {"status": status},
 ...config
     });
 }
@@ -241,7 +241,7 @@ export async function findPetsByTags(tags?:Array<string>,config?:AxiosRequestCon
     return axios({
         method: "get",
         url: `/pet/findByTags`,
-params: {tags: tags},
+params: {"tags": tags},
 ...config
     });
 }
@@ -300,7 +300,7 @@ export async function deletePet(petId:number,apiKey?:string,config?:AxiosRequest
     return axios({
         method: "delete",
         url: `/pet/${petId}`,
-headers: {api_key: apiKey},
+headers: {"api_key": apiKey},
 ...config
     });
 }
@@ -320,7 +320,7 @@ export async function uploadFile(petId:number,data:Blob,additionalMetadata?:stri
         method: "post",
         url: `/pet/${petId}/uploadImage`,
 data: data,
-params: {additionalMetadata: additionalMetadata},
+params: {"additionalMetadata": additionalMetadata},
 ...config
     });
 }

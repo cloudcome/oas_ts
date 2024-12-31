@@ -140,7 +140,7 @@ test('upload single', () => {
           return axios({
               method: "post",
               url: \`/upload\`,
-      params: {category: category},
+      params: {"category": category},
       data: data,
       ...config
           });
@@ -236,7 +236,7 @@ test('upload multiple', () => {
           return axios({
               method: "post",
               url: \`/upload\`,
-      params: {category: category},
+      params: {"category": category},
       data: data,
       ...config
           });

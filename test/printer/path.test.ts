@@ -170,7 +170,7 @@ test('1路径 + 1请求 + 1query', () => {
           return axios({
               method: "get",
               url: \`/api/abc\`,
-      params: {var: var_2},
+      params: {"var": var_2},
       ...config
           });
       }"
@@ -222,7 +222,7 @@ test('1路径 + 1请求 + 1query with duplicate', () => {
           return axios({
               method: "get",
               url: \`/api/abc\`,
-      params: {config: config},
+      params: {"config": config},
       ...config_2
           });
       }"

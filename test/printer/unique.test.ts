@@ -165,7 +165,7 @@ test('unique types', () => {
           return axios({
               method: "get",
               url: \`/test/\${axios_2}\`,
-      params: {UnknownObject: UnknownObject},
+      params: {"UnknownObject": UnknownObject},
       ...config
           });
       }"
