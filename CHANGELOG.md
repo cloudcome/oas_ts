@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.25.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.25.0...v0.25.1) (2024-12-31)
+
+
+### Bug Fixes
+
+* 修正请求参数名称为非 JS 变量时字符化 ([60125a1](https://github.com/FrontEndDev-org/openapi-axios/commit/60125a129d6e012b6641831c0814773d06db4752))
+
 ## [0.25.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.24.0...v0.25.0) (2024-08-05)
 
 
