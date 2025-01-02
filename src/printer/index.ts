@@ -480,21 +480,6 @@ export async function ${funcName}(${requestArgs.toArgs()}): AxiosPromise<${respT
 
   static helpersCode = `
 // helpers --- start
-type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
-type UnknownObject = Record<string, unknown>;
-type DeepGet<O, K> = K extends [infer P, ...infer R]
-    ? O extends Record<string, unknown> | Array<unknown>
-        ? P extends keyof O
-            ? R['length'] extends 0
-                ? O[P]
-                : DeepGet<NonNullable<O[P]>, R>
-            : never
-        : never
-    : never;
-// helpers --- end
-    `;
-}
-
 type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
 type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
 type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
@@ -508,6 +493,25 @@ type DeepGet<O, K> = K extends [infer P, ...infer R]
       : never
     : never
   : never;
+// helpers --- end
+    `;
+}
+
+// helpers --- start
+type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
+type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
+type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
+type UnknownObject = Record<string, unknown>;
+type DeepGet<O, K> = K extends [infer P, ...infer R]
+  ? O extends Record<string, any> | Array<any>
+    ? P extends keyof O
+      ? R['length'] extends 0
+        ? O[P]
+        : DeepGet<NonNullable<O[P]>, R>
+      : never
+    : never
+  : never;
+// helpers --- end
 
 interface T0 {
   aa?: string;
