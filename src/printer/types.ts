@@ -45,21 +45,15 @@ export type OperationIdNormalize = (context: OperationContext) => string;
 
 export interface PrinterOptions {
   /**
-   * 导入名称
+   * 导入名称，为空字符串时默认导入
    * @default axios
-   */
-  axiosImportName?: string;
-
-  /**
-   * axios 是否具名导入
-   * @default false
    * @example
    * // 具名导入
    * import { axios } from 'axios';
    * // 默认导入（非具名导入）
    * import axios from 'axios';
    */
-  axiosNamedImport?: boolean;
+  axiosImportName?: string;
 
   /**
    * 指定导入文件

@@ -51,7 +51,6 @@ export class Printer {
       throw new Error(`当前仅支持 openapi ${OpenAPIVersion.V3_1}，当前版本为 ${openapi}`);
 
     this.registerComponents();
-    this.named.internalVarName(options?.axiosImportName || AXIOS_IMPORT_NAME);
   }
 
   schemas: Record<string /** refId */, string /** refType */> = {};
@@ -188,7 +187,6 @@ export class Printer {
   private _printImports() {
     const {
       axiosImportName = AXIOS_IMPORT_NAME,
-      axiosNamedImport,
       axiosImportFile = AXIOS_IMPORT_FILE,
       axiosRequestConfigTypeName = AXIOS_QUEST_CONFIG_TYPE_NAME,
       axiosResponseTypeName = AXIOS_PROMISE_TYPE_NAME,
@@ -197,11 +195,11 @@ export class Printer {
     const importPath = toRelative(axiosImportFile, file);
 
     return [
-      axiosNamedImport
-        // 具名导入
-        ? `import {${axiosImportName}} from "${importPath}";`
+      axiosImportName === ''
         // 默认导入
-        : `import ${axiosImportName} from "${importPath}";`,
+        ? `import ${AXIOS_IMPORT_NAME} from "${importPath}";`
+        // 具名导入
+        : `import {${axiosImportName} as ${AXIOS_IMPORT_NAME}} from "${importPath}";`,
       `import type {${axiosRequestConfigTypeName}, ${axiosResponseTypeName}} from "${importPath}";`,
       '',
     ].join('\n');
@@ -361,7 +359,7 @@ export class Printer {
 
     return `${jsDoc.print()}
 export async function ${funcName}(${requestArgs.toArgs()}): AxiosPromise<${respType}> {
-    return axios({
+    return ${AXIOS_IMPORT_NAME}({
         method: ${JSON.stringify(method)},
         ${requestArgs.toValues()}
     });
