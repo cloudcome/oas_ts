@@ -5,23 +5,26 @@
  * @description This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.
  */
 
-import axios from "axios";
-import type {AxiosRequestConfig, AxiosPromise} from "axios";
+import {axios as axios} from "axios";
+import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
+import {type AxiosPromise as AxiosPromise} from "axios";
 
 
 
 // helpers --- start
+type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
+type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
 type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
 type UnknownObject = Record<string, unknown>;
 type DeepGet<O, K> = K extends [infer P, ...infer R]
-    ? O extends Record<string, unknown> | Array<unknown>
-        ? P extends keyof O
-            ? R['length'] extends 0
-                ? O[P]
-                : DeepGet<NonNullable<O[P]>, R>
-            : never
-        : never
-    : never;
+  ? O extends Record<string, any> | Array<any>
+    ? P extends keyof O
+      ? R['length'] extends 0
+        ? O[P]
+        : DeepGet<NonNullable<O[P]>, R>
+      : never
+    : never
+  : never;
 // helpers --- end
     
 
