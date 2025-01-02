@@ -3,7 +3,7 @@ import path from 'node:path';
 import process from 'node:process';
 import { Command } from 'commander';
 import { generate, resolveConfigFile } from './command';
-import { pkgName, pkgVersion } from './const';
+import { configFileBaseName, pkgName, pkgVersion } from './const';
 
 export function createCLI() {
   const program = new Command();
@@ -30,7 +30,7 @@ export function createCLI() {
         return;
       }
 
-      const configFilename = 'openapi.config.cjs';
+      const configFilename = `${configFileBaseName}.cjs`;
       const configFilePath = path.join(process.cwd(), configFilename);
 
       fs.writeFileSync(
@@ -43,9 +43,9 @@ const { defineConfig } = require('openapi-axios');
  * @ref https://github.com/FrontEndDev-org/openapi-axios
  */
 module.exports = defineConfig({
-    modules: {
-        'petStore3': 'https://petstore31.swagger.io/api/v31/openapi.json'
-    },
+  modules: {
+    'petStore3': 'https://petstore31.swagger.io/api/v31/openapi.json'
+  },
 });`.trim()}\n`,
       );
       console.log('生成配置文件', configFilename);

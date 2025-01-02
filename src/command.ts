@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { tryFlatten } from 'try-flatten';
+import { configFileBaseName } from './const';
 import { Generator } from './generator/Generator';
 import { Logger } from './generator/Logger';
 
@@ -11,9 +12,8 @@ export function defineConfig(options: GeneratorOptions): GeneratorOptions {
 }
 
 export const configFileNameOrder = [
-  //
-  'openapi.config.cjs',
-  'openapi.config.js',
+  `${configFileBaseName}.cjs`,
+  `${configFileBaseName}.js`,
 ];
 
 export function resolveConfigFile(cwd: string) {
