@@ -149,17 +149,17 @@ export class Printer {
   print(configs?: PrinterConfigs) {
     Object.assign(this.configs, configs);
     const { hideHeaders, hideHelpers, hideFooters, hideInfo, hideComponents, hideImports, hidePaths } = this.configs;
-    const headers = (this.options?.headers || []).join('\n');
-    const footers = (this.options?.footers || []).join('\n');
+    const header = (this.options?.header || '');
+    const footer = (this.options?.footer || '');
 
     return [
-      !hideHeaders && headers,
+      !hideHeaders && header,
       !hideInfo && this._printInfo(),
       !hideImports && this._printImports(),
       !hideHelpers && Printer.helpersCode,
       !hideComponents && this._printComponents(),
       !hidePaths && this._printPaths(),
-      !hideFooters && footers,
+      !hideFooters && footer,
     ]
       .filter(Boolean)
       .join('\n\n');

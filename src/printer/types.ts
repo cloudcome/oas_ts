@@ -104,12 +104,12 @@ export interface PrinterOptions {
   /**
    * 生成文件的头部信息
    */
-  headers?: string[];
+  header?: string;
 
   /**
    * 生成文件的尾部信息
    */
-  footers?: string[];
+  footer?: string;
 }
 
 export interface PrinterConfigs {
