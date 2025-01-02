@@ -3,6 +3,7 @@ import path from 'node:path';
 export function toRelative(toFile: string, fromFile?: string) {
   if (!fromFile)
     return toFile;
+
   if (!path.isAbsolute(toFile))
     return toFile;
 

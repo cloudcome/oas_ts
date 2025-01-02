@@ -4,7 +4,7 @@ import { toRelative } from '../utils/path';
 import { isString, isUndefined } from '../utils/type-is';
 import { Arg } from './Arg';
 import { Args } from './Args';
-import { AXIOS_IMPORT_FILE, AXIOS_IMPORT_NAME, AXIOS_PROMISE_TYPE_NAME, AXIOS_QUEST_CONFIG_TYPE_NAME } from './const';
+import { AXIOS_IMPORT_FILE, AXIOS_IMPORT_NAME, AXIOS_PROMISE_TYPE_NAME, AXIOS_QUEST_CONFIG_TYPE_NAME, AXIOS_TYPE_IMPORT_FILE } from './const';
 import {
   filterLine,
   isRefMedia,
@@ -21,6 +21,7 @@ import {
   type OpenApiLatest_Request,
   type OpenApiLatest_Response,
   type OpenApiLatest_Schema,
+  toImportString,
 } from './helpers';
 import { JsDoc } from './JsDoc';
 import { Named } from './Named';
@@ -188,19 +189,18 @@ export class Printer {
     const {
       axiosImportName = AXIOS_IMPORT_NAME,
       axiosImportFile = AXIOS_IMPORT_FILE,
+      axiosTypeImportFile = AXIOS_TYPE_IMPORT_FILE,
       axiosRequestConfigTypeName = AXIOS_QUEST_CONFIG_TYPE_NAME,
       axiosResponseTypeName = AXIOS_PROMISE_TYPE_NAME,
     } = this.options || {};
     const { file } = this.configs;
     const importPath = toRelative(axiosImportFile, file);
+    const importTypePath = toRelative(axiosTypeImportFile, file);
 
     return [
-      axiosImportName === ''
-        // 默认导入
-        ? `import ${AXIOS_IMPORT_NAME} from "${importPath}";`
-        // 具名导入
-        : `import {${axiosImportName} as ${AXIOS_IMPORT_NAME}} from "${importPath}";`,
-      `import type {${axiosRequestConfigTypeName}, ${axiosResponseTypeName}} from "${importPath}";`,
+      toImportString(AXIOS_IMPORT_NAME, axiosImportName, importPath),
+      toImportString(AXIOS_QUEST_CONFIG_TYPE_NAME, axiosRequestConfigTypeName, importTypePath, true),
+      toImportString(AXIOS_PROMISE_TYPE_NAME, axiosResponseTypeName, importTypePath, true),
       '',
     ].join('\n');
   }
@@ -268,7 +268,7 @@ export class Printer {
     if (isRefOperation(operation))
       return;
 
-    const { responseStatusCode, responseContentType, requestContentType, axiosRequestConfigTypeName = AXIOS_QUEST_CONFIG_TYPE_NAME } = this.options || {};
+    const { responseStatusCode, responseContentType, requestContentType } = this.options || {};
     const argNamed = new Named();
     const header = new Arg(argNamed, 'headers', this.schemata);
     const cookie = new Arg(argNamed, 'cookies', this.schemata);
@@ -277,7 +277,7 @@ export class Printer {
     path.setUrl(url); // 设置 url，用于解析 path 参数
     const data = new Arg(argNamed, 'data', this.schemata, true);
     const config = new Arg(argNamed, 'config', this.schemata, true);
-    config.setDefaultType(axiosRequestConfigTypeName);
+    config.setDefaultType(AXIOS_QUEST_CONFIG_TYPE_NAME);
     const resp = new Arg(argNamed, 'response', this.schemata, true);
     const { parameters, requestBody, responses, operationId } = operation;
 
@@ -358,7 +358,7 @@ export class Printer {
     jsDoc.addComments(responseArgs.toComments());
 
     return `${jsDoc.print()}
-export async function ${funcName}(${requestArgs.toArgs()}): AxiosPromise<${respType}> {
+export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_PROMISE_TYPE_NAME}<${respType}> {
     return ${AXIOS_IMPORT_NAME}({
         method: ${JSON.stringify(method)},
         ${requestArgs.toValues()}

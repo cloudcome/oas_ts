@@ -70,6 +70,7 @@ export const KEYWORD_VARS = [
 
 export const AXIOS_IMPORT_NAME = 'axios';
 export const AXIOS_IMPORT_FILE = 'axios';
+export const AXIOS_TYPE_IMPORT_FILE = 'axios';
 export const AXIOS_QUEST_CONFIG_TYPE_NAME = 'AxiosRequestConfig';
 export const AXIOS_PROMISE_TYPE_NAME = 'AxiosPromise';
 export const INTERNAL_VARS = [

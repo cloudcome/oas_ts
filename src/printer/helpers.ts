@@ -54,3 +54,13 @@ export function requiredTypeStringify(required?: boolean) {
 export function requiredKeyStringify(key: string, required: boolean) {
   return required ? key : `[${key}]`;
 }
+
+export function toImportString(id: string, name: string, path: string, isType = false) {
+  const isDefault = name === '';
+  const type = isType ? (isDefault ? ' type ' : 'type ') : (isDefault ? ' ' : '');
+  return isDefault
+  // 默认导入
+    ? `import${type}${id} from "${path}";`
+  // 具名导入
+    : `import {${type}${name} as ${id}} from "${path}";`;
+}

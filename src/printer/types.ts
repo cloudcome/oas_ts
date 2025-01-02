@@ -56,10 +56,16 @@ export interface PrinterOptions {
   axiosImportName?: string;
 
   /**
-   * 指定导入文件
+   * axios 模块的导入文件
    * @default axios
    */
   axiosImportFile?: string;
+
+  /**
+   * axios 相关类型的导入文件
+   * @default axios
+   */
+  axiosTypeImportFile?: string;
 
   /**
    * 请求配置类型名称
