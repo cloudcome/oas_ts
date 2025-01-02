@@ -29,12 +29,12 @@ it('nextUniqueName', () => {
 
 it('formatTsCode', async () => {
   expect(await formatTsCode('function show() {const a:number=   1;const o={\na:1}\n}')).toMatchInlineSnapshot(`
-      "function show() {
-          const a: number = 1;
-          const o = {
-              a: 1,
-          };
-      }
-      "
-    `);
+    "function show() {
+      const a: number = 1;
+      const o = {
+        a: 1,
+      };
+    }
+    "
+  `);
 });
