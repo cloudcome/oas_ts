@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.28.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.27.0...v0.28.0) (2025-01-03)
+
+
+### Features
+
+* 关键字字典调整 ([fa7dfff](https://github.com/FrontEndDev-org/openapi-axios/commit/fa7dffff1d2efd9f705ab27442e396468ff12699))
+
 ## [0.27.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.26.1...v0.27.0) (2025-01-03)
 
 
