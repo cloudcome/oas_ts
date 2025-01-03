@@ -52,7 +52,7 @@
     "阿森 <zhenxs2018@foxmail.com>"
   ],
   "dependencies": {
-    "@redocly/openapi-core": "^1.26.1",
+    "@redocly/openapi-core": "^1.27.0",
     "chalk": "^4.1.2",
     "commander": "^13.0.0",
     "prettier": "^3.4.2",
