@@ -11,7 +11,7 @@ export function createCLI() {
   program
     .name(pkgName)
     .version(pkgVersion)
-    .description(process.env.PKG_DESCRIPTION)
+    .description(PKG_DESCRIPTION)
     .action((options, command) => {
       if (command.args.length === 0)
         return generate();

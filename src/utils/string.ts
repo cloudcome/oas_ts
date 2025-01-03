@@ -43,12 +43,3 @@ export async function formatTsCode(tsCode: string, userOptions?: Options, cwd = 
     return tsCode;
   }
 }
-
-export function camelCase(s: string) {
-  return s.replace(/[^a-z\d]([a-z])/gi, (_, c) => c.toUpperCase());
-}
-
-export function pascalCase(s: string) {
-  s = camelCase(s);
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
