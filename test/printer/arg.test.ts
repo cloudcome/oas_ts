@@ -367,3 +367,51 @@ it('n*path + n*query + n*header', () => {
     }"
   `);
 });
+
+it('path name unique', () => {
+  const printer = new Printer({
+    openapi: '3.1.0',
+    info: {
+      title: 'test',
+      version: '1.0.0',
+    },
+    paths: {
+      '/pets/{type}': {
+        get: {
+          operationId: 'getPet',
+          parameters: [
+            {
+              in: 'path',
+              name: 'type',
+              schema: {
+                type: 'string',
+              },
+            },
+          ],
+        },
+      },
+    },
+  });
+
+  expect(
+    printer.print({
+      hideImports: true,
+      hideHeaders: true,
+      hideFooters: true,
+      hideInfo: true,
+      hideHelpers: true,
+    }),
+  ).toMatchInlineSnapshot(`
+    "/**
+     * @param type request path "type"
+     * @param [config] request config
+     */
+    export async function getPet(type:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+        return axios({
+            method: "get",
+            url: \`/pets/\${type}\`,
+    ...config
+        });
+    }"
+  `);
+});
