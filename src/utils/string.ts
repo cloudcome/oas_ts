@@ -14,7 +14,7 @@ export function fixVarName(origin: string, bigger = false, fallback = 'var') {
 }
 
 export function nextUniqueName(refName: string, nameCountMap: Map<string, number>) {
-  // abc123 -> abc
+  // abc_123 -> abc
   const baseName = refName.replace(/_[1-9]\d*$/, '');
   const count = nameCountMap.get(baseName) || 0;
   const nextCount = count + 1;
@@ -42,4 +42,13 @@ export async function formatTsCode(tsCode: string, userOptions?: Options, cwd = 
   catch (cause) {
     return tsCode;
   }
+}
+
+export function camelCase(s: string) {
+  return s.replace(/[^a-z\d]([a-z])/gi, (_, c) => c.toUpperCase());
+}
+
+export function pascalCase(s: string) {
+  s = camelCase(s);
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }

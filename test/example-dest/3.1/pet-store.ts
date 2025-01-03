@@ -108,7 +108,17 @@ export type Tag = {
  * @param [config] request config
  * @returns Successful operation
  */
-export async function updatePet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
+export async function updatePet(data:
+/**
+ * @description A Pet in JSON Format
+ */
+Pet
+,config?:AxiosRequestConfig): AxiosPromise<
+/**
+ * @description A Pet in XML Format
+ */
+Pet
+> {
     return axios({
         method: "put",
         url: `/pet`,
@@ -125,7 +135,17 @@ data: data,
  * @param [config] request config
  * @returns Successful operation
  */
-export async function addPet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
+export async function addPet(data:
+/**
+ * @description A Pet in JSON Format
+ */
+Pet
+,config?:AxiosRequestConfig): AxiosPromise<
+/**
+ * @description A Pet in XML Format
+ */
+Pet
+> {
     return axios({
         method: "post",
         url: `/pet`,
@@ -140,7 +160,13 @@ data: data,
  * @param petId ID of pet that needs to be fetched
  * @param [config] request config
  */
-export async function getPetById(petId:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+export async function getPetById(petId:
+/**
+ * @description param ID of pet that needs to be fetched
+ * @format int64
+ */
+number
+,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "get",
         url: `/pet/${petId}`,

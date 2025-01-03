@@ -1,4 +1,4 @@
-import { fixVarName, formatTsCode, nextUniqueName, refToType } from '../../src/utils/string';
+import { camelCase, fixVarName, formatTsCode, nextUniqueName, pascalCase, refToType } from '../../src/utils/string';
 
 it('fixVarName', () => {
   expect(fixVarName('!')).toEqual('var');
@@ -37,4 +37,16 @@ it('formatTsCode', async () => {
     }
     "
   `);
+});
+
+it('camelCase', () => {
+  expect(camelCase('aaa-bbb')).toEqual('aaaBbb');
+  expect(camelCase('aaa_bbb')).toEqual('aaaBbb');
+  expect(camelCase('aaa_bbb-ccc')).toEqual('aaaBbbCcc');
+  expect(camelCase('aaa_bbb-ccc.ddd')).toEqual('aaaBbbCccDdd');
+  expect(camelCase('aaa_bbb-ccc.ddd123')).toEqual('aaaBbbCccDdd123');
+  expect(pascalCase('aaa-bbb')).toEqual('AaaBbb');
+  expect(pascalCase('aaa_bbb')).toEqual('AaaBbb');
+  expect(pascalCase('aaa_bbb-ccc')).toEqual('AaaBbbCcc');
+  expect(pascalCase('aaa_bbb-ccc.ddd123')).toEqual('AaaBbbCccDdd123');
 });

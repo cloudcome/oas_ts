@@ -144,30 +144,30 @@ it('unique types', () => {
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-      "export type AxiosPromise_2 = {
-      "name"?:string;
-      };
+    "export type AxiosPromise_2 = {
+    "name"?:string;
+    };
 
-      export type UnknownObject_2 = {
-      "name"?:number;
-      };
+    export type UnknownObject_2 = {
+    "name"?:number;
+    };
 
-      /**
-       * @param axios_2 request param
-       * @param [UnknownObject] request param
-       * @param [config] request config
-       * @returns success
-       */
-      export async function getTest(axios_2:string,UnknownObject?:UnknownObject_2,config?:AxiosRequestConfig): AxiosPromise<{
-      "AxiosPromise"?:AxiosPromise_2;
-      "UnknownObject"?:UnknownObject_2;
-      }> {
-          return axios({
-              method: "get",
-              url: \`/test/\${axios_2}\`,
-      params: {"UnknownObject": UnknownObject},
-      ...config
-          });
-      }"
-    `);
+    /**
+     * @param axios_2 request path "axios"
+     * @param [UnknownObject] request params "UnknownObject"
+     * @param [config] request config
+     * @returns success
+     */
+    export async function getTest(axios_2:string,UnknownObject?:UnknownObject_2,config?:AxiosRequestConfig): AxiosPromise<{
+    "AxiosPromise"?:AxiosPromise_2;
+    "UnknownObject"?:UnknownObject_2;
+    }> {
+        return axios({
+            method: "get",
+            url: \`/test/\${axios_2}\`,
+    params: {"UnknownObject": UnknownObject},
+    ...config
+        });
+    }"
+  `);
 });

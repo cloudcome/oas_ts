@@ -28,7 +28,7 @@ import { Named } from './Named';
 import { Schemata } from './Schemata';
 
 const allowMethods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
-const parameterType = ['query', 'header', 'path', 'cookie'];
+const parameterTypes = ['query', 'header', 'path', 'cookie'];
 
 type RequestMediaMatch = (contentType: string, content: OpenApiLatest_Media) => boolean;
 type ResponseMediaMatch = (contentType: string, content: OpenApiLatest_Media, response: OpenAPILatest.ResponseObject) => boolean;
@@ -36,7 +36,7 @@ type ResponseMediaMatch = (contentType: string, content: OpenApiLatest_Media, re
 type ResponseMatch = (statusCode: string, response: OpenApiLatest_Response) => boolean;
 
 export class Printer {
-  named = new Named();
+  named = new Named({ internalVars: true, internalTypes: true });
   schemata = new Schemata(this.named);
   private configs: PrinterConfigs = {};
 
@@ -268,17 +268,18 @@ export class Printer {
     if (isRefOperation(operation))
       return;
 
-    const { responseStatusCode, responseContentType, requestContentType } = this.options || {};
-    const argNamed = new Named();
-    const header = new Arg(argNamed, 'headers', this.schemata);
-    const cookie = new Arg(argNamed, 'cookies', this.schemata);
-    const query = new Arg(argNamed, 'params', this.schemata);
-    const path = new Arg(argNamed, 'path', this.schemata);
+    const options = this.options || {};
+    const { responseStatusCode, responseContentType, requestContentType } = options;
+    const argNamed = new Named({ keywordVars: true, internalVars: true, internalTypes: true });
+    const header = new Arg(argNamed, 'header', this.schemata, options);
+    const cookie = new Arg(argNamed, 'cookie', this.schemata, options);
+    const query = new Arg(argNamed, 'param', this.schemata, options);
+    const path = new Arg(argNamed, 'path', this.schemata, options);
     path.setUrl(url); // 设置 url，用于解析 path 参数
-    const data = new Arg(argNamed, 'data', this.schemata, true);
-    const config = new Arg(argNamed, 'config', this.schemata, true);
+    const data = new Arg(argNamed, 'data', this.schemata, options, true);
+    const config = new Arg(argNamed, 'config', this.schemata, options, true);
     config.setDefaultType(AXIOS_QUEST_CONFIG_TYPE_NAME);
-    const resp = new Arg(argNamed, 'response', this.schemata, true);
+    const resp = new Arg(argNamed, 'response', this.schemata, options, true);
     const { parameters, requestBody, responses, operationId } = operation;
 
     if (parameters) {
@@ -423,7 +424,7 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_PROMISE_TYPE
       return;
     }
 
-    if (parameterType.includes(parameter.in)) {
+    if (parameterTypes.includes(parameter.in)) {
       args[parameter.in].add(parameter);
     }
   }

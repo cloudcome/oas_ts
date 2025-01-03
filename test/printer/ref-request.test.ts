@@ -59,22 +59,27 @@ it('ref request', () => {
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-      "export type User = {
-      "username"?:string;
-      "password"?:string;
-      };
+    "export type User = {
+    "username"?:string;
+    "password"?:string;
+    };
 
-      /**
-       * @param data 用户列表
-       * @param [config] request config
-       */
-      export async function postTest(data:Array<User>,config?:AxiosRequestConfig): AxiosPromise<unknown> {
-          return axios({
-              method: "post",
-              url: \`/test\`,
-      data: data,
-      ...config
-          });
-      }"
-    `);
+    /**
+     * @param data 用户列表
+     * @param [config] request config
+     */
+    export async function postTest(data:
+    /**
+     * @description 用户列表
+     */
+    Array<User>
+    ,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+        return axios({
+            method: "post",
+            url: \`/test\`,
+    data: data,
+    ...config
+        });
+    }"
+  `);
 });

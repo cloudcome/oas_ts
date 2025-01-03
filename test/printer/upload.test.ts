@@ -40,21 +40,27 @@ it('upload root', () => {
   });
 
   expect(output).toMatchInlineSnapshot(`
-      "/**
-       * @description upload
-       * @summary upload
-       * @param data A file
-       * @param [config] request config
-       */
-      export async function upload(data:Blob,config?:AxiosRequestConfig): AxiosPromise<unknown> {
-          return axios({
-              method: "post",
-              url: \`/upload\`,
-      data: data,
-      ...config
-          });
-      }"
-    `);
+    "/**
+     * @description upload
+     * @summary upload
+     * @param data A file
+     * @param [config] request config
+     */
+    export async function upload(data:
+    /**
+     * @description A file
+     * @format binary
+     */
+    Blob
+    ,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+        return axios({
+            method: "post",
+            url: \`/upload\`,
+    data: data,
+    ...config
+        });
+    }"
+  `);
 });
 
 it('upload single', () => {

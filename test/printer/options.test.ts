@@ -26,7 +26,7 @@ it('axios 模块导入名称默认', () => {
     /**
      * @param [config] request config
      */
-    export async function get_2(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function get(config?:AxiosRequestConfig): AxiosPromise<unknown> {
         return axios({
             method: "get",
             url: \`/\`,
@@ -63,7 +63,7 @@ it('axios 模块导入名称指定', () => {
     /**
      * @param [config] request config
      */
-    export async function get_2(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function get(config?:AxiosRequestConfig): AxiosPromise<unknown> {
         return axios({
             method: "get",
             url: \`/\`,
@@ -100,7 +100,7 @@ it('axios 默认导入名称为空', () => {
     /**
      * @param [config] request config
      */
-    export async function get_2(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function get(config?:AxiosRequestConfig): AxiosPromise<unknown> {
         return axios({
             method: "get",
             url: \`/\`,
@@ -142,7 +142,7 @@ it('axios 模块和类型指定文件', () => {
     /**
      * @param [config] request config
      */
-    export async function get_2(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function get(config?:AxiosRequestConfig): AxiosPromise<unknown> {
         return axios({
             method: "get",
             url: \`/\`,

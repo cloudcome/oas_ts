@@ -193,7 +193,12 @@ params: {"tags": tags},
  * @param [config] request config
  * @returns successful operation
  */
-export async function getPetById(petId:number,config?:AxiosRequestConfig): AxiosPromise<Pet> {
+export async function getPetById(petId:
+/**
+ * @format int64
+ */
+number
+,config?:AxiosRequestConfig): AxiosPromise<Pet> {
     return axios({
         method: "get",
         url: `/pet/${petId}`,
@@ -209,7 +214,12 @@ export async function getPetById(petId:number,config?:AxiosRequestConfig): Axios
  * @param data request data
  * @param [config] request config
  */
-export async function updatePetWithForm(petId:number,data:{
+export async function updatePetWithForm(petId:
+/**
+ * @format int64
+ */
+number
+,data:{
 /**
  * @description Updated name of the pet
  */
@@ -232,10 +242,15 @@ data: data,
  * @summary Deletes a pet
  * @see pet Everything about your Pets {@link http://swagger.io Find out more}
  * @param petId Pet id to delete
- * @param [apiKey] request param
+ * @param [apiKey] request headers "api_key"
  * @param [config] request config
  */
-export async function deletePet(petId:number,apiKey?:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+export async function deletePet(petId:
+/**
+ * @format int64
+ */
+number
+,apiKey?:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "delete",
         url: `/pet/${petId}`,
@@ -253,7 +268,12 @@ headers: {"api_key": apiKey},
  * @param [config] request config
  * @returns successful operation
  */
-export async function uploadFile(petId:number,data:{
+export async function uploadFile(petId:
+/**
+ * @format int64
+ */
+number
+,data:{
 /**
  * @description Additional data to pass to server
  */
@@ -317,7 +337,14 @@ data: data,
  * @param [config] request config
  * @returns successful operation
  */
-export async function getOrderById(orderId:number,config?:AxiosRequestConfig): AxiosPromise<Order> {
+export async function getOrderById(orderId:
+/**
+ * @format int64
+ * @minimum 1
+ * @maximum 10
+ */
+number
+,config?:AxiosRequestConfig): AxiosPromise<Order> {
     return axios({
         method: "get",
         url: `/store/order/${orderId}`,
@@ -332,7 +359,13 @@ export async function getOrderById(orderId:number,config?:AxiosRequestConfig): A
  * @param orderId ID of the order that needs to be deleted
  * @param [config] request config
  */
-export async function deleteOrder(orderId:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+export async function deleteOrder(orderId:
+/**
+ * @format int64
+ * @minimum 1
+ */
+number
+,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
         method: "delete",
         url: `/store/order/${orderId}`,

@@ -6,10 +6,19 @@ export class Named {
   typeNameCountMap = new Map<string /* type */, number /* count */>();
   refIdTypeMap = new Map<string /* refId */, string /* refType */>();
 
-  constructor() {
-    KEYWORD_VARS.forEach(this.internalVarName.bind(this));
-    INTERNAL_VARS.forEach(this.internalVarName.bind(this));
-    INTERNAL_TYPES.forEach(this.internalTypeName.bind(this));
+  constructor({ keywordVars, internalTypes, internalVars }: {
+    keywordVars?: boolean;
+    internalVars?: boolean;
+    internalTypes?: boolean;
+  } = {}) {
+    if (keywordVars)
+      KEYWORD_VARS.forEach(this.internalVarName.bind(this));
+
+    if (internalVars)
+      INTERNAL_VARS.forEach(this.internalVarName.bind(this));
+
+    if (internalTypes)
+      INTERNAL_TYPES.forEach(this.internalTypeName.bind(this));
   }
 
   /**

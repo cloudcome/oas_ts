@@ -44,16 +44,16 @@ it('ref parameter', () => {
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-      "/**
-       * @param userId request param
-       * @param [config] request config
-       */
-      export async function postTest(userId:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
-          return axios({
-              method: "post",
-              url: \`/test/\${userId}\`,
-      ...config
-          });
-      }"
-    `);
+    "/**
+     * @param userId request path "userId"
+     * @param [config] request config
+     */
+    export async function postTest(userId:number,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+        return axios({
+            method: "post",
+            url: \`/test/\${userId}\`,
+    ...config
+        });
+    }"
+  `);
 });

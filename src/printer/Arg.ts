@@ -1,35 +1,78 @@
 import type { OpenAPILatest } from '../types/openapi';
 import type { Named } from './Named';
+import type { PrinterOptions } from './types';
 import { isRefParameter, type OpenApiLatest_Parameter, requiredKeyStringify } from './helpers';
 import { Schemata } from './Schemata';
 
-export type ArgKind = 'path' | 'headers' | 'cookies' | 'params' | 'data' | 'config' | 'response';
-export interface ArgParsed {
-  arg: Arg;
-  originName: string;
-  uniqueName: string;
-  required: boolean;
-  type: string;
-  comments: Record<string, unknown>;
-  props: string[];
-}
-interface InternalArgItem {
+export type ArgKind = 'path' | 'header' | 'cookie' | 'param' | 'data' | 'config' | 'response';
+
+const kindAxiosPropNames: Record<ArgKind, string> = {
+  path: 'url',
+  header: 'headers',
+  cookie: 'cookies',
+  param: 'params',
+  data: 'data',
+  config: 'config',
+  response: 'response',
+};
+const kindAxiosDocNames: Record<ArgKind, string> = {
+  path: 'path',
+  header: 'headers',
+  cookie: 'cookies',
+  param: 'params',
+  data: 'data',
+  config: 'config',
+  response: 'response',
+};
+
+export interface ArgProp {
+  name: string;
   parameter: OpenAPILatest.ParameterObject;
   schema: OpenAPILatest.SchemaObject;
 }
 
 export class Arg {
   parameters: OpenApiLatest_Parameter[] = [];
+  originName: string = '';
+
+  /**
+   * 作为属性的名称
+   */
+  propName = '';
+  /**
+   * 作为参数的注释名称
+   */
+  docName = '';
+  /**
+   * 作为参数的变量名称
+   */
+  varName = '';
+  /**
+   * 是否必填
+   */
+  required: boolean = false;
+  /**
+   * 类型
+   */
+  type: string = '';
+  comments: Record<string, unknown> = {};
+  props: ArgProp[] = [];
 
   constructor(
     readonly named: Named,
     readonly kind: ArgKind,
     readonly schemata: Schemata,
+    readonly printOptions: PrinterOptions,
     /**
      * 是否单参数（如 data、config、response）
      */
     readonly isSingle: boolean = false,
-  ) {}
+  ) {
+    this.originName = this.kind;
+    this.propName = kindAxiosPropNames[this.kind];
+    this.docName = kindAxiosDocNames[this.kind];
+    this.varName = '';
+  }
 
   url: string = '';
   urlParams: string[] = [];
@@ -57,11 +100,9 @@ export class Arg {
     this.parameters.push(parameter);
   }
 
-  parse(): ArgParsed | null {
-    const internalArgItems: InternalArgItem[] = [];
+  parse(): Arg | null {
     const fixedParameters = this.parameters.filter(p => !isRefParameter(p) && 'schema' in p && p.schema) as OpenAPILatest.ParameterObject[];
     const propLength = fixedParameters.length;
-    const props = fixedParameters.map(p => p.name);
     const requiredNames: string[] = [];
 
     fixedParameters.forEach((parameter) => {
@@ -75,79 +116,64 @@ export class Arg {
         parameter.required = true;
       }
 
-      internalArgItems.push({
+      this.props.push({
         parameter,
+        name,
         schema: schema!,
       });
     });
 
     switch (propLength) {
       case 0: {
-        if (this.kind === 'path') {
-          return {
-            arg: this,
-            originName: this.kind,
-            uniqueName: this.named.nextVarName(this.kind),
-            // 路径参数必填
-            required: true,
-            type: this.defaultType,
-            comments: {},
-            props,
-          };
-        }
+        switch (this.kind) {
+          case 'path':
+            this.required = true;
+            this.type = this.defaultType;
+            this.varName = this.named.nextVarName(this.docName);
+            return this;
 
-        if (this.kind === 'config') {
-          const name = this.named.nextVarName(this.kind);
-          return {
-            arg: this,
-            originName: this.kind,
-            uniqueName: name,
-            required: false,
-            type: this.defaultType,
-            comments: {
-              [`param [${name}]`]: 'request config',
-            },
-            props,
-          };
+          case 'config':
+            this.type = this.defaultType;
+            this.varName = this.named.nextVarName(this.docName);
+            this.comments = {
+              [`param [${this.varName}]`]: `request ${this.propName}`,
+            };
+            return this;
         }
-
         return null;
       }
 
       case 1: {
         // prop0: type0
-        const [firstArg] = internalArgItems;
+        const [firstArg] = this.props;
         const { parameter, schema } = firstArg;
         const result = this.schemata.print(schema);
-        const name = this.kind === 'response' ? this.kind : this.named.nextVarName(parameter.name || this.kind);
+        const isResponse = this.kind === 'response';
         const required = parameter.required || result.required || false;
 
-        return {
-          arg: this,
-          originName: parameter.name,
-          uniqueName: name,
-          required,
-          type: Schemata.toString(result, true),
-          props,
-          comments:
-                        this.kind === 'response'
-                          ? {
-                              returns: parameter.description || schema.description || false,
-                            }
-                          : {
-                              [`param ${requiredKeyStringify(name, required)}`]:
-                                      parameter.description || schema.description || `request ${this.kind === 'data' ? 'data' : 'param'}`,
-                            },
-        };
+        this.originName = firstArg.name;
+        this.varName = this.named.nextVarName(firstArg.name);
+        this.required = required;
+        this.type = Schemata.toString(result);
+        this.comments = isResponse
+          ? {
+              returns: parameter.description || schema.description || false,
+            }
+          : {
+              [
+              `param ${requiredKeyStringify(this.varName, required)}`]: parameter.description || schema.description
+                || (this.kind === 'data' ? 'request data' : `request ${this.docName} ${JSON.stringify(firstArg.name)}`),
+            };
+        return this;
       }
 
       default: {
         // name: {prop0: type0, prop1: type1, ...}
         const rootSchema: OpenAPILatest.SchemaObject = {
           type: 'object',
-          properties: internalArgItems.reduce(
-            (acc, { parameter, schema }) => {
-              acc[parameter.name] = {
+          properties: this.props.reduce(
+            (acc, { parameter, schema, name: originName }) => {
+              acc[originName] = {
                 ...schema,
                 description: parameter.description || schema.description,
                 deprecated: parameter.deprecated || schema.deprecated,
@@ -159,25 +185,19 @@ export class Arg {
           required: requiredNames,
         };
         const result = this.schemata.print(rootSchema);
-        const name = this.named.nextVarName(this.kind);
         const required = requiredNames.length > 0;
 
-        return {
-          arg: this,
-          originName: this.kind,
-          uniqueName: name,
-          required,
-          type: Schemata.toString(result),
-          props,
-          comments:
-                        this.kind === 'response'
-                          ? {
-                              returns: result.comments.description,
-                            }
-                          : {
-                              [`param ${requiredKeyStringify(name, required)}`]: 'request params',
-                            },
-        };
+        this.required = required;
+        this.type = Schemata.toString(result);
+        this.varName = this.named.nextVarName(this.docName);
+        this.comments = this.kind === 'response'
+          ? {
+              returns: result.comments.description,
+            }
+          : {
+              [`param ${requiredKeyStringify(this.docName, required)}`]: `request ${this.docName}`,
+            };
+        return this;
       }
     }
   }
