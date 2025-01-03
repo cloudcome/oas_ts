@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.27.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.26.1...v0.27.0) (2025-01-03)
+
+
+### Features
+
+* axiosImportName 选项默认值调整为 "" ([2364378](https://github.com/FrontEndDev-org/openapi-axios/commit/236437897794c483ea2e98d58e3317956a73c343))
+
 ## [0.26.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.26.0...v0.26.1) (2025-01-03)
 
 
