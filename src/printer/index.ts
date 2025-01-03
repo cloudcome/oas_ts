@@ -187,7 +187,7 @@ export class Printer {
 
   private _printImports() {
     const {
-      axiosImportName = AXIOS_IMPORT_NAME,
+      axiosImportName = '',
       axiosImportFile = AXIOS_IMPORT_FILE,
       axiosTypeImportFile = AXIOS_TYPE_IMPORT_FILE,
       axiosRequestConfigTypeName = AXIOS_QUEST_CONFIG_TYPE_NAME,

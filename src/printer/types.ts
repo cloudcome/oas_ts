@@ -46,7 +46,7 @@ export type OperationIdNormalize = (context: OperationContext) => string;
 export interface PrinterOptions {
   /**
    * 导入名称，为空字符串时默认导入
-   * @default axios
+   * @default ""
    * @example
    * // 具名导入
    * import { axios } from 'axios';
