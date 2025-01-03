@@ -52,9 +52,7 @@ export class Args {
               return acc;
             }, {} as Record<string, boolean>);
             const resolvedURL = url.replace(/\{(.*?)\}/g, (_, originName) => {
-              const propPrintName = pathNameInProps[originName];
-
-              if (!propPrintName) {
+              if (!pathNameInProps[originName]) {
                 throw new Error(`路径参数 ${originName} 未定义`);
               }
 
@@ -62,7 +60,7 @@ export class Args {
               if (props.length === 1)
                 return `\${${varName}}`;
 
-              return `\${${varName}[${JSON.stringify(propPrintName)}]}`;
+              return `\${${varName}[${JSON.stringify(originName)}]}`;
             });
             return `url: \`${resolvedURL}\``;
           }
