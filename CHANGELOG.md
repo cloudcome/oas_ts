@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.26.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.25.1...v0.26.0) (2025-01-03)
+
+
+### Features
+
+* axios 导入名称配置优化 ([a3ba8d1](https://github.com/FrontEndDev-org/openapi-axios/commit/a3ba8d1cc4c282a5009c5e83c3dc1b9725256521))
+* 支持指定 axios 类型导入文件 ([039d16d](https://github.com/FrontEndDev-org/openapi-axios/commit/039d16d90f856833fb9fe5c48dbd76755d92fe20))
+* 生成头尾部选项修正 ([c353038](https://github.com/FrontEndDev-org/openapi-axios/commit/c353038f9a55571d0d0303675b38a7268b9c84cb))
+* 配置文件名修改为 openapi-axios.config ([c10a182](https://github.com/FrontEndDev-org/openapi-axios/commit/c10a1824124faff488eb1f9adb4a179e169324c3))
+
 ## [0.25.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.25.0...v0.25.1) (2024-12-31)
 
 
