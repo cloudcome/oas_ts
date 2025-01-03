@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.26.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.26.0...v0.26.1) (2025-01-03)
+
+
+### Bug Fixes
+
+* 修复 path arg 属性名 ([3f82434](https://github.com/FrontEndDev-org/openapi-axios/commit/3f8243432831a7dae7bf7a47918bfb9b2fcab931))
+
 ## [0.26.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.25.1...v0.26.0) (2025-01-03)
 
 
