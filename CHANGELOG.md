@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.28.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.28.0...v0.28.1) (2025-01-08)
+
+
+### Bug Fixes
+
+* 修复指定导入文件后未正确输出 ([345e4b2](https://github.com/FrontEndDev-org/openapi-axios/commit/345e4b276bd9d6c0058ff16a0e410475b25d3852))
+
 ## [0.28.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.27.0...v0.28.0) (2025-01-03)
 
 
