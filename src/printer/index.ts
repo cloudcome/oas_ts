@@ -1,6 +1,6 @@
 import type { PrinterConfigs, PrinterOptions } from './types';
 import { type OpenAPILatest, OpenAPIVersion } from '../types/openapi';
-import { toRelative } from '../utils/path';
+import { toImportPath } from '../utils/path';
 import { isString, isUndefined } from '../utils/type-is';
 import { Arg } from './Arg';
 import { Args } from './Args';
@@ -188,14 +188,16 @@ export class Printer {
   private _printImports() {
     const {
       axiosImportName = '',
-      axiosImportFile = AXIOS_IMPORT_FILE,
-      axiosTypeImportFile = AXIOS_TYPE_IMPORT_FILE,
+      axiosImportFile,
+      axiosTypeImportFile,
       axiosRequestConfigTypeName = AXIOS_QUEST_CONFIG_TYPE_NAME,
       axiosResponseTypeName = AXIOS_PROMISE_TYPE_NAME,
     } = this.options || {};
-    const { file } = this.configs;
-    const importPath = toRelative(axiosImportFile, file);
-    const importTypePath = toRelative(axiosTypeImportFile, file);
+    const { cwd = '/', file } = this.configs;
+    const axiosImportFile2 = axiosImportFile || AXIOS_IMPORT_FILE;
+    const importPath = toImportPath(axiosImportFile2, cwd, file);
+    const axiosTypeImportFile2 = axiosTypeImportFile || axiosImportFile || AXIOS_TYPE_IMPORT_FILE;
+    const importTypePath = toImportPath(axiosTypeImportFile2, cwd, file);
 
     return [
       toImportString(AXIOS_IMPORT_NAME, axiosImportName, importPath),

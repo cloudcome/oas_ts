@@ -18,7 +18,7 @@ it('axios 模块导入名称默认', () => {
     hideInfo: true,
     hideHelpers: true,
   })).toMatchInlineSnapshot(`
-    "import {axios as axios} from "axios";
+    "import axios from "axios";
     import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
     import {type AxiosPromise as AxiosPromise} from "axios";
 

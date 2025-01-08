@@ -119,6 +119,11 @@ export interface PrinterConfigs {
   module?: string;
 
   /**
+   * file cwd
+   */
+  cwd?: string;
+
+  /**
    * file path
    */
   file?: string;

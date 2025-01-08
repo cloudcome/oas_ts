@@ -9,7 +9,7 @@
  * @see {@link http://swagger.io Find out more about Swagger}
  */
 
-import {axios as axios} from "axios";
+import axios from "axios";
 import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
 import {type AxiosPromise as AxiosPromise} from "axios";
 

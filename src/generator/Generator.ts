@@ -86,7 +86,7 @@ export class Generator extends Emitter<GeneratorEmits> {
     // 3. 输出
     this.emit('process', makePayload('printing'));
     const printer = new Printer(openAPIV3Document, printerOptions);
-    const code = printer.print({ module, file });
+    const code = printer.print({ module, cwd, file });
 
     // 4. 写入
     this.emit('process', makePayload('writing'));

@@ -12,7 +12,7 @@
  * - [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)
  */
 
-import {axios as axios} from "axios";
+import axios from "axios";
 import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
 import {type AxiosPromise as AxiosPromise} from "axios";
 
