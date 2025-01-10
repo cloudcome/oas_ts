@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.29.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.28.1...v0.29.0) (2025-01-10)
+
+
+### Features
+
+* axios method 参数值调整为大写 ([7406abd](https://github.com/FrontEndDev-org/openapi-axios/commit/7406abd655ed1a4831cbe4f3ecb13f6bfd25accd))
+
+
+### Bug Fixes
+
+* 修改配置文件名 ([252d70b](https://github.com/FrontEndDev-org/openapi-axios/commit/252d70b703e5d3e721208d71bfd083c4fa554213))
+
 ## [0.28.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.28.0...v0.28.1) (2025-01-08)
 
 
