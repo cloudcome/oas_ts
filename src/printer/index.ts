@@ -363,7 +363,7 @@ export class Printer {
     return `${jsDoc.print()}
 export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_PROMISE_TYPE_NAME}<${respType}> {
     return ${AXIOS_IMPORT_NAME}({
-        method: ${JSON.stringify(method)},
+        method: ${JSON.stringify(method.toUpperCase())},
         ${requestArgs.toValues()}
     });
 }`;
