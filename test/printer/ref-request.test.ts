@@ -75,7 +75,7 @@ it('ref request', () => {
     Array<User>
     ,config?:AxiosRequestConfig): AxiosPromise<unknown> {
         return axios({
-            method: "post",
+            method: "POST",
             url: \`/test\`,
     data: data,
     ...config

@@ -34,15 +34,15 @@ it('ref path', () => {
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-      "/**
-       * @param [config] request config
-       */
-      export async function getTest(config?:AxiosRequestConfig): AxiosPromise<unknown> {
-          return axios({
-              method: "get",
-              url: \`/test\`,
-      ...config
-          });
-      }"
-    `);
+    "/**
+     * @param [config] request config
+     */
+    export async function getTest(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+        return axios({
+            method: "GET",
+            url: \`/test\`,
+    ...config
+        });
+    }"
+  `);
 });

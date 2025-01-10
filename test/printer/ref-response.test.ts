@@ -61,20 +61,20 @@ it('ref response', () => {
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-      "export type User = {
-      "username"?:string;
-      "password"?:string;
-      };
+    "export type User = {
+    "username"?:string;
+    "password"?:string;
+    };
 
-      /**
-       * @param [config] request config
-       */
-      export async function postTest(config?:AxiosRequestConfig): AxiosPromise<Array<User>> {
-          return axios({
-              method: "post",
-              url: \`/test\`,
-      ...config
-          });
-      }"
-    `);
+    /**
+     * @param [config] request config
+     */
+    export async function postTest(config?:AxiosRequestConfig): AxiosPromise<Array<User>> {
+        return axios({
+            method: "POST",
+            url: \`/test\`,
+    ...config
+        });
+    }"
+  `);
 });

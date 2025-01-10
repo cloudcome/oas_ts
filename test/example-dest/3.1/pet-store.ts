@@ -120,7 +120,7 @@ Pet
 Pet
 > {
     return axios({
-        method: "put",
+        method: "PUT",
         url: `/pet`,
 data: data,
 ...config
@@ -147,7 +147,7 @@ Pet
 Pet
 > {
     return axios({
-        method: "post",
+        method: "POST",
         url: `/pet`,
 data: data,
 ...config
@@ -168,7 +168,7 @@ export async function getPetById(petId:
 number
 ,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
-        method: "get",
+        method: "GET",
         url: `/pet/${petId}`,
 ...config
     });

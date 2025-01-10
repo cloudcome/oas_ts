@@ -54,7 +54,7 @@ it('upload root', () => {
     Blob
     ,config?:AxiosRequestConfig): AxiosPromise<unknown> {
         return axios({
-            method: "post",
+            method: "POST",
             url: \`/upload\`,
     data: data,
     ...config
@@ -125,33 +125,33 @@ it('upload single', () => {
   });
 
   expect(output).toMatchInlineSnapshot(`
-      "/**
-       * @description upload
-       * @summary upload
-       * @param category request param
-       * @param data request data
-       * @param [config] request config
-       */
-      export async function upload(category:("a"|"b"),data:{
-      /**
-       * @description A file
-       * @format binary
-       */
-      "file":Blob;
-      /**
-       * @description A name
-       */
-      "name"?:string;
-      },config?:AxiosRequestConfig): AxiosPromise<unknown> {
-          return axios({
-              method: "post",
-              url: \`/upload\`,
-      params: {"category": category},
-      data: data,
-      ...config
-          });
-      }"
-    `);
+    "/**
+     * @description upload
+     * @summary upload
+     * @param category request param
+     * @param data request data
+     * @param [config] request config
+     */
+    export async function upload(category:("a"|"b"),data:{
+    /**
+     * @description A file
+     * @format binary
+     */
+    "file":Blob;
+    /**
+     * @description A name
+     */
+    "name"?:string;
+    },config?:AxiosRequestConfig): AxiosPromise<unknown> {
+        return axios({
+            method: "POST",
+            url: \`/upload\`,
+    params: {"category": category},
+    data: data,
+    ...config
+        });
+    }"
+  `);
 });
 
 it('upload multiple', () => {
@@ -219,33 +219,33 @@ it('upload multiple', () => {
   });
 
   expect(output).toMatchInlineSnapshot(`
-      "/**
-       * @description upload
-       * @summary upload
-       * @param category request param
-       * @param data request data
-       * @param [config] request config
-       */
-      export async function upload(category:("a"|"b"),data:{
-      "file"?:Array<
-      /**
-       * @description A file
-       * @format binary
-       */
-      Blob
-      >;
-      /**
-       * @description A name
-       */
-      "name"?:string;
-      },config?:AxiosRequestConfig): AxiosPromise<unknown> {
-          return axios({
-              method: "post",
-              url: \`/upload\`,
-      params: {"category": category},
-      data: data,
-      ...config
-          });
-      }"
-    `);
+    "/**
+     * @description upload
+     * @summary upload
+     * @param category request param
+     * @param data request data
+     * @param [config] request config
+     */
+    export async function upload(category:("a"|"b"),data:{
+    "file"?:Array<
+    /**
+     * @description A file
+     * @format binary
+     */
+    Blob
+    >;
+    /**
+     * @description A name
+     */
+    "name"?:string;
+    },config?:AxiosRequestConfig): AxiosPromise<unknown> {
+        return axios({
+            method: "POST",
+            url: \`/upload\`,
+    params: {"category": category},
+    data: data,
+    ...config
+        });
+    }"
+  `);
 });

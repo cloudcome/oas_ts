@@ -47,22 +47,22 @@ it('unique vars', () => {
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-      "export type TestAa = {
-      "name"?:string;
-      };
+    "export type TestAa = {
+    "name"?:string;
+    };
 
-      /**
-       * @param [config] request config
-       * @returns success
-       */
-      export async function getTest(config?:AxiosRequestConfig): AxiosPromise<TestAa> {
-          return axios({
-              method: "get",
-              url: \`/test\`,
-      ...config
-          });
-      }"
-    `);
+    /**
+     * @param [config] request config
+     * @returns success
+     */
+    export async function getTest(config?:AxiosRequestConfig): AxiosPromise<TestAa> {
+        return axios({
+            method: "GET",
+            url: \`/test\`,
+    ...config
+        });
+    }"
+  `);
 });
 
 it('unique types', () => {
@@ -163,7 +163,7 @@ it('unique types', () => {
     "UnknownObject"?:UnknownObject_2;
     }> {
         return axios({
-            method: "get",
+            method: "GET",
             url: \`/test/\${axios_2}\`,
     params: {"UnknownObject": UnknownObject},
     ...config

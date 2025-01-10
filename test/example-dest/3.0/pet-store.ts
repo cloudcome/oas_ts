@@ -191,7 +191,7 @@ export type ApiResponse = {
  */
 export async function addPet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
     return axios({
-        method: "post",
+        method: "POST",
         url: `/pet`,
 data: data,
 ...config
@@ -208,7 +208,7 @@ data: data,
  */
 export async function updatePet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
     return axios({
-        method: "put",
+        method: "PUT",
         url: `/pet`,
 data: data,
 ...config
@@ -230,7 +230,7 @@ export async function findPetsByStatus(status?:
 ("available"|"pending"|"sold")
 ,config?:AxiosRequestConfig): AxiosPromise<Array<Pet>> {
     return axios({
-        method: "get",
+        method: "GET",
         url: `/pet/findByStatus`,
 params: {"status": status},
 ...config
@@ -247,7 +247,7 @@ params: {"status": status},
  */
 export async function findPetsByTags(tags?:Array<string>,config?:AxiosRequestConfig): AxiosPromise<Array<Pet>> {
     return axios({
-        method: "get",
+        method: "GET",
         url: `/pet/findByTags`,
 params: {"tags": tags},
 ...config
@@ -269,7 +269,7 @@ export async function getPetById(petId:
 number
 ,config?:AxiosRequestConfig): AxiosPromise<Pet> {
     return axios({
-        method: "get",
+        method: "GET",
         url: `/pet/${petId}`,
 ...config
     });
@@ -299,7 +299,7 @@ number
 "status"?:string;
 },config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
-        method: "post",
+        method: "POST",
         url: `/pet/${petId}`,
 params: params,
 ...config
@@ -321,7 +321,7 @@ export async function deletePet(petId:
 number
 ,apiKey?:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
-        method: "delete",
+        method: "DELETE",
         url: `/pet/${petId}`,
 headers: {"api_key": apiKey},
 ...config
@@ -350,7 +350,7 @@ number
 Blob
 ,additionalMetadata?:string,config?:AxiosRequestConfig): AxiosPromise<ApiResponse> {
     return axios({
-        method: "post",
+        method: "POST",
         url: `/pet/${petId}/uploadImage`,
 data: data,
 params: {"additionalMetadata": additionalMetadata},
@@ -372,7 +372,7 @@ export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<{
 [key: string]:number;
 }> {
     return axios({
-        method: "get",
+        method: "GET",
         url: `/store/inventory`,
 ...config
     });
@@ -388,7 +388,7 @@ export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<{
  */
 export async function placeOrder(data:Order,config?:AxiosRequestConfig): AxiosPromise<Order> {
     return axios({
-        method: "post",
+        method: "POST",
         url: `/store/order`,
 data: data,
 ...config
@@ -410,7 +410,7 @@ export async function getOrderById(orderId:
 number
 ,config?:AxiosRequestConfig): AxiosPromise<Order> {
     return axios({
-        method: "get",
+        method: "GET",
         url: `/store/order/${orderId}`,
 ...config
     });
@@ -430,7 +430,7 @@ export async function deleteOrder(orderId:
 number
 ,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
-        method: "delete",
+        method: "DELETE",
         url: `/store/order/${orderId}`,
 ...config
     });
@@ -445,7 +445,7 @@ number
  */
 export async function createUser(data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
-        method: "post",
+        method: "POST",
         url: `/user`,
 data: data,
 ...config
@@ -462,7 +462,7 @@ data: data,
  */
 export async function createUsersWithListInput(data:Array<User>,config?:AxiosRequestConfig): AxiosPromise<User> {
     return axios({
-        method: "post",
+        method: "POST",
         url: `/user/createWithList`,
 data: data,
 ...config
@@ -488,7 +488,7 @@ export async function loginUser(params?:{
 "password"?:string;
 },config?:AxiosRequestConfig): AxiosPromise<string> {
     return axios({
-        method: "get",
+        method: "GET",
         url: `/user/login`,
 params: params,
 ...config
@@ -503,7 +503,7 @@ params: params,
  */
 export async function logoutUser(config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
-        method: "get",
+        method: "GET",
         url: `/user/logout`,
 ...config
     });
@@ -519,7 +519,7 @@ export async function logoutUser(config?:AxiosRequestConfig): AxiosPromise<unkno
  */
 export async function getUserByName(username:string,config?:AxiosRequestConfig): AxiosPromise<User> {
     return axios({
-        method: "get",
+        method: "GET",
         url: `/user/${username}`,
 ...config
     });
@@ -534,7 +534,7 @@ export async function getUserByName(username:string,config?:AxiosRequestConfig):
  */
 export async function deleteUser(username:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
-        method: "delete",
+        method: "DELETE",
         url: `/user/${username}`,
 ...config
     });
@@ -550,7 +550,7 @@ export async function deleteUser(username:string,config?:AxiosRequestConfig): Ax
  */
 export async function updateUser(username:string,data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
     return axios({
-        method: "put",
+        method: "PUT",
         url: `/user/${username}`,
 data: data,
 ...config

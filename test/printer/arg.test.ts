@@ -66,7 +66,7 @@ it('1*path + 1*query + 1*header', () => {
      */
     export async function getPet(petId:string,data:string,xAuthKey?:string,categoryId?:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
         return axios({
-            method: "get",
+            method: "GET",
             url: \`/pets/\${petId}\`,
     data: data,
     headers: {"x-auth-key": xAuthKey},
@@ -153,7 +153,7 @@ it('n*path + 1*query + 1*header', () => {
     "zoo-id":string;
     },data:string,xAuthKey?:string,categoryId?:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
         return axios({
-            method: "get",
+            method: "GET",
             url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
     data: data,
     headers: {"x-auth-key": xAuthKey},
@@ -250,7 +250,7 @@ it('n*path + n*query + 1*header', () => {
     "kind-id"?:string;
     },config?:AxiosRequestConfig): AxiosPromise<unknown> {
         return axios({
-            method: "get",
+            method: "GET",
             url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
     data: data,
     headers: {"x-auth-key": xAuthKey},
@@ -357,7 +357,7 @@ it('n*path + n*query + n*header', () => {
     "kind-id"?:string;
     },config?:AxiosRequestConfig): AxiosPromise<unknown> {
         return axios({
-            method: "get",
+            method: "GET",
             url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
     data: data,
     headers: headers,
@@ -408,7 +408,7 @@ it('path name unique', () => {
      */
     export async function getPet(type:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
         return axios({
-            method: "get",
+            method: "GET",
             url: \`/pets/\${type}\`,
     ...config
         });
