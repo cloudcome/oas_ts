@@ -28,8 +28,8 @@ it('ref $id', () => {
               $ref: '#/components/schemas/t0',
               description: '33',
             },
-            t00: {
-              $ref: '#/components/schemas/t0',
+            t1: {
+              $ref: '#/components/schemas/AxiosRequestConfig',
             },
           },
         },
@@ -61,7 +61,7 @@ it('ref $id', () => {
        * @description 33
        */
       "t0"?:AxiosRequestConfig_2;
-      "t00"?:AxiosRequestConfig_2;
+      "t1"?:AxiosRequestConfig_2;
       };"
     `);
 });
