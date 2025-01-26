@@ -39,7 +39,7 @@ const { defineConfig } = require('openapi-axios');
  */
 module.exports = defineConfig({
   modules: {
-    petStore3: 'https://petstore31.swagger.io/api/v31/openapi.json'
+    '.petStore3': 'https://petstore3.swagger.io/api/v3/openapi.json'
   },
 });
 ```
@@ -49,7 +49,7 @@ module.exports = defineConfig({
 # 根据配置文件生成typescript文件
 npx openapi-axios
 
-# 将会生成 src/apis/petStore3.ts 文件
+# 将会生成 src/apis/.petStore3.ts 文件
 ```
 
 <details>
@@ -130,7 +130,7 @@ export async function updatePet(data: Pet, config?: AxiosRequestConfig): AxiosPr
 然后你可以直接导入一个函数并使用它。 调用接口就像调用本地函数一样简单。
 
 ```ts
-import { updatePet } from '@/apis/petStore3';
+import { updatePet } from '@/apis/.petStore3';
 
 // 类型安全
 const { data: pet } = await updatePet({
