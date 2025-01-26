@@ -48,6 +48,7 @@ it('v3.1 schema', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`

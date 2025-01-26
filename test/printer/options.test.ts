@@ -16,6 +16,7 @@ it('axios 模块导入名称默认', () => {
   });
   expect(printer.print({
     hideInfo: true,
+    hideAlert: true,
     hideHelpers: true,
   })).toMatchInlineSnapshot(`
     "import axios from "axios";
@@ -53,6 +54,7 @@ it('axios 模块导入名称指定', () => {
   });
   expect(printer.print({
     hideInfo: true,
+    hideAlert: true,
     hideHelpers: true,
   })).toMatchInlineSnapshot(`
     "import {axios2 as axios} from "axios";
@@ -90,6 +92,7 @@ it('axios 默认导入名称为空', () => {
   });
   expect(printer.print({
     hideInfo: true,
+    hideAlert: true,
     hideHelpers: true,
   })).toMatchInlineSnapshot(`
     "import axios from "axios";
@@ -132,6 +135,7 @@ it('axios 模块和类型指定文件', () => {
   expect(printer.print({
     file: '/a/d/my-api.ts',
     hideInfo: true,
+    hideAlert: true,
     hideHelpers: true,
   })).toMatchInlineSnapshot(`
     "import {axios2 as axios} from "../b/request.ts";

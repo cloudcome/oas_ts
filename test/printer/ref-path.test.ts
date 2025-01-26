@@ -31,6 +31,7 @@ it('ref path', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`

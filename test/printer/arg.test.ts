@@ -54,6 +54,7 @@ it('1*path + 1*query + 1*header', () => {
       hideHeaders: true,
       hideFooters: true,
       hideInfo: true,
+      hideAlert: true,
       hideHelpers: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -138,6 +139,7 @@ it('n*path + 1*query + 1*header', () => {
       hideHeaders: true,
       hideFooters: true,
       hideInfo: true,
+      hideAlert: true,
       hideHelpers: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -232,6 +234,7 @@ it('n*path + n*query + 1*header', () => {
       hideHeaders: true,
       hideFooters: true,
       hideInfo: true,
+      hideAlert: true,
       hideHelpers: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -336,6 +339,7 @@ it('n*path + n*query + n*header', () => {
       hideHeaders: true,
       hideFooters: true,
       hideInfo: true,
+      hideAlert: true,
       hideHelpers: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -399,6 +403,7 @@ it('path name unique', () => {
       hideHeaders: true,
       hideFooters: true,
       hideInfo: true,
+      hideAlert: true,
       hideHelpers: true,
     }),
   ).toMatchInlineSnapshot(`

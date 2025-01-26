@@ -44,6 +44,7 @@ it('unique vars', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -141,6 +142,7 @@ it('unique types', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`

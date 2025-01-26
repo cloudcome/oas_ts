@@ -44,6 +44,7 @@ it('ref $id', () => {
       hideHelpers: true,
       hideImports: true,
       hideInfo: true,
+      hideAlert: true,
     }),
   ).toMatchInlineSnapshot(`
       "/**
@@ -123,6 +124,7 @@ it('ref $anchor', () => {
       hideHelpers: true,
       hideImports: true,
       hideInfo: true,
+      hideAlert: true,
     }),
   ).toMatchInlineSnapshot(`
       "export type T0 = {

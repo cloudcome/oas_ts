@@ -56,6 +56,7 @@ it('ref request', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`

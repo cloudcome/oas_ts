@@ -33,6 +33,7 @@ it('upload root', () => {
   const output = printer.print({
     hideComponents: true,
     hideInfo: true,
+    hideAlert: true,
     hideFooters: true,
     hideHeaders: true,
     hideImports: true,
@@ -118,6 +119,7 @@ it('upload single', () => {
   const output = printer.print({
     hideComponents: true,
     hideInfo: true,
+    hideAlert: true,
     hideFooters: true,
     hideHeaders: true,
     hideImports: true,
@@ -212,6 +214,7 @@ it('upload multiple', () => {
   const output = printer.print({
     hideComponents: true,
     hideInfo: true,
+    hideAlert: true,
     hideFooters: true,
     hideHeaders: true,
     hideImports: true,

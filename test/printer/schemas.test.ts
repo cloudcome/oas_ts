@@ -22,6 +22,7 @@ it('number', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -56,6 +57,7 @@ it('number enum', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -90,6 +92,7 @@ it('[number, null] enum', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -125,6 +128,7 @@ it('type[]', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -179,6 +183,7 @@ it('allOf primitive', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -230,6 +235,7 @@ it('explicit array', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -272,6 +278,7 @@ it('generic array', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -324,6 +331,7 @@ it('explicit object', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -374,6 +382,7 @@ it('generic object', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -406,6 +415,7 @@ it('additionalProperties true', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`"export type Pet = UnknownObject;"`);
@@ -432,6 +442,7 @@ it('additionalProperties false', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`"export type Pet = {};"`);
@@ -469,6 +480,7 @@ it('additionalProperties schema type', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -519,6 +531,7 @@ it('additionalProperties schema ref', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`

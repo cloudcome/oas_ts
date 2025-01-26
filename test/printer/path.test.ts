@@ -19,6 +19,7 @@ it('1路径 + 1请求', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -54,6 +55,7 @@ it('1路径 + 1请求 * module', () => {
       module: 'TTT',
       hideImports: true,
       hideHelpers: true,
+      hideAlert: true,
     }),
   ).toMatchInlineSnapshot(`
     "/**
@@ -96,6 +98,7 @@ it('1路径 + 2请求', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -159,6 +162,7 @@ it('1路径 + 1请求 + 1query', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -216,6 +220,7 @@ it('1路径 + 1请求 + 1query with duplicate', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -269,6 +274,7 @@ it('1路径 + 1请求 + 1path', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -328,6 +334,7 @@ it('1路径 + 1请求 + 2path', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -396,6 +403,7 @@ it('1路径 + 1请求 + 2query', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -478,6 +486,7 @@ it('1路径 + 1请求 + 2query + 1path', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -574,6 +583,7 @@ it('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -681,6 +691,7 @@ it('1路径 + 1请求 + 2query + 1path + 1request object', () => {
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -794,6 +805,7 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive',
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
@@ -925,6 +937,7 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', ()
       hideHeaders: true,
       hideHelpers: true,
       hideInfo: true,
+      hideAlert: true,
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
