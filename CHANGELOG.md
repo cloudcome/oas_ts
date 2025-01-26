@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.31.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.30.1...v0.31.0) (2025-01-26)
+
+
+### Features
+
+* **printer:** 添加文件生成警告信息 ([e754eeb](https://github.com/FrontEndDev-org/openapi-axios/commit/e754eebb1281340363b549fe2ce564b1424646b4))
+
 ## [0.30.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.30.0...v0.30.1) (2025-01-26)
 
 
