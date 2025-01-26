@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.30.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.29.0...v0.30.0) (2025-01-26)
+
+
+### Features
+
+* **printer:** 重构组件注册和引用解析逻辑 ([7f49ec0](https://github.com/FrontEndDev-org/openapi-axios/commit/7f49ec0715ed84f466632e5c664d62e2b478f129))
+
 ## [0.29.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.28.1...v0.29.0) (2025-01-10)
 
 
