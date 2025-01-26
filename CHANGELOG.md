@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.30.1](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.30.0...v0.30.1) (2025-01-26)
+
+
+### Bug Fixes
+
+* **printer:** 更新 Axios 相关类型名称 ([0cfa5a5](https://github.com/FrontEndDev-org/openapi-axios/commit/0cfa5a532526651a4c45e282c2b031159ba76060))
+
 ## [0.30.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.29.0...v0.30.0) (2025-01-26)
 
 
