@@ -1,5 +1,7 @@
+import type { OpenAPILatest } from '../types/openapi';
+import type { OpenApiLatest_Media, OpenApiLatest_Operation, OpenApiLatest_Parameter, OpenApiLatest_PathItem, OpenApiLatest_Request, OpenApiLatest_Response, OpenApiLatest_Schema } from './helpers';
 import type { PrinterConfigs, PrinterOptions } from './types';
-import { type OpenAPILatest, OpenAPIVersion } from '../types/openapi';
+import { OpenAPIVersion } from '../types/openapi';
 import { toImportPath } from '../utils/path';
 import { isString, isUndefined } from '../utils/type-is';
 import { Arg } from './Arg';
@@ -20,13 +22,7 @@ import {
   isRefRequest,
   isRefResponse,
   isRefSchema,
-  type OpenApiLatest_Media,
-  type OpenApiLatest_Operation,
-  type OpenApiLatest_Parameter,
-  type OpenApiLatest_PathItem,
-  type OpenApiLatest_Request,
-  type OpenApiLatest_Response,
-  type OpenApiLatest_Schema,
+
   toImportString,
 } from './helpers';
 import { JsDoc } from './JsDoc';

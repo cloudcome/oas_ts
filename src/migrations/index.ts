@@ -1,4 +1,5 @@
-import { type OpenAPIAll, type OpenAPILatest, OpenAPIVersion } from '../types/openapi';
+import type { OpenAPIAll, OpenAPILatest } from '../types/openapi';
+import { OpenAPIVersion } from '../types/openapi';
 import { migrate_2_0To3_0 } from './openapi-2_0';
 import { migrate_3_0To3_1 } from './openapi-3_0';
 

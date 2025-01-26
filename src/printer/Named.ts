@@ -42,17 +42,16 @@ export class Named {
   }
 
   nextOperationId(method: string, url: string, operationId?: string) {
-    operationId
-            = operationId
-            || fixVarName(
-              [
-                method,
-                url
-                  .replace(/\{.*?\}/g, '')
-                  .split('/')
-                  .filter(Boolean),
-              ].join('_'),
-            );
+    operationId = operationId
+      || fixVarName(
+        [
+          method,
+          url
+            .replace(/\{.*?\}/g, '')
+            .split('/')
+            .filter(Boolean),
+        ].join('_'),
+      );
     return nextUniqueName(operationId, this.varNameCountMap);
   }
 

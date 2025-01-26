@@ -1,8 +1,9 @@
 import type { OpenAPILatest } from '../types/openapi';
+import type { OpenApiLatest_Schema } from './helpers';
 import type { Named } from './Named';
 import { never } from '../utils/func';
 import { isArray, isBoolean, isNumber, isString, isUndefined } from '../utils/type-is';
-import { isRefSchema, type OpenApiLatest_Schema, requiredTypeStringify } from './helpers';
+import { isRefSchema, requiredTypeStringify } from './helpers';
 import { JsDoc } from './JsDoc';
 
 interface SchemaResult {

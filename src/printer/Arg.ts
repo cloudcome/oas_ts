@@ -1,7 +1,8 @@
 import type { OpenAPILatest } from '../types/openapi';
+import type { OpenApiLatest_Parameter } from './helpers';
 import type { Named } from './Named';
 import type { PrinterOptions } from './types';
-import { isRefParameter, type OpenApiLatest_Parameter, requiredKeyStringify } from './helpers';
+import { isRefParameter, requiredKeyStringify } from './helpers';
 import { Schemata } from './Schemata';
 
 export type ArgKind = 'path' | 'header' | 'cookie' | 'param' | 'data' | 'config' | 'response';

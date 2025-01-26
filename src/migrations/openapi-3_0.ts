@@ -1,4 +1,5 @@
-import { type OpenAPIV3, type OpenAPIV3_1, OpenAPIVersion } from '../types/openapi';
+import type { OpenAPIV3, OpenAPIV3_1 } from '../types/openapi';
+import { OpenAPIVersion } from '../types/openapi';
 import { objectMap } from '../utils/object';
 import { isBoolean, isUndefined } from '../utils/type-is';
 
