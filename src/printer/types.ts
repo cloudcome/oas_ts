@@ -75,7 +75,7 @@ export interface PrinterOptions {
 
   /**
    * 响应类型名称
-   * @default AxiosPromise
+   * @default AxiosResponse
    */
   axiosResponseTypeName?: string;
 

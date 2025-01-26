@@ -9,8 +9,8 @@ import { Args } from './Args';
 import {
   AXIOS_IMPORT_FILE,
   AXIOS_IMPORT_NAME,
-  AXIOS_PROMISE_TYPE_NAME,
-  AXIOS_QUEST_CONFIG_TYPE_NAME,
+  AXIOS_REQUEST_TYPE_NAME,
+  AXIOS_RESPONSE_TYPE_NAME,
   AXIOS_TYPE_IMPORT_FILE,
 } from './const';
 import {
@@ -331,8 +331,8 @@ export class Printer {
       axiosImportName = '',
       axiosImportFile,
       axiosTypeImportFile,
-      axiosRequestConfigTypeName = AXIOS_QUEST_CONFIG_TYPE_NAME,
-      axiosResponseTypeName = AXIOS_PROMISE_TYPE_NAME,
+      axiosRequestConfigTypeName = AXIOS_REQUEST_TYPE_NAME,
+      axiosResponseTypeName = AXIOS_RESPONSE_TYPE_NAME,
     } = this.options || {};
     const { cwd = '/', file } = this.configs;
     const axiosImportFile2 = axiosImportFile || AXIOS_IMPORT_FILE;
@@ -343,13 +343,13 @@ export class Printer {
     return [
       toImportString(AXIOS_IMPORT_NAME, axiosImportName, importPath),
       toImportString(
-        AXIOS_QUEST_CONFIG_TYPE_NAME,
+        AXIOS_REQUEST_TYPE_NAME,
         axiosRequestConfigTypeName,
         importTypePath,
         true,
       ),
       toImportString(
-        AXIOS_PROMISE_TYPE_NAME,
+        AXIOS_RESPONSE_TYPE_NAME,
         axiosResponseTypeName,
         importTypePath,
         true,
@@ -452,7 +452,7 @@ export class Printer {
     path.setUrl(url); // 设置 url，用于解析 path 参数
     const data = new Arg(argNamed, 'data', this.schemata, options, true);
     const config = new Arg(argNamed, 'config', this.schemata, options, true);
-    config.setDefaultType(AXIOS_QUEST_CONFIG_TYPE_NAME);
+    config.setDefaultType(AXIOS_REQUEST_TYPE_NAME);
     const resp = new Arg(argNamed, 'response', this.schemata, options, true);
     const { parameters, requestBody, responses, operationId } = operation;
 
@@ -539,7 +539,7 @@ export class Printer {
     jsDoc.addComments(responseArgs.toComments());
 
     return `${jsDoc.print()}
-export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_PROMISE_TYPE_NAME}<${respType}> {
+export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_RESPONSE_TYPE_NAME}<${respType}> {
     return ${AXIOS_IMPORT_NAME}({
         method: ${JSON.stringify(method.toUpperCase())},
         ${requestArgs.toValues()}

@@ -71,8 +71,8 @@ export const KEYWORD_VARS = [
 export const AXIOS_IMPORT_NAME = 'axios';
 export const AXIOS_IMPORT_FILE = 'axios';
 export const AXIOS_TYPE_IMPORT_FILE = 'axios';
-export const AXIOS_QUEST_CONFIG_TYPE_NAME = 'AxiosRequestConfig';
-export const AXIOS_PROMISE_TYPE_NAME = 'AxiosPromise';
+export const AXIOS_REQUEST_TYPE_NAME = 'AxiosRequestConfig';
+export const AXIOS_RESPONSE_TYPE_NAME = 'AxiosResponse';
 export const INTERNAL_VARS = [
   // config
   AXIOS_IMPORT_NAME,
@@ -105,6 +105,6 @@ export const INTERNAL_TYPES = [
   'UnknownArray',
   'DeepGet',
   // config
-  AXIOS_QUEST_CONFIG_TYPE_NAME,
-  AXIOS_PROMISE_TYPE_NAME,
+  AXIOS_REQUEST_TYPE_NAME,
+  AXIOS_RESPONSE_TYPE_NAME,
 ];
