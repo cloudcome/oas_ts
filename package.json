@@ -38,7 +38,7 @@
     "node": ">=14.21"
   },
   "scripts": {
-    "prepare": "husky",
+    "prepare": "lefthook install",
     "build": "NODE_ENV=production vite build",
     "lint:js": "eslint",
     "lint:js:fix": "eslint --fix",
@@ -67,8 +67,7 @@
     "@types/node": "20",
     "@vitest/coverage-v8": "^3.0.4",
     "eslint": "^9.19.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.4.2",
+    "lefthook": "^1.10.10",
     "taze": "^18.3.0",
     "typescript": "^5.7.3",
     "vite": "^6.0.11",

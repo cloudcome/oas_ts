@@ -1,0 +1,16 @@
+# @file lefthook.yml
+# @ref https://evilmartians.github.io/lefthook/
+
+pre-commit:
+  parallel: true
+  commands:
+    eslint:
+      glob: '*'
+      run: npx eslint --no-error-on-unmatched-pattern --no-color --fix {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  parallel: true
+  commands:
+    commitlint:
+      run: npx commitlint --edit
