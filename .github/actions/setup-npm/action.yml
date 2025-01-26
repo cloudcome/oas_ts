@@ -1,4 +1,4 @@
-name: setup nvm
+name: setup
 description: 依照 nvmrc 创建 node 环境
 
 runs:
@@ -8,8 +8,10 @@ runs:
       shell: bash
     - run: timedatectl
       shell: bash
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v4
       with:
         node-version-file: .nvmrc
         cache: npm
-        cache-dependency-path: '**/package-lock.json'
+        cache-dependency-path: package-lock.json
+    - run: npm ci
+      shell: bash

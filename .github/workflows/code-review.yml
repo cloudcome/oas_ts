@@ -16,16 +16,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-nvm
-      - run: npm ci
+      - uses: ./.github/actions/setup-npm
       - run: npm run lint
 
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-nvm
-      - run: npm ci
+      - uses: ./.github/actions/setup-npm
       - run: npm run test:coverage
       - uses: codacy/codacy-coverage-reporter-action@v1
         if: github.actor != 'dependabot[bot]'

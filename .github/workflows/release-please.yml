@@ -30,8 +30,7 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-nvm
-      - run: npm ci
+      - uses: ./.github/actions/setup-npm
       - run: npm run build
       - uses: FrontEndDev-org/publish-node-package-action@v2
         with:
@@ -47,8 +46,7 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-nvm
-      - run: npm ci
+      - uses: ./.github/actions/setup-npm
       - run: npm run build
       - uses: FrontEndDev-org/publish-node-package-action@v2
         with:
