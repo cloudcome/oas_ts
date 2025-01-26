@@ -1,6 +1,6 @@
 /**
  * @title Swagger Petstore - OpenAPI 3.1
- * @version 1.0.6
+ * @version 1.0.7
  * @contact <apiteam@swagger.io>
  * @description This is a sample Pet Store Server based on the OpenAPI 3.1 specification.
  * You can find out more about
@@ -59,13 +59,13 @@ export type Pet = {
 /**
  * @description Pet Category
  */
-"category"?:unknown;
+"category"?:Category;
 /**
  * @example doggie
  */
 "name":string;
 "photoUrls":Array<string>;
-"tags"?:Array<unknown>;
+"tags"?:Array<Tag>;
 /**
  * @description pet status in the store
  */
