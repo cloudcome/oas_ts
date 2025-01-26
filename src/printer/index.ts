@@ -135,13 +135,13 @@ export class Printer {
 
           const refType = this.named.nextRefType(name, id);
           this.schemas[id] = refType;
-          this._registerAnchors(id, refType, schema, []);
+          this.#registerAnchors(id, refType, schema, []);
           return refType;
         },
         additional: (id, refType) => {
           this.schemas[id] = refType;
           this.named.setRefType(id, refType);
-          this._registerAnchors(id, refType, schema, []);
+          this.#registerAnchors(id, refType, schema, []);
         },
       });
     }
@@ -229,7 +229,7 @@ export class Printer {
     }
   }
 
-  private _registerAnchors(
+  #registerAnchors(
     rootId: string,
     rootType: string,
     schema: OpenApiLatest_Schema,
@@ -251,14 +251,14 @@ export class Printer {
     }
 
     if ('items' in schema && schema.items) {
-      this._registerAnchors(rootId, rootType, schema.items, [
+      this.#registerAnchors(rootId, rootType, schema.items, [
         ...props,
         'number',
       ]);
     }
     else if ('properties' in schema && schema.properties) {
       for (const [prop, property] of Object.entries(schema.properties)) {
-        this._registerAnchors(rootId, rootType, property, [
+        this.#registerAnchors(rootId, rootType, property, [
           ...props,
           JSON.stringify(prop),
         ]);
@@ -282,18 +282,18 @@ export class Printer {
 
     return [
       !hideHeaders && header,
-      !hideInfo && this._printInfo(),
-      !hideImports && this._printImports(),
+      !hideInfo && this.#printInfo(),
+      !hideImports && this.#printImports(),
       !hideHelpers && Printer.helpersCode,
-      !hideComponents && this._printComponents(),
-      !hidePaths && this._printPaths(),
+      !hideComponents && this.#printComponents(),
+      !hidePaths && this.#printPaths(),
       !hideFooters && footer,
     ]
       .filter(Boolean)
       .join('\n\n');
   }
 
-  private _printInfo() {
+  #printInfo() {
     const {
       contact,
       description,
@@ -326,7 +326,7 @@ export class Printer {
     return jsDoc.print();
   }
 
-  private _printImports() {
+  #printImports() {
     const {
       axiosImportName = '',
       axiosImportFile,
@@ -358,10 +358,10 @@ export class Printer {
     ].join('\n');
   }
 
-  private _printComponents() {
+  #printComponents() {
     return Object.entries(this.document.components?.schemas || {})
       .map(([name, schema]) => {
-        return this._printComponent(
+        return this.#printComponent(
           name,
           `#/components/schemas/${name}`,
           schema,
@@ -370,7 +370,7 @@ export class Printer {
       .join('\n\n');
   }
 
-  private _printComponent(
+  #printComponent(
     name: string,
     id: string,
     schema: OpenApiLatest_Schema,
@@ -389,17 +389,17 @@ export class Printer {
       .join('\n');
   }
 
-  private _printPaths() {
+  #printPaths() {
     return Object.entries(this.document.paths || {})
       .map(([url, pathItem]) => {
-        return this._printPathItem(url, pathItem)
+        return this.#printPathItem(url, pathItem)
           .filter(filterLine)
           .join('\n\n');
       })
       .join('\n\n');
   }
 
-  private _printPathItem(
+  #printPathItem(
     url: string,
     pathItem: OpenApiLatest_PathItem,
   ): Array<string | undefined> {
@@ -410,7 +410,7 @@ export class Printer {
         throw new Error(`未发现 pathItem 引用：${pathItem.$ref}`);
       }
 
-      return this._printPathItem(url, relPathItem);
+      return this.#printPathItem(url, relPathItem);
     }
 
     return Object.entries(pathItem).map(([method, _operation]) => {
@@ -426,11 +426,11 @@ export class Printer {
 
       // 已经约束了是 http method
       const operation = _operation as OpenApiLatest_Operation;
-      return this._printOperation(method, url, operation);
+      return this.#printOperation(method, url, operation);
     });
   }
 
-  private _printOperation(
+  #printOperation(
     method: string,
     url: string,
     operation: OpenApiLatest_Operation,
@@ -458,7 +458,7 @@ export class Printer {
 
     if (parameters) {
       for (const parameter of parameters) {
-        this._parseParameter(parameter, {
+        this.#parseParameter(parameter, {
           header,
           cookie,
           path,
@@ -468,7 +468,7 @@ export class Printer {
     }
 
     if (requestBody) {
-      this._parseRequestBody(data, requestBody, (contentType, content) => {
+      this.#parseRequestBody(data, requestBody, (contentType, content) => {
         if (isString(requestContentType))
           return requestContentType === contentType;
         if (!requestContentType)
@@ -484,7 +484,7 @@ export class Printer {
     }
 
     if (responses) {
-      this._parseResponses(
+      this.#parseResponses(
         resp,
         responses,
         (statusCode, response) => {
@@ -547,7 +547,7 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_RESPONSE_TYP
 }`;
   }
 
-  private _parseContents(
+  #parseContents(
     arg: Arg,
     contents: {
       [contentType: string]:
@@ -567,10 +567,10 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_RESPONSE_TYP
     if (!content)
       return;
 
-    this._parseContent(arg, content, comments);
+    this.#parseContent(arg, content, comments);
   }
 
-  private _parseContent(
+  #parseContent(
     arg: Arg,
     content: OpenApiLatest_Media,
     comments: {
@@ -594,7 +594,7 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_RESPONSE_TYP
     });
   }
 
-  private _parseParameter(
+  #parseParameter(
     parameter: OpenApiLatest_Parameter,
     args: Record<OpenAPILatest.ParameterObject['in'], Arg>,
   ) {
@@ -606,7 +606,7 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_RESPONSE_TYP
         throw new Error(`未发现 parameter 引用：${$ref}`);
       }
 
-      this._parseParameter(refParameter, args);
+      this.#parseParameter(refParameter, args);
       return;
     }
 
@@ -615,7 +615,7 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_RESPONSE_TYP
     }
   }
 
-  private _parseRequestBody(
+  #parseRequestBody(
     arg: Arg,
     requestBody: OpenApiLatest_Request,
     match: RequestMediaMatch,
@@ -630,14 +630,14 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_RESPONSE_TYP
       if (!refRequestBody)
         throw new Error(`未发现 requestBody 引用：${$ref}`);
 
-      this._parseRequestBody(arg, refRequestBody, match);
+      this.#parseRequestBody(arg, refRequestBody, match);
       return;
     }
 
-    this._parseContents(arg, requestBody.content, requestBody, match);
+    this.#parseContents(arg, requestBody.content, requestBody, match);
   }
 
-  private _parseResponses(
+  #parseResponses(
     arg: Arg,
     responses: OpenAPILatest.ResponsesObject,
     responseMatch: ResponseMatch,
@@ -652,10 +652,10 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_RESPONSE_TYP
     if (!response)
       return;
 
-    this._parseResponse(arg, response, contentMatch);
+    this.#parseResponse(arg, response, contentMatch);
   }
 
-  private _parseResponse(
+  #parseResponse(
     arg: Arg,
     response: OpenApiLatest_Response,
     contentMatch: ResponseMediaMatch,
@@ -667,7 +667,7 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_RESPONSE_TYP
       if (!refResponse)
         throw new Error(`未发现 response 引用：${$ref}`);
 
-      this._parseResponse(arg, refResponse, contentMatch);
+      this.#parseResponse(arg, refResponse, contentMatch);
       return;
     }
 
@@ -675,7 +675,7 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_RESPONSE_TYP
     if (!content)
       return;
 
-    this._parseContents(arg, content, response, (contentType, content) =>
+    this.#parseContents(arg, content, response, (contentType, content) =>
       contentMatch(contentType, content, response));
   }
 
