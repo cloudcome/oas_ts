@@ -4,7 +4,13 @@ import { toImportPath } from '../utils/path';
 import { isString, isUndefined } from '../utils/type-is';
 import { Arg } from './Arg';
 import { Args } from './Args';
-import { AXIOS_IMPORT_FILE, AXIOS_IMPORT_NAME, AXIOS_PROMISE_TYPE_NAME, AXIOS_QUEST_CONFIG_TYPE_NAME, AXIOS_TYPE_IMPORT_FILE } from './const';
+import {
+  AXIOS_IMPORT_FILE,
+  AXIOS_IMPORT_NAME,
+  AXIOS_PROMISE_TYPE_NAME,
+  AXIOS_QUEST_CONFIG_TYPE_NAME,
+  AXIOS_TYPE_IMPORT_FILE,
+} from './const';
 import {
   filterLine,
   isRefMedia,
@@ -27,13 +33,32 @@ import { JsDoc } from './JsDoc';
 import { Named } from './Named';
 import { Schemata } from './Schemata';
 
-const allowMethods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
+const allowMethods = [
+  'get',
+  'put',
+  'post',
+  'delete',
+  'options',
+  'head',
+  'patch',
+  'trace',
+];
 const parameterTypes = ['query', 'header', 'path', 'cookie'];
 
-type RequestMediaMatch = (contentType: string, content: OpenApiLatest_Media) => boolean;
-type ResponseMediaMatch = (contentType: string, content: OpenApiLatest_Media, response: OpenAPILatest.ResponseObject) => boolean;
+type RequestMediaMatch = (
+  contentType: string,
+  content: OpenApiLatest_Media,
+) => boolean;
+type ResponseMediaMatch = (
+  contentType: string,
+  content: OpenApiLatest_Media,
+  response: OpenAPILatest.ResponseObject,
+) => boolean;
 
-type ResponseMatch = (statusCode: string, response: OpenApiLatest_Response) => boolean;
+type ResponseMatch = (
+  statusCode: string,
+  response: OpenApiLatest_Response,
+) => boolean;
 
 export class Printer {
   named = new Named({ internalVars: true, internalTypes: true });
@@ -48,8 +73,11 @@ export class Printer {
 
     if (!openapi)
       throw new Error('未找到 openapi 版本号');
-    if (!openapi.startsWith(OpenAPIVersion.V3_1))
-      throw new Error(`当前仅支持 openapi ${OpenAPIVersion.V3_1}，当前版本为 ${openapi}`);
+    if (!openapi.startsWith(OpenAPIVersion.V3_1)) {
+      throw new Error(
+        `当前仅支持 openapi ${OpenAPIVersion.V3_1}，当前版本为 ${openapi}`,
+      );
+    }
 
     this.registerComponents();
   }
@@ -61,86 +89,156 @@ export class Printer {
   responses: Record<string, OpenApiLatest_Response> = {};
   pathItems: Record<string, OpenApiLatest_PathItem> = {};
 
-  #parseRefId(defaultId: string, overrideId: string, callback: (id: string) => void) {
-    const ids = defaultId === overrideId ? [overrideId] : [overrideId, defaultId];
+  #parseRefComponent<T>(
+    { kind, name, obj, primary, additional }: {
+      kind: keyof OpenAPILatest.ComponentsObject;
+      name: string;
+      obj: { $ref: string } | { $id?: string };
+      primary: (id: string) => T;
+      additional?: ((id: string, val: T) => void) | true;
+    },
+  ) {
+    const nodeId = `#/components/${kind}/${name}`;
+    const refId = '$ref' in obj ? obj.$ref : '';
+    const namedId = '$ref' in obj ? '' : obj.$id;
 
-    for (const id of ids) {
-      callback(id);
+    if (refId === nodeId) {
+      throw new Error(`${kind}/${name} 引用了自身`);
+    }
+
+    const val = primary(nodeId);
+
+    if (namedId && namedId !== nodeId) {
+      if (additional === true) {
+        primary(namedId);
+      }
+      else {
+        additional?.(namedId, val);
+      }
     }
   }
 
   registerComponents() {
-    const { schemas = {}, requestBodies = {}, parameters = {}, responses = {}, pathItems = {} } = this.document.components || {};
+    const {
+      schemas = {},
+      requestBodies = {},
+      parameters = {},
+      responses = {},
+      pathItems = {},
+    } = this.document.components || {};
 
     for (const [name, schema] of Object.entries(schemas)) {
-      const defaultId = `#/components/schemas/${name}`;
-      const overrideId = isRefSchema(schema) ? schema.$ref : schema.$id || defaultId;
+      this.#parseRefComponent({
+        kind: 'schemas',
+        name,
+        obj: schema,
+        primary: (id) => {
+          if (this.schemas[id]) {
+            throw new Error(`重复的 schema 引用 id：${id}`);
+          }
 
-      this.#parseRefId(defaultId, overrideId, (id) => {
-        if (this.schemas[id]) {
-          throw new Error(`重复的 schema 引用 id：${id}`);
-        }
-
-        const refType = this.named.nextRefType(name, id);
-        this.schemas[id] = refType;
-        this._registerAnchors(id, refType, schema, []);
+          const refType = this.named.nextRefType(name, id);
+          this.schemas[id] = refType;
+          this._registerAnchors(id, refType, schema, []);
+          return refType;
+        },
+        additional: (id, refType) => {
+          this.schemas[id] = refType;
+          this.named.setRefType(id, refType);
+          this._registerAnchors(id, refType, schema, []);
+        },
       });
     }
 
     for (const [name, requestBody] of Object.entries(requestBodies)) {
       const defaultId = `#/components/requestBodies/${name}`;
-      const overrideId = isRefRequest(requestBody) ? defaultId : requestBody.$id || defaultId;
+      const overrideId = isRefRequest(requestBody)
+        ? defaultId
+        : requestBody.$id || defaultId;
 
-      this.#parseRefId(defaultId, overrideId, (id) => {
-        if (this.requestBodies[id]) {
-          throw new Error(`重复的 requestBody 引用 id：${id}`);
-        }
-
-        this.requestBodies[id] = requestBody;
+      this.#parseRefComponent({
+        kind: 'requestBodies',
+        name,
+        obj: requestBody,
+        primary: (id) => {
+          if (this.requestBodies[id]) {
+            throw new Error(`重复的 requestBody 引用 id：${id}`);
+          }
+          this.requestBodies[id] = requestBody;
+        },
+        additional: true,
       });
     }
 
     for (const [name, parameter] of Object.entries(parameters)) {
       const defaultId = `#/components/parameters/${name}`;
-      const overrideId = isRefParameter(parameter) ? defaultId : parameter.$id || defaultId;
+      const overrideId = isRefParameter(parameter)
+        ? defaultId
+        : parameter.$id || defaultId;
 
-      this.#parseRefId(defaultId, overrideId, (id) => {
-        if (this.parameters[id]) {
-          throw new Error(`重复的 parameter 引用 id：${id}`);
-        }
-
-        this.parameters[id] = parameter;
+      this.#parseRefComponent({
+        kind: 'parameters',
+        name,
+        obj: parameter,
+        primary: (id) => {
+          if (this.parameters[id]) {
+            throw new Error(`重复的 parameter 引用 id：${id}`);
+          }
+          this.parameters[id] = parameter;
+        },
+        additional: true,
       });
     }
 
     for (const [name, response] of Object.entries(responses)) {
       const defaultId = `#/components/responses/${name}`;
-      const overrideId = isRefResponse(response) ? defaultId : response.$id || defaultId;
+      const overrideId = isRefResponse(response)
+        ? defaultId
+        : response.$id || defaultId;
 
-      this.#parseRefId(defaultId, overrideId, (id) => {
-        if (this.responses[overrideId]) {
-          throw new Error(`重复的 response 引用 id：${overrideId}`);
-        }
+      this.#parseRefComponent({
+        kind: 'responses',
+        name,
+        obj: response,
+        primary: (id) => {
+          if (this.responses[overrideId]) {
+            throw new Error(`重复的 response 引用 id：${overrideId}`);
+          }
 
-        this.responses[overrideId] = response;
+          this.responses[id] = response;
+        },
+        additional: true,
       });
     }
 
     for (const [name, pathItem] of Object.entries(pathItems)) {
       const defaultId = `#/components/pathItems/${name}`;
-      const overrideId = isRefPathItem(pathItem) ? defaultId : pathItem.$id || defaultId;
+      const overrideId = isRefPathItem(pathItem)
+        ? defaultId
+        : pathItem.$id || defaultId;
 
-      this.#parseRefId(defaultId, overrideId, (id) => {
-        if (this.pathItems[id]) {
-          throw new Error(`重复的 pathItem 引用 id：${id}`);
-        }
+      this.#parseRefComponent({
+        kind: 'pathItems',
+        name,
+        obj: pathItem,
+        primary: (id) => {
+          if (this.pathItems[id]) {
+            throw new Error(`重复的 pathItem 引用 id：${id}`);
+          }
 
-        this.pathItems[id] = pathItem;
+          this.pathItems[id] = pathItem;
+        },
+        additional: true,
       });
     }
   }
 
-  private _registerAnchors(rootId: string, rootType: string, schema: OpenApiLatest_Schema, props: string[]) {
+  private _registerAnchors(
+    rootId: string,
+    rootType: string,
+    schema: OpenApiLatest_Schema,
+    props: string[],
+  ) {
     if (isRefSchema(schema))
       return;
 
@@ -153,24 +251,38 @@ export class Printer {
       }
 
       this.anchors[anchorId] = anchorType;
-      this.named.refIdTypeMap.set(anchorId, anchorType);
+      this.named.setRefType(anchorId, anchorType);
     }
 
     if ('items' in schema && schema.items) {
-      this._registerAnchors(rootId, rootType, schema.items, [...props, 'number']);
+      this._registerAnchors(rootId, rootType, schema.items, [
+        ...props,
+        'number',
+      ]);
     }
     else if ('properties' in schema && schema.properties) {
       for (const [prop, property] of Object.entries(schema.properties)) {
-        this._registerAnchors(rootId, rootType, property, [...props, JSON.stringify(prop)]);
+        this._registerAnchors(rootId, rootType, property, [
+          ...props,
+          JSON.stringify(prop),
+        ]);
       }
     }
   }
 
   print(configs?: PrinterConfigs) {
     Object.assign(this.configs, configs);
-    const { hideHeaders, hideHelpers, hideFooters, hideInfo, hideComponents, hideImports, hidePaths } = this.configs;
-    const header = (this.options?.header || '');
-    const footer = (this.options?.footer || '');
+    const {
+      hideHeaders,
+      hideHelpers,
+      hideFooters,
+      hideInfo,
+      hideComponents,
+      hideImports,
+      hidePaths,
+    } = this.configs;
+    const header = this.options?.header || '';
+    const footer = this.options?.footer || '';
 
     return [
       !hideHeaders && header,
@@ -186,7 +298,15 @@ export class Printer {
   }
 
   private _printInfo() {
-    const { contact, description, license, summary, termsOfService, title, version } = this.document.info;
+    const {
+      contact,
+      description,
+      license,
+      summary,
+      termsOfService,
+      title,
+      version,
+    } = this.document.info;
     const { externalDocs } = this.document;
     const { name, email, url } = contact || {};
     const jsDoc = new JsDoc();
@@ -197,7 +317,12 @@ export class Printer {
     jsDoc.addComments({
       title,
       version,
-      contact: name || url || email ? [name, email ? `<${email}>` : '', url ? `(${url})` : ''].filter(Boolean).join(' ') : undefined,
+      contact:
+        name || url || email
+          ? [name, email ? `<${email}>` : '', url ? `(${url})` : '']
+              .filter(Boolean)
+              .join(' ')
+          : undefined,
       description,
       summary,
       see: extDoc,
@@ -221,8 +346,18 @@ export class Printer {
 
     return [
       toImportString(AXIOS_IMPORT_NAME, axiosImportName, importPath),
-      toImportString(AXIOS_QUEST_CONFIG_TYPE_NAME, axiosRequestConfigTypeName, importTypePath, true),
-      toImportString(AXIOS_PROMISE_TYPE_NAME, axiosResponseTypeName, importTypePath, true),
+      toImportString(
+        AXIOS_QUEST_CONFIG_TYPE_NAME,
+        axiosRequestConfigTypeName,
+        importTypePath,
+        true,
+      ),
+      toImportString(
+        AXIOS_PROMISE_TYPE_NAME,
+        axiosResponseTypeName,
+        importTypePath,
+        true,
+      ),
       '',
     ].join('\n');
   }
@@ -230,12 +365,20 @@ export class Printer {
   private _printComponents() {
     return Object.entries(this.document.components?.schemas || {})
       .map(([name, schema]) => {
-        return this._printComponent(name, `#/components/schemas/${name}`, schema);
+        return this._printComponent(
+          name,
+          `#/components/schemas/${name}`,
+          schema,
+        );
       })
       .join('\n\n');
   }
 
-  private _printComponent(name: string, id: string, schema: OpenApiLatest_Schema) {
+  private _printComponent(
+    name: string,
+    id: string,
+    schema: OpenApiLatest_Schema,
+  ) {
     const { comments, type } = this.schemata.print(schema);
     const jsDoc = new JsDoc();
     jsDoc.addComments(comments);
@@ -245,18 +388,25 @@ export class Printer {
       throw new Error(`未发现 schema 引用：${id}`);
     }
 
-    return [jsDoc.print(), `export type ${refType} = ${type};`].filter(Boolean).join('\n');
+    return [jsDoc.print(), `export type ${refType} = ${type};`]
+      .filter(Boolean)
+      .join('\n');
   }
 
   private _printPaths() {
     return Object.entries(this.document.paths || {})
       .map(([url, pathItem]) => {
-        return this._printPathItem(url, pathItem).filter(filterLine).join('\n\n');
+        return this._printPathItem(url, pathItem)
+          .filter(filterLine)
+          .join('\n\n');
       })
       .join('\n\n');
   }
 
-  private _printPathItem(url: string, pathItem: OpenApiLatest_PathItem): Array<string | undefined> {
+  private _printPathItem(
+    url: string,
+    pathItem: OpenApiLatest_PathItem,
+  ): Array<string | undefined> {
     if (isRefPathItem(pathItem)) {
       const relPathItem = this.pathItems[pathItem.$ref];
 
@@ -284,13 +434,21 @@ export class Printer {
     });
   }
 
-  private _printOperation(method: string, url: string, operation: OpenApiLatest_Operation) {
+  private _printOperation(
+    method: string,
+    url: string,
+    operation: OpenApiLatest_Operation,
+  ) {
     if (isRefOperation(operation))
       return;
 
     const options = this.options || {};
     const { responseStatusCode, responseContentType, requestContentType } = options;
-    const argNamed = new Named({ keywordVars: true, internalVars: true, internalTypes: true });
+    const argNamed = new Named({
+      keywordVars: true,
+      internalVars: true,
+      internalTypes: true,
+    });
     const header = new Arg(argNamed, 'header', this.schemata, options);
     const cookie = new Arg(argNamed, 'cookie', this.schemata, options);
     const query = new Arg(argNamed, 'param', this.schemata, options);
@@ -366,7 +524,13 @@ export class Printer {
     }
 
     const funcName = this.named.nextOperationId(method, url, operationId);
-    const requestArgs = new Args([header.parse(), path.parse(), query.parse(), data.parse(), config.parse()]);
+    const requestArgs = new Args([
+      header.parse(),
+      path.parse(),
+      query.parse(),
+      data.parse(),
+      config.parse(),
+    ]);
     const responseArgs = new Args([resp.parse()]);
     const respType = responseArgs.toType(0);
     const jsDoc = new JsDoc(this.document.tags);
@@ -389,7 +553,11 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_PROMISE_TYPE
 
   private _parseContents(
     arg: Arg,
-    contents: { [contentType: string]: OpenAPILatest.MediaTypeObject | OpenAPILatest.ReferenceObject },
+    contents: {
+      [contentType: string]:
+        | OpenAPILatest.MediaTypeObject
+        | OpenAPILatest.ReferenceObject;
+    },
     comments: {
       description?: string;
       required?: boolean;
@@ -430,7 +598,10 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_PROMISE_TYPE
     });
   }
 
-  private _parseParameter(parameter: OpenApiLatest_Parameter, args: Record<OpenAPILatest.ParameterObject['in'], Arg>) {
+  private _parseParameter(
+    parameter: OpenApiLatest_Parameter,
+    args: Record<OpenAPILatest.ParameterObject['in'], Arg>,
+  ) {
     if (isRefParameter(parameter)) {
       const { $ref } = parameter;
       const refParameter = this.parameters[$ref];
@@ -448,7 +619,11 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_PROMISE_TYPE
     }
   }
 
-  private _parseRequestBody(arg: Arg, requestBody: OpenApiLatest_Request, match: RequestMediaMatch) {
+  private _parseRequestBody(
+    arg: Arg,
+    requestBody: OpenApiLatest_Request,
+    match: RequestMediaMatch,
+  ) {
     if (!requestBody)
       return;
 
@@ -466,10 +641,17 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_PROMISE_TYPE
     this._parseContents(arg, requestBody.content, requestBody, match);
   }
 
-  private _parseResponses(arg: Arg, responses: OpenAPILatest.ResponsesObject, responseMatch: ResponseMatch, contentMatch: ResponseMediaMatch) {
-    const response = Object.entries(responses).find(([statusCode, response]) => {
-      return responseMatch(statusCode, response);
-    })?.[1];
+  private _parseResponses(
+    arg: Arg,
+    responses: OpenAPILatest.ResponsesObject,
+    responseMatch: ResponseMatch,
+    contentMatch: ResponseMediaMatch,
+  ) {
+    const response = Object.entries(responses).find(
+      ([statusCode, response]) => {
+        return responseMatch(statusCode, response);
+      },
+    )?.[1];
 
     if (!response)
       return;
@@ -477,7 +659,11 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_PROMISE_TYPE
     this._parseResponse(arg, response, contentMatch);
   }
 
-  private _parseResponse(arg: Arg, response: OpenApiLatest_Response, contentMatch: ResponseMediaMatch) {
+  private _parseResponse(
+    arg: Arg,
+    response: OpenApiLatest_Response,
+    contentMatch: ResponseMediaMatch,
+  ) {
     if (isRefResponse(response)) {
       const { $ref } = response;
       const refResponse = this.responses[$ref];
@@ -493,7 +679,8 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_PROMISE_TYPE
     if (!content)
       return;
 
-    this._parseContents(arg, content, response, (contentType, content) => contentMatch(contentType, content, response));
+    this._parseContents(arg, content, response, (contentType, content) =>
+      contentMatch(contentType, content, response));
   }
 
   static helpersCode = `
@@ -516,9 +703,15 @@ type DeepGet<O, K> = K extends [infer P, ...infer R]
 }
 
 // helpers --- start
-type OneOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | OneOf<B> : never;
-type AllOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A & AllOf<B> : unknown;
-type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B] ? A | AnyOf<B> | (A & AnyOf<B>) : never;
+type OneOf<T extends unknown[]> = T extends [infer A, ...infer B]
+  ? A | OneOf<B>
+  : never;
+type AllOf<T extends unknown[]> = T extends [infer A, ...infer B]
+  ? A & AllOf<B>
+  : unknown;
+type AnyOf<T extends unknown[]> = T extends [infer A, ...infer B]
+  ? A | AnyOf<B> | (A & AnyOf<B>)
+  : never;
 type UnknownObject = Record<string, unknown>;
 type DeepGet<O, K> = K extends [infer P, ...infer R]
   ? O extends Record<string, any> | Array<any>
