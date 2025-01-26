@@ -55,7 +55,7 @@ it('unique vars', () => {
      * @param [config] request config
      * @returns success
      */
-    export async function getTest(config?:AxiosRequestConfig): AxiosPromise<TestAa> {
+    export async function getTest(config?:AxiosRequestConfig): AxiosResponse<TestAa> {
         return axios({
             method: "GET",
             url: \`/test\`,
@@ -99,8 +99,8 @@ it('unique types', () => {
                   schema: {
                     type: 'object',
                     properties: {
-                      AxiosPromise: {
-                        $ref: '#/components/schemas/AxiosPromise',
+                      AxiosResponse: {
+                        $ref: '#/components/schemas/AxiosResponse',
                       },
                       UnknownObject: {
                         $ref: '#/components/schemas/UnknownObject',
@@ -116,7 +116,7 @@ it('unique types', () => {
     },
     components: {
       schemas: {
-        AxiosPromise: {
+        AxiosResponse: {
           type: 'object',
           properties: {
             name: {
@@ -144,7 +144,7 @@ it('unique types', () => {
       hideImports: true,
     }),
   ).toMatchInlineSnapshot(`
-    "export type AxiosPromise_2 = {
+    "export type AxiosResponse_2 = {
     "name"?:string;
     };
 
@@ -158,8 +158,8 @@ it('unique types', () => {
      * @param [config] request config
      * @returns success
      */
-    export async function getTest(axios_2:string,UnknownObject?:UnknownObject_2,config?:AxiosRequestConfig): AxiosPromise<{
-    "AxiosPromise"?:AxiosPromise_2;
+    export async function getTest(axios_2:string,UnknownObject?:UnknownObject_2,config?:AxiosRequestConfig): AxiosResponse<{
+    "AxiosResponse"?:AxiosResponse_2;
     "UnknownObject"?:UnknownObject_2;
     }> {
         return axios({

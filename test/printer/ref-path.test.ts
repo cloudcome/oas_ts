@@ -37,7 +37,7 @@ it('ref path', () => {
     "/**
      * @param [config] request config
      */
-    export async function getTest(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function getTest(config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/test\`,

@@ -14,7 +14,7 @@
 
 import axios from "axios";
 import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
-import {type AxiosPromise as AxiosPromise} from "axios";
+import {type AxiosResponse as AxiosResponse} from "axios";
 
 
 
@@ -189,7 +189,7 @@ export type ApiResponse = {
  * @param [config] request config
  * @returns Successful operation
  */
-export async function addPet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
+export async function addPet(data:Pet,config?:AxiosRequestConfig): AxiosResponse<Pet> {
     return axios({
         method: "POST",
         url: `/pet`,
@@ -206,7 +206,7 @@ data: data,
  * @param [config] request config
  * @returns Successful operation
  */
-export async function updatePet(data:Pet,config?:AxiosRequestConfig): AxiosPromise<Pet> {
+export async function updatePet(data:Pet,config?:AxiosRequestConfig): AxiosResponse<Pet> {
     return axios({
         method: "PUT",
         url: `/pet`,
@@ -228,7 +228,7 @@ export async function findPetsByStatus(status?:
  * @default available
  */
 ("available"|"pending"|"sold")
-,config?:AxiosRequestConfig): AxiosPromise<Array<Pet>> {
+,config?:AxiosRequestConfig): AxiosResponse<Array<Pet>> {
     return axios({
         method: "GET",
         url: `/pet/findByStatus`,
@@ -245,7 +245,7 @@ params: {"status": status},
  * @param [config] request config
  * @returns successful operation
  */
-export async function findPetsByTags(tags?:Array<string>,config?:AxiosRequestConfig): AxiosPromise<Array<Pet>> {
+export async function findPetsByTags(tags?:Array<string>,config?:AxiosRequestConfig): AxiosResponse<Array<Pet>> {
     return axios({
         method: "GET",
         url: `/pet/findByTags`,
@@ -267,7 +267,7 @@ export async function getPetById(petId:
  * @format int64
  */
 number
-,config?:AxiosRequestConfig): AxiosPromise<Pet> {
+,config?:AxiosRequestConfig): AxiosResponse<Pet> {
     return axios({
         method: "GET",
         url: `/pet/${petId}`,
@@ -297,7 +297,7 @@ number
  * @description Status of pet that needs to be updated
  */
 "status"?:string;
-},config?:AxiosRequestConfig): AxiosPromise<unknown> {
+},config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "POST",
         url: `/pet/${petId}`,
@@ -319,7 +319,7 @@ export async function deletePet(petId:
  * @format int64
  */
 number
-,apiKey?:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+,apiKey?:string,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "DELETE",
         url: `/pet/${petId}`,
@@ -348,7 +348,7 @@ number
  * @format binary
  */
 Blob
-,additionalMetadata?:string,config?:AxiosRequestConfig): AxiosPromise<ApiResponse> {
+,additionalMetadata?:string,config?:AxiosRequestConfig): AxiosResponse<ApiResponse> {
     return axios({
         method: "POST",
         url: `/pet/${petId}/uploadImage`,
@@ -365,7 +365,7 @@ params: {"additionalMetadata": additionalMetadata},
  * @param [config] request config
  * @returns successful operation
  */
-export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<{
+export async function getInventory(config?:AxiosRequestConfig): AxiosResponse<{
 /**
  * @format int32
  */
@@ -386,7 +386,7 @@ export async function getInventory(config?:AxiosRequestConfig): AxiosPromise<{
  * @param [config] request config
  * @returns successful operation
  */
-export async function placeOrder(data:Order,config?:AxiosRequestConfig): AxiosPromise<Order> {
+export async function placeOrder(data:Order,config?:AxiosRequestConfig): AxiosResponse<Order> {
     return axios({
         method: "POST",
         url: `/store/order`,
@@ -408,7 +408,7 @@ export async function getOrderById(orderId:
  * @format int64
  */
 number
-,config?:AxiosRequestConfig): AxiosPromise<Order> {
+,config?:AxiosRequestConfig): AxiosResponse<Order> {
     return axios({
         method: "GET",
         url: `/store/order/${orderId}`,
@@ -428,7 +428,7 @@ export async function deleteOrder(orderId:
  * @format int64
  */
 number
-,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "DELETE",
         url: `/store/order/${orderId}`,
@@ -443,7 +443,7 @@ number
  * @param data Created user object
  * @param [config] request config
  */
-export async function createUser(data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+export async function createUser(data:User,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "POST",
         url: `/user`,
@@ -460,7 +460,7 @@ data: data,
  * @param [config] request config
  * @returns Successful operation
  */
-export async function createUsersWithListInput(data:Array<User>,config?:AxiosRequestConfig): AxiosPromise<User> {
+export async function createUsersWithListInput(data:Array<User>,config?:AxiosRequestConfig): AxiosResponse<User> {
     return axios({
         method: "POST",
         url: `/user/createWithList`,
@@ -486,7 +486,7 @@ export async function loginUser(params?:{
  * @description The password for login in clear text
  */
 "password"?:string;
-},config?:AxiosRequestConfig): AxiosPromise<string> {
+},config?:AxiosRequestConfig): AxiosResponse<string> {
     return axios({
         method: "GET",
         url: `/user/login`,
@@ -501,7 +501,7 @@ params: params,
  * @see user Operations about user
  * @param [config] request config
  */
-export async function logoutUser(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+export async function logoutUser(config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "GET",
         url: `/user/logout`,
@@ -517,7 +517,7 @@ export async function logoutUser(config?:AxiosRequestConfig): AxiosPromise<unkno
  * @param [config] request config
  * @returns successful operation
  */
-export async function getUserByName(username:string,config?:AxiosRequestConfig): AxiosPromise<User> {
+export async function getUserByName(username:string,config?:AxiosRequestConfig): AxiosResponse<User> {
     return axios({
         method: "GET",
         url: `/user/${username}`,
@@ -532,7 +532,7 @@ export async function getUserByName(username:string,config?:AxiosRequestConfig):
  * @param username The name that needs to be deleted
  * @param [config] request config
  */
-export async function deleteUser(username:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+export async function deleteUser(username:string,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "DELETE",
         url: `/user/${username}`,
@@ -548,7 +548,7 @@ export async function deleteUser(username:string,config?:AxiosRequestConfig): Ax
  * @param data Update an existent user in the store
  * @param [config] request config
  */
-export async function updateUser(username:string,data:User,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+export async function updateUser(username:string,data:User,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "PUT",
         url: `/user/${username}`,

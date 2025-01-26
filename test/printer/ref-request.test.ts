@@ -73,7 +73,7 @@ it('ref request', () => {
      * @description 用户列表
      */
     Array<User>
-    ,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    ,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "POST",
             url: \`/test\`,

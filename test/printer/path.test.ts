@@ -25,7 +25,7 @@ it('1路径 + 1请求', () => {
     "/**
      * @param [config] request config
      */
-    export async function getApiAbc(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function getApiAbc(config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc\`,
@@ -66,7 +66,7 @@ it('1路径 + 1请求 * module', () => {
      * @module TTT
      * @param [config] request config
      */
-    export async function getApiAbc(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function getApiAbc(config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc\`,
@@ -102,7 +102,7 @@ it('1路径 + 2请求', () => {
     "/**
      * @param [config] request config
      */
-    export async function getApiAbc(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function getApiAbc(config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc\`,
@@ -113,7 +113,7 @@ it('1路径 + 2请求', () => {
     /**
      * @param [config] request config
      */
-    export async function postApiAbc(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function postApiAbc(config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "POST",
             url: \`/api/abc\`,
@@ -171,7 +171,7 @@ it('1路径 + 1请求 + 1query', () => {
      * @description description 2
      */
     number
-    ,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    ,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc\`,
@@ -223,7 +223,7 @@ it('1路径 + 1请求 + 1query with duplicate', () => {
      * @param [config] request params "config"
      * @param [config_2] request config
      */
-    export async function getApiAbc(config?:string,config_2?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function getApiAbc(config?:string,config_2?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc\`,
@@ -276,7 +276,7 @@ it('1路径 + 1请求 + 1path', () => {
      * @param var_2 request path "var"
      * @param [config] request config
      */
-    export async function getApiAbc(var_2:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function getApiAbc(var_2:string,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${var_2}\`,
@@ -341,7 +341,7 @@ it('1路径 + 1请求 + 2path', () => {
      * @format integer
      */
     "xyz":number;
-    },config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${path["var"]}/def/\${path["xyz"]}\`,
@@ -412,7 +412,7 @@ it('1路径 + 1请求 + 2query', () => {
      * @description description 3
      */
     "b":string;
-    },config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc\`,
@@ -500,7 +500,7 @@ it('1路径 + 1请求 + 2query + 1path', () => {
      * @description xxx
      */
     "b":string;
-    },config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${params}\`,
@@ -599,7 +599,7 @@ it('1路径 + 1请求 + 2query + 1path + 1request primitive', () => {
      * @description aaa
      */
     string
-    ,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    ,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${c}\`,
@@ -706,7 +706,7 @@ it('1路径 + 1请求 + 2query + 1path + 1request object', () => {
      * @description yyy
      */
     "name":string;
-    },config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${c}\`,
@@ -820,7 +820,7 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response primitive',
      * @description yyy
      */
     "name":string;
-    },config?:AxiosRequestConfig): AxiosPromise<string> {
+    },config?:AxiosRequestConfig): AxiosResponse<string> {
         return axios({
             method: "GET",
             url: \`/api/abc/\${c}\`,
@@ -951,7 +951,7 @@ it('1路径 + 1请求 + 2query + 1path + 1request object + 1response object', ()
      * @description yyy
      */
     "name":string;
-    },config?:AxiosRequestConfig): AxiosPromise<
+    },config?:AxiosRequestConfig): AxiosResponse<
     /**
      * @description resp---123
      */

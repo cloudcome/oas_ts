@@ -11,7 +11,7 @@
 
 import axios from "axios";
 import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
-import {type AxiosPromise as AxiosPromise} from "axios";
+import {type AxiosResponse as AxiosResponse} from "axios";
 
 
 
@@ -113,7 +113,7 @@ export async function updatePet(data:
  * @description A Pet in JSON Format
  */
 Pet
-,config?:AxiosRequestConfig): AxiosPromise<
+,config?:AxiosRequestConfig): AxiosResponse<
 /**
  * @description A Pet in XML Format
  */
@@ -140,7 +140,7 @@ export async function addPet(data:
  * @description A Pet in JSON Format
  */
 Pet
-,config?:AxiosRequestConfig): AxiosPromise<
+,config?:AxiosRequestConfig): AxiosResponse<
 /**
  * @description A Pet in XML Format
  */
@@ -166,7 +166,7 @@ export async function getPetById(petId:
  * @format int64
  */
 number
-,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+,config?:AxiosRequestConfig): AxiosResponse<unknown> {
     return axios({
         method: "GET",
         url: `/pet/${petId}`,

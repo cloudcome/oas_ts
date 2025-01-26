@@ -64,7 +64,7 @@ it('1*path + 1*query + 1*header', () => {
      * @param [categoryId] request params "category-id"
      * @param [config] request config
      */
-    export async function getPet(petId:string,data:string,xAuthKey?:string,categoryId?:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function getPet(petId:string,data:string,xAuthKey?:string,categoryId?:string,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/pets/\${petId}\`,
@@ -151,7 +151,7 @@ it('n*path + 1*query + 1*header', () => {
     export async function getPet(path:{
     "pet-id":string;
     "zoo-id":string;
-    },data:string,xAuthKey?:string,categoryId?:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    },data:string,xAuthKey?:string,categoryId?:string,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
@@ -248,7 +248,7 @@ it('n*path + n*query + 1*header', () => {
     },data:string,xAuthKey?:string,params?:{
     "category-id"?:string;
     "kind-id"?:string;
-    },config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
@@ -355,7 +355,7 @@ it('n*path + n*query + n*header', () => {
     },params?:{
     "category-id"?:string;
     "kind-id"?:string;
-    },config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/zoo/\${path["zoo-id"]}/pets/\${path["pet-id"]}\`,
@@ -406,7 +406,7 @@ it('path name unique', () => {
      * @param type request path "type"
      * @param [config] request config
      */
-    export async function getPet(type:string,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function getPet(type:string,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/pets/\${type}\`,

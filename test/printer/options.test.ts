@@ -20,13 +20,13 @@ it('axios 模块导入名称默认', () => {
   })).toMatchInlineSnapshot(`
     "import axios from "axios";
     import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
-    import {type AxiosPromise as AxiosPromise} from "axios";
+    import {type AxiosResponse as AxiosResponse} from "axios";
 
 
     /**
      * @param [config] request config
      */
-    export async function get(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function get(config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/\`,
@@ -57,13 +57,13 @@ it('axios 模块导入名称指定', () => {
   })).toMatchInlineSnapshot(`
     "import {axios2 as axios} from "axios";
     import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
-    import {type AxiosPromise as AxiosPromise} from "axios";
+    import {type AxiosResponse as AxiosResponse} from "axios";
 
 
     /**
      * @param [config] request config
      */
-    export async function get(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function get(config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/\`,
@@ -94,13 +94,13 @@ it('axios 默认导入名称为空', () => {
   })).toMatchInlineSnapshot(`
     "import axios from "axios";
     import {type AxiosRequestConfig as AxiosRequestConfig} from "axios";
-    import {type AxiosPromise as AxiosPromise} from "axios";
+    import {type AxiosResponse as AxiosResponse} from "axios";
 
 
     /**
      * @param [config] request config
      */
-    export async function get(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function get(config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/\`,
@@ -126,7 +126,7 @@ it('axios 模块和类型指定文件', () => {
     axiosImportName: 'axios2',
     axiosImportFile: '/a/b/request.ts',
     axiosRequestConfigTypeName: 'AxiosRequestConfig2',
-    axiosResponseTypeName: 'AxiosPromise2',
+    axiosResponseTypeName: 'AxiosResponse2',
     axiosTypeImportFile: '/a/c/request-types.ts',
   });
   expect(printer.print({
@@ -136,13 +136,13 @@ it('axios 模块和类型指定文件', () => {
   })).toMatchInlineSnapshot(`
     "import {axios2 as axios} from "../b/request.ts";
     import {type AxiosRequestConfig2 as AxiosRequestConfig} from "../c/request-types.ts";
-    import {type AxiosPromise2 as AxiosPromise} from "../c/request-types.ts";
+    import {type AxiosResponse2 as AxiosResponse} from "../c/request-types.ts";
 
 
     /**
      * @param [config] request config
      */
-    export async function get(config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    export async function get(config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "GET",
             url: \`/\`,

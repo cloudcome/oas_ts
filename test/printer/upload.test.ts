@@ -52,7 +52,7 @@ it('upload root', () => {
      * @format binary
      */
     Blob
-    ,config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    ,config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "POST",
             url: \`/upload\`,
@@ -142,7 +142,7 @@ it('upload single', () => {
      * @description A name
      */
     "name"?:string;
-    },config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "POST",
             url: \`/upload\`,
@@ -238,7 +238,7 @@ it('upload multiple', () => {
      * @description A name
      */
     "name"?:string;
-    },config?:AxiosRequestConfig): AxiosPromise<unknown> {
+    },config?:AxiosRequestConfig): AxiosResponse<unknown> {
         return axios({
             method: "POST",
             url: \`/upload\`,
