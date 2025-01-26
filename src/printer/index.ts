@@ -47,7 +47,7 @@ export class Printer {
     const { openapi } = document;
 
     if (!openapi)
-      throw new Error(`未找到 openapi 版本号`);
+      throw new Error('未找到 openapi 版本号');
     if (!openapi.startsWith(OpenAPIVersion.V3_1))
       throw new Error(`当前仅支持 openapi ${OpenAPIVersion.V3_1}，当前版本为 ${openapi}`);
 
@@ -60,64 +60,84 @@ export class Printer {
   parameters: Record<string, OpenApiLatest_Parameter> = {};
   responses: Record<string, OpenApiLatest_Response> = {};
   pathItems: Record<string, OpenApiLatest_PathItem> = {};
+
+  #parseRefId(defaultId: string, overrideId: string, callback: (id: string) => void) {
+    const ids = defaultId === overrideId ? [overrideId] : [overrideId, defaultId];
+
+    for (const id of ids) {
+      callback(id);
+    }
+  }
+
   registerComponents() {
     const { schemas = {}, requestBodies = {}, parameters = {}, responses = {}, pathItems = {} } = this.document.components || {};
 
-    Object.entries(schemas).forEach(([name, schema]) => {
-      const id = isRefSchema(schema) ? schema.$ref : schema.$id || `#/components/schemas/${name}`;
+    for (const [name, schema] of Object.entries(schemas)) {
+      const defaultId = `#/components/schemas/${name}`;
+      const overrideId = isRefSchema(schema) ? schema.$ref : schema.$id || defaultId;
 
-      if (this.schemas[id]) {
-        throw new Error(`重复的 schema 引用 id：${id}`);
-      }
+      this.#parseRefId(defaultId, overrideId, (id) => {
+        if (this.schemas[id]) {
+          throw new Error(`重复的 schema 引用 id：${id}`);
+        }
 
-      const refType = this.named.nextRefType(name, id);
-      this.schemas[id] = refType;
-      this._registerAnchors(id, refType, schema, []);
-    });
+        const refType = this.named.nextRefType(name, id);
+        this.schemas[id] = refType;
+        this._registerAnchors(id, refType, schema, []);
+      });
+    }
 
-    Object.entries(requestBodies).forEach(([name, requestBody]) => {
+    for (const [name, requestBody] of Object.entries(requestBodies)) {
       const defaultId = `#/components/requestBodies/${name}`;
-      const id = isRefRequest(requestBody) ? defaultId : requestBody.$id || defaultId;
+      const overrideId = isRefRequest(requestBody) ? defaultId : requestBody.$id || defaultId;
 
-      if (this.requestBodies[id]) {
-        throw new Error(`重复的 requestBody 引用 id：${id}`);
-      }
+      this.#parseRefId(defaultId, overrideId, (id) => {
+        if (this.requestBodies[id]) {
+          throw new Error(`重复的 requestBody 引用 id：${id}`);
+        }
 
-      this.requestBodies[id] = requestBody;
-    });
+        this.requestBodies[id] = requestBody;
+      });
+    }
 
-    Object.entries(parameters).forEach(([name, parameter]) => {
+    for (const [name, parameter] of Object.entries(parameters)) {
       const defaultId = `#/components/parameters/${name}`;
-      const id = isRefParameter(parameter) ? defaultId : parameter.$id || defaultId;
+      const overrideId = isRefParameter(parameter) ? defaultId : parameter.$id || defaultId;
 
-      if (this.parameters[id]) {
-        throw new Error(`重复的 parameter 引用 id：${id}`);
-      }
+      this.#parseRefId(defaultId, overrideId, (id) => {
+        if (this.parameters[id]) {
+          throw new Error(`重复的 parameter 引用 id：${id}`);
+        }
 
-      this.parameters[id] = parameter;
-    });
+        this.parameters[id] = parameter;
+      });
+    }
 
-    Object.entries(responses).forEach(([name, response]) => {
+    for (const [name, response] of Object.entries(responses)) {
       const defaultId = `#/components/responses/${name}`;
-      const id = isRefResponse(response) ? defaultId : response.$id || defaultId;
+      const overrideId = isRefResponse(response) ? defaultId : response.$id || defaultId;
 
-      if (this.responses[id]) {
-        throw new Error(`重复的 response 引用 id：${id}`);
-      }
+      this.#parseRefId(defaultId, overrideId, (id) => {
+        if (this.responses[overrideId]) {
+          throw new Error(`重复的 response 引用 id：${overrideId}`);
+        }
 
-      this.responses[id] = response;
-    });
+        this.responses[overrideId] = response;
+      });
+    }
 
-    Object.entries(pathItems).forEach(([name, pathItem]) => {
+    for (const [name, pathItem] of Object.entries(pathItems)) {
       const defaultId = `#/components/pathItems/${name}`;
-      const id = isRefPathItem(pathItem) ? defaultId : pathItem.$id || defaultId;
+      const overrideId = isRefPathItem(pathItem) ? defaultId : pathItem.$id || defaultId;
 
-      if (this.pathItems[id]) {
-        throw new Error(`重复的 pathItem 引用 id：${id}`);
-      }
+      this.#parseRefId(defaultId, overrideId, (id) => {
+        if (this.pathItems[id]) {
+          throw new Error(`重复的 pathItem 引用 id：${id}`);
+        }
 
-      this.pathItems[id] = pathItem;
-    });
+        this.pathItems[id] = pathItem;
+      });
+    }
   }
 
   private _registerAnchors(rootId: string, rootType: string, schema: OpenApiLatest_Schema, props: string[]) {
@@ -140,9 +160,9 @@ export class Printer {
       this._registerAnchors(rootId, rootType, schema.items, [...props, 'number']);
     }
     else if ('properties' in schema && schema.properties) {
-      Object.entries(schema.properties).forEach(([prop, property]) => {
+      for (const [prop, property] of Object.entries(schema.properties)) {
         this._registerAnchors(rootId, rootType, property, [...props, JSON.stringify(prop)]);
-      });
+      }
     }
   }
 
@@ -210,9 +230,7 @@ export class Printer {
   private _printComponents() {
     return Object.entries(this.document.components?.schemas || {})
       .map(([name, schema]) => {
-        const defaultId = `#/components/schemas/${name}`;
-        const id = isRefSchema(schema) ? defaultId : schema.$id || defaultId;
-        return this._printComponent(name, id, schema);
+        return this._printComponent(name, `#/components/schemas/${name}`, schema);
       })
       .join('\n\n');
   }
@@ -285,14 +303,14 @@ export class Printer {
     const { parameters, requestBody, responses, operationId } = operation;
 
     if (parameters) {
-      parameters.forEach((parameter) => {
+      for (const parameter of parameters) {
         this._parseParameter(parameter, {
           header,
           cookie,
           path,
           query,
         });
-      });
+      }
     }
 
     if (requestBody) {
@@ -402,15 +420,14 @@ export async function ${funcName}(${requestArgs.toArgs()}): ${AXIOS_PROMISE_TYPE
 
       throw new Error(`不支持引用${label}内容：${$ref}`);
     }
-    else {
-      arg.add({
-        in: 'query',
-        name: 'data',
-        ...comments,
-        schema: content.schema,
-        required: true,
-      });
-    }
+
+    arg.add({
+      in: 'query',
+      name: 'data',
+      ...comments,
+      schema: content.schema,
+      required: true,
+    });
   }
 
   private _parseParameter(parameter: OpenApiLatest_Parameter, args: Record<OpenAPILatest.ParameterObject['in'], Arg>) {
