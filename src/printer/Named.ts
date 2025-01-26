@@ -63,13 +63,15 @@ export class Named {
 
   nextRefType(refType: string, refId: string) {
     const uniqueTypeName = this.nextTypeName(refType);
-
-    this.refIdTypeMap.set(refId, uniqueTypeName);
-
+    this.setRefType(refId, uniqueTypeName);
     return uniqueTypeName;
   }
 
-  getRefType(ref: string) {
-    return this.refIdTypeMap.get(ref) || '';
+  setRefType(refId: string, refType: string) {
+    this.refIdTypeMap.set(refId, refType);
+  }
+
+  getRefType(refId: string) {
+    return this.refIdTypeMap.get(refId) || '';
   }
 }
