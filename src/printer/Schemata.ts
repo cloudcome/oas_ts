@@ -103,10 +103,15 @@ export class Schemata {
 
     switch (type) {
       case 'string': {
-        const { enum: enumValues = [], format } = schema;
+        const { enum: enumValues = [], format, minLength, maxLength, pattern } = schema;
         const isBlob = format === 'binary';
         return {
-          comments,
+          comments: {
+            ...comments,
+            minLength,
+            maxLength,
+            pattern,
+          },
           type:
                         enumValues.length > 0
                           ? withGroup(
