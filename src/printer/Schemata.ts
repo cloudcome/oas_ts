@@ -113,14 +113,14 @@ export class Schemata {
             pattern,
           },
           type:
-                        enumValues.length > 0
-                          ? withGroup(
-                              enumValues.map(e => (isString(e) ? JSON.stringify(e) : this.named.getRefType(e.$ref) || 'unknown')),
-                              '|',
-                            )
-                          : isBlob
-                            ? 'Blob'
-                            : 'string',
+              enumValues.length > 0
+                ? withGroup(
+                    enumValues.map(e => (isString(e) ? JSON.stringify(e) : this.named.getRefType(e.$ref) || 'unknown')),
+                    '|',
+                  )
+                : isBlob
+                  ? 'Blob'
+                  : 'string',
           required: Boolean(schema.required),
         };
       }
@@ -130,12 +130,12 @@ export class Schemata {
         return {
           comments,
           type:
-                        enumValues.length > 0
-                          ? withGroup(
-                              enumValues.map(e => (isBoolean(e) ? String(e) : this.named.getRefType(e.$ref) || 'unknown')),
-                              '|',
-                            )
-                          : type,
+              enumValues.length > 0
+                ? withGroup(
+                    enumValues.map(e => (isBoolean(e) ? String(e) : this.named.getRefType(e.$ref) || 'unknown')),
+                    '|',
+                  )
+                : type,
           required: Boolean(schema.required),
         };
       }
@@ -154,12 +154,12 @@ export class Schemata {
             maximum,
           },
           type:
-                        enumValues.length > 0
-                          ? withGroup(
-                              enumValues.map(e => (isNumber(e) ? String(e) : this.named.getRefType(e.$ref) || 'unknown')),
-                              '|',
-                            )
-                          : 'number',
+              enumValues.length > 0
+                ? withGroup(
+                    enumValues.map(e => (isNumber(e) ? String(e) : this.named.getRefType(e.$ref) || 'unknown')),
+                    '|',
+                  )
+                : 'number',
           required: Boolean(schema.required),
         };
       }
