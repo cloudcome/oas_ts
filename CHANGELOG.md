@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.32.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.31.0...v0.32.0) (2025-01-29)
+
+
+### Features
+
+* **printer:** 为字符串类型添加格式约束评论 ([62ec3ca](https://github.com/FrontEndDev-org/openapi-axios/commit/62ec3caf12e76aef1150e4c760eab48da1d2c14a))
+
 ## [0.31.0](https://github.com/FrontEndDev-org/openapi-axios/compare/v0.30.1...v0.31.0) (2025-01-26)
 
 
