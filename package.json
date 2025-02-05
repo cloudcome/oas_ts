@@ -64,7 +64,7 @@
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
     "@commitlint/types": "^19.5.0",
-    "@types/node": "20",
+    "@types/node": "22",
     "@vitest/coverage-v8": "^3.0.4",
     "eslint": "^9.19.0",
     "lefthook": "^1.10.10",
